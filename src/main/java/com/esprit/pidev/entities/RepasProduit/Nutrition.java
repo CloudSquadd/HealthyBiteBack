@@ -1,8 +1,16 @@
-package com.esprit.pidev.entities;
+package com.esprit.pidev.entities.RepasProduit;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Nutrition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +26,11 @@ public class Nutrition {
     private double sel;
 
     @OneToOne
+    @JsonIgnore
     private Produit produit;
 
     @OneToOne
+    @JsonIgnore
     private Repas repas;
 
 }
