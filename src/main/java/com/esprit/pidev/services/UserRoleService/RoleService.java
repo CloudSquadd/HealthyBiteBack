@@ -11,4 +11,8 @@ public class RoleService {
     private RoleRepository repo;
 
 
+
+    public Role createNewRole(Role role) {
+        return repo.save(role);
+    }
 }
