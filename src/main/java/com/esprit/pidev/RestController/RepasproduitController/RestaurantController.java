@@ -15,6 +15,7 @@ public class RestaurantController {
     @PostMapping("/addRestaurant")
     public Restaurant addRestaurant(@RequestBody Restaurant res){
         return iRestaurant.addRestaurant(res);
+
     }
     @PutMapping("/updateRestaurant")
     public Restaurant updateRestaurant(@RequestBody Restaurant res){
@@ -24,6 +25,7 @@ public class RestaurantController {
     public Restaurant retrieveRestaurantById(@PathVariable("id") Long id){
         return iRestaurant.retrieveRestaurantById(id);
     }
+
     @GetMapping("/getAllRestaurant")
     public List<Restaurant> retrieveAllRestaurant(){
         return iRestaurant.retrieveAllRestaurant();
