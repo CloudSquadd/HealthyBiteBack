@@ -19,8 +19,8 @@ public class LigneRepasController {
         if(ligneRepas != null) {
             return ResponseEntity.ok(ligneRepas);
         }
-        return ResponseEntity.notFound().build();
-    }
+        return ResponseEntity.notFound().build();}
+
 
     @PostMapping
     public ResponseEntity<LigneRepas> addLigneRepas(@RequestBody LigneRepas ligneRepas) {
