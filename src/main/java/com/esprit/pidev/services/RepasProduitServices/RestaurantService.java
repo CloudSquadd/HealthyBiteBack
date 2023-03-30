@@ -1,6 +1,6 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
-import com.esprit.pidev.entities.RepasProduit.Restaurant;
+import com.esprit.pidev.entities.ProduitRepas.Restaurant;
 import com.esprit.pidev.repository.RepasproduitRepository.RestaurantRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

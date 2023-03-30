@@ -1,4 +1,4 @@
-package com.esprit.pidev.entities.RepasProduit;
+package com.esprit.pidev.entities.ProduitRepas;
 
 import javax.persistence.*;
 
