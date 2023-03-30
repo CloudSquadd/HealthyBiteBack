@@ -1,6 +1,8 @@
 package com.esprit.pidev.entities.Forum;
 
 
+import com.esprit.pidev.entities.User;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,9 +13,10 @@ public class Dislike {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
     private Post post;
 
- /*   @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 }

@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.Forum;
 
+import com.esprit.pidev.entities.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,6 +20,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     private String commentText;
     private Date commentDate;

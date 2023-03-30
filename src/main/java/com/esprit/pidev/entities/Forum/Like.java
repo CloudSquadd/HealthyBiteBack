@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.Forum;
 
+import com.esprit.pidev.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class Like {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 }

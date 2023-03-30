@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.Forum;
 
+import com.esprit.pidev.entities.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,9 +24,9 @@ public class Post {
     @Column(name = "description")
     private String description;
 
-   /* @ManyToOne
-    @JoinColumn(name = "user_id")
-    User user;*/
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
