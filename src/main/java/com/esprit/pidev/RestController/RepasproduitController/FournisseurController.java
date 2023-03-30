@@ -27,7 +27,6 @@ public class FournisseurController {
     public Fournisseur retrieveFournisseurById(@PathVariable("id") Long id){
         return iFournisseur.retrieveFournisseurById(id);
     }
-
     @GetMapping("/getAllFournisseur")
     public List<Fournisseur> retrieveAllFournisseur(){
         return iFournisseur.retrieveAllFournisseur();
