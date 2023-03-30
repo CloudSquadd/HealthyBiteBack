@@ -3,7 +3,6 @@ package com.esprit.pidev.entities.RepasProduit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.Set;
@@ -16,6 +15,7 @@ import java.util.Set;
 @ToString
 public class Fournisseur extends Commerciale {
 
-    @OneToMany(mappedBy = "fournisseur",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fournisseur")
+    @JsonIgnore
     private Set<Produit> produits;
 }
