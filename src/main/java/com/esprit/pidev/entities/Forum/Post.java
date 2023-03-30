@@ -14,7 +14,6 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "posts")
 
 public class Post {
     @Id
