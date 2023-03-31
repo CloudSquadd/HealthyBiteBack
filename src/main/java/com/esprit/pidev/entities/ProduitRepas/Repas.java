@@ -11,7 +11,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Repas extends Aliment {
+public class Repas  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nom;
+    private String description;
+    private double prix;
+    private String ingredient;
     private String allergene;
 
     @Enumerated(EnumType.STRING)

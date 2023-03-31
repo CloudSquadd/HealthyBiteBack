@@ -12,11 +12,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Restaurant extends User{
+public class Restaurant{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
     private Set<Repas> repas;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

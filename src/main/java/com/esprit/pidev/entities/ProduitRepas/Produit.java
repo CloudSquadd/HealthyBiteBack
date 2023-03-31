@@ -11,8 +11,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Produit extends Aliment {
+public class Produit  {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nom;
+    private String description;
+    private double prix;
+    private String ingredient;
     @Enumerated(EnumType.STRING)
     private CategProduit categoriePro;
 

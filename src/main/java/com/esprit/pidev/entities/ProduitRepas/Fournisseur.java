@@ -13,12 +13,17 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Fournisseur extends User {
+public class Fournisseur {
 
-    @OneToMany(mappedBy = "fournisseur",cascade = CascadeType.ALL)
-    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @OneToMany(mappedBy = "fournisseur",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Produit> produits;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 }

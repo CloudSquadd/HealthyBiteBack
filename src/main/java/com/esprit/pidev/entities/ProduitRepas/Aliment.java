@@ -3,6 +3,7 @@ package com.esprit.pidev.entities.ProduitRepas;
 import javax.persistence.*;
 
 @MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Aliment {
 
     @Id
