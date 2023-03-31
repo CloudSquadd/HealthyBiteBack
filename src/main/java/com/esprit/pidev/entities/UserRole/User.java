@@ -1,5 +1,7 @@
-package com.esprit.pidev.entities;
+package com.esprit.pidev.entities.UserRole;
 
+import com.esprit.pidev.entities.ProduitRepas.Fournisseur;
+import com.esprit.pidev.entities.ProduitRepas.Restaurant;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     @GeneratedValue
@@ -37,4 +40,5 @@ public class User {
     public void setRole(Set<Role> role) {
         this.role = role;
     }
+
 }

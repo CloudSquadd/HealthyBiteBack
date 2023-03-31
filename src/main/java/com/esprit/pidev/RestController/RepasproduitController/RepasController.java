@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -34,6 +35,12 @@ public class RepasController {
     @DeleteMapping("deleteRepas/{id}")
     public void deleteRepas(@PathVariable("id") Long id){
         iRepas.deleteRepas(id);
+    }
+
+
+    @GetMapping("getRepasByRestaurant/{id}")
+    public Set<Repas> getRepasByRestaurantId(@PathVariable Long id) {
+        return iRepas.getRepasByRestaurantId(id);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.esprit.pidev.services.UserRoleService;
 
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.UserRole.User;
 
 import java.util.List;
 

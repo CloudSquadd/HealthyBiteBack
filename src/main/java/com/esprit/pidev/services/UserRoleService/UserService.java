@@ -1,8 +1,8 @@
 package com.esprit.pidev.services.UserRoleService;
 
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.ProduitRepas.Restaurant;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
-import com.esprit.pidev.services.UserRoleService.IUser;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,10 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserService implements IUser {
-    @Autowired
+
     private UserRepository repo;
+
+
 
     public User saveUser(User user) {
         return repo.save(user);
@@ -51,6 +53,7 @@ public class UserService implements IUser {
     public void deleteUser(Integer id) {
         repo.deleteById(id);
     }
+
 
 
 }

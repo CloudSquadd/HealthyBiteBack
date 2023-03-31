@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -36,5 +37,10 @@ public class RepasService implements IRepas{
     @Override
     public void deleteRepas(Long id) {
             repasRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<Repas> getRepasByRestaurantId(Long id) {
+        return repasRepository.findByRestaurantId(id);
     }
 }

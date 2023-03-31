@@ -1,6 +1,6 @@
 package com.esprit.pidev.RestController.UserRoleController;
 
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.services.UserRoleService.IUser;
 import com.esprit.pidev.services.UserRoleService.UserService;
 import lombok.AllArgsConstructor;
