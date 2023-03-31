@@ -16,11 +16,9 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Fournisseur extends User {
 
-    @OneToMany(mappedBy = "fournisseur")
+    @OneToMany(mappedBy = "fournisseur",cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Produit> produits;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
 }
