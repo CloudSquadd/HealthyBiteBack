@@ -13,5 +13,9 @@ public interface IRestaurant {
     List<Restaurant> retrieveAllRestaurant();
     void deleteRestaurant(Long id);
 
+     Set<Restaurant> getRestaurantsByAdresse(String ville);
+
+
+
 
 }

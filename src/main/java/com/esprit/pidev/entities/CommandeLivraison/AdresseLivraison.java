@@ -1,5 +1,7 @@
 package com.esprit.pidev.entities.CommandeLivraison;
 
+import com.esprit.pidev.entities.ProduitRepas.Fournisseur;
+import com.esprit.pidev.entities.ProduitRepas.Restaurant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +31,12 @@ public class AdresseLivraison {
     @ManyToOne
     @JsonIgnore
     private Livraison livraison;
+
+    @ManyToOne
+    @JsonIgnore
+    private Restaurant restaurant;
+
+    @ManyToOne
+    @JsonIgnore
+    private Fournisseur fournisseur;
 }

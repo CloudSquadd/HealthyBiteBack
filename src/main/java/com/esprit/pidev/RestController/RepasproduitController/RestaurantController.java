@@ -4,6 +4,7 @@ import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.ProduitRepas.Restaurant;
 import com.esprit.pidev.services.RepasProduitServices.IRestaurant;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,16 @@ public class RestaurantController {
     @DeleteMapping("deleteRestaurant/{id}")
     public void deleteRestaurant(@PathVariable("id") Long id) {
         iRestaurant.deleteRestaurant(id);
+    }
+
+    @GetMapping("/getRestaurantsByAdresse/{ville}")
+    public ResponseEntity<Set<Restaurant>> getRestaurantsByAdresse(@PathVariable String ville) {
+        Set<Restaurant> restaurants = iRestaurant.getRestaurantsByAdresse(ville);
+        if (restaurants.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(restaurants);
+        }
     }
 
 }

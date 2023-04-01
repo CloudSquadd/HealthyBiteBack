@@ -14,4 +14,6 @@ public abstract class Aliment {
     private double prix;
     private String ingredient;
 
+
+
 }

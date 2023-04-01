@@ -8,4 +8,5 @@ import java.util.Set;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant,Long> {
 
+    Set<Restaurant> findByAdresse_Ville(String ville);
 }

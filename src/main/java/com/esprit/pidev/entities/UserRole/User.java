@@ -23,6 +23,7 @@ public class User {
     private String password;
     private String email;
     private Integer tel;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {

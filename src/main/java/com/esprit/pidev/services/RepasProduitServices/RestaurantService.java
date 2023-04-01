@@ -39,9 +39,10 @@ public class RestaurantService implements IRestaurant{
             restaurantRepository.deleteById(id);
     }
 
-
-
-
+    @Override
+    public Set<Restaurant> getRestaurantsByAdresse(String ville) {
+        return restaurantRepository.findByAdresse_Ville(ville);
+    }
 
 
 }
