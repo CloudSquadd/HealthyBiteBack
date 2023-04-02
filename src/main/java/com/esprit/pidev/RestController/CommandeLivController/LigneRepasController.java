@@ -13,7 +13,7 @@ public class LigneRepasController {
     @Autowired
     private ILigneRepasService ligneRepasService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/getLigneRepasById/{id}")
     public ResponseEntity<LigneRepas> getLigneRepasById(@PathVariable Long id) {
         LigneRepas ligneRepas = ligneRepasService.getLigneRepasById(id);
         if(ligneRepas != null) {
@@ -22,7 +22,7 @@ public class LigneRepasController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping("/addLigneRepas")
     public ResponseEntity<LigneRepas> addLigneRepas(@RequestBody LigneRepas ligneRepas) {
         LigneRepas newLigneRepas = ligneRepasService.addLigneRepas(ligneRepas);
         if(newLigneRepas != null) {
@@ -31,7 +31,7 @@ public class LigneRepasController {
         return ResponseEntity.unprocessableEntity().build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateLigneRepasById/{id}")
     public ResponseEntity<LigneRepas> updateLigneRepas(@PathVariable Long id, @RequestBody LigneRepas ligneRepas) {
         LigneRepas updatedLigneRepas = ligneRepasService.updateLigneRepas(ligneRepas);
         if(updatedLigneRepas != null) {
@@ -40,7 +40,7 @@ public class LigneRepasController {
         return ResponseEntity.unprocessableEntity().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteLigneRepasById/{id}")
     public ResponseEntity<Void> deleteLigneRepasById(@PathVariable Long id) {
         ligneRepasService.deleteLigneRepasById(id);
         return ResponseEntity.noContent().build();

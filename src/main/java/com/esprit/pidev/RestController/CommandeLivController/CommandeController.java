@@ -16,34 +16,34 @@ public class CommandeController {
         this.commandeService = commandeService;
     }
 
-    @GetMapping
-    public List<Commande> getAllCommandes() {
-        return commandeService.getAllCommandes();
-    }
 
-    @GetMapping("/{id}")
-    public Commande getCommandeById(@PathVariable Long id) {
-        return commandeService.getCommandeById(id);
-    }
-
-    @PostMapping
+    @PostMapping("/addCommande")
     public Commande addCommande(@RequestBody Commande commande) {
         return commandeService.addCommande(commande);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("updateCommande/{id}")
     public void updateCommande(@PathVariable Long id, @RequestBody Commande commande) {
         commande.setIdCom(id);
         commandeService.updateCommande(commande);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("deleteCommande/{id}")
     public void deleteCommandeById(@PathVariable Long id) {
         commandeService.deleteCommandeById(id);
     }
 
-    @GetMapping("/etat/{etatCommande}")
+    @GetMapping("/getCommandeByEtat/{etatCommande}")
     public List<Commande> getCommandesByEtatCommande(@PathVariable EtatCommande etatCommande) {
         return commandeService.getCommandesByEtat(etatCommande);
+    }
+    @GetMapping("/getAllCommande")
+    public List<Commande> getAllCommandes() {
+        return commandeService.getAllCommandes();
+    }
+
+    @GetMapping("getCommandeById/{id}")
+    public Commande getCommandeById(@PathVariable Long id) {
+        return commandeService.getCommandeById(id);
     }
 }

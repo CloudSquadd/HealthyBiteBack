@@ -16,25 +16,25 @@ public class LivraisonController {
     @Autowired
     private LivraisonService livraisonService;
 
-    @PostMapping("/")
+    @PostMapping("/addLivraison")
     public ResponseEntity<Livraison> addLivraison(@RequestBody Livraison livraison) {
         Livraison newLivraison = livraisonService.addLivraison(livraison);
         return new ResponseEntity<>(newLivraison, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getLivraisonById/{id}")
     public ResponseEntity<Livraison> getLivraisonById(@PathVariable("id") Long id) {
         Livraison livraison = livraisonService.getLivraisonById(id);
         return new ResponseEntity<>(livraison, HttpStatus.OK);
     }
 
-    @PutMapping("/")
+    @PutMapping("/updateLivraison")
     public ResponseEntity<Livraison> updateLivraison(@RequestBody Livraison livraison) {
         Livraison updatedLivraison = livraisonService.updateLivraison(livraison);
         return new ResponseEntity<>(updatedLivraison, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteLivraison(ById/{id}")
     public ResponseEntity<Void> deleteLivraison(@PathVariable("id") Long id) {
         livraisonService.deleteLivraison(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

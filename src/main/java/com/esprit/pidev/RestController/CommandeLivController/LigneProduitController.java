@@ -13,7 +13,7 @@ public class LigneProduitController {
     @Autowired
     private ILigneProduitService ligneProduitService;
 
-    @GetMapping("/{id}")
+    @GetMapping("getLigneProduitById/{id}")
     public ResponseEntity<LigneProduit> getLigneProduitById(@PathVariable Long id) {
         LigneProduit ligneProduit = ligneProduitService.getLigneProduitById(id);
         if(ligneProduit != null) {
@@ -22,7 +22,7 @@ public class LigneProduitController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping("/addLigneProduit")
     public ResponseEntity<LigneProduit> addLigneProduit(@RequestBody LigneProduit ligneProduit) {
         LigneProduit newLigneProduit = ligneProduitService.addLigneProduit(ligneProduit);
         if(newLigneProduit != null) {
@@ -31,7 +31,7 @@ public class LigneProduitController {
         return ResponseEntity.unprocessableEntity().build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("updateLigneProduit/{id}")
     public ResponseEntity<LigneProduit> updateLigneProduit(@PathVariable Long id, @RequestBody LigneProduit ligneProduit) {
         LigneProduit updatedLigneProduit = ligneProduitService.updateLigneProduit(ligneProduit);
         if(updatedLigneProduit != null) {
@@ -40,7 +40,7 @@ public class LigneProduitController {
         return ResponseEntity.unprocessableEntity().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("deleteLigneProduitById/{id}")
     public ResponseEntity<Void> deleteLigneProduitById(@PathVariable Long id) {
         ligneProduitService.deleteLigneProduitById(id);
         return ResponseEntity.noContent().build();
