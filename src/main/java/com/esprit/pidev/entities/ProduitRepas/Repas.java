@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.ProduitRepas;
 
+import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -24,9 +25,9 @@ public class Repas  {
     @Enumerated(EnumType.STRING)
     private CategRepas CategorieRep;
     @ManyToOne
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private Restaurant restaurant;
+    private User user;
 
     @OneToOne(mappedBy = "repas", cascade = CascadeType.ALL)
     private Nutrition nutrition;

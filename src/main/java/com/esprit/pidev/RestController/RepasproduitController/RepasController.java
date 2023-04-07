@@ -38,9 +38,9 @@ public class RepasController {
     }
 
 
-    @GetMapping("getRepasByRestaurant/{id}")
+   /* @GetMapping("getRepasByRestaurant/{id}")
     public Set<Repas> getRepasByRestaurantId(@PathVariable Long id) {
         return iRepas.getRepasByRestaurantId(id);
-    }
+    }*/
 
 }

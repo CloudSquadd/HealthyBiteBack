@@ -1,10 +1,8 @@
 package com.esprit.pidev.services.UserRoleService;
 
-import com.esprit.pidev.entities.ProduitRepas.Restaurant;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

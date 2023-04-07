@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.ProduitRepas;
 
+import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -25,9 +26,8 @@ public class Produit  {
 
     @ManyToOne
     @JsonIgnore
-    private Fournisseur fournisseur;
+    private User user;
 
-
-    @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Nutrition nutrition;
 }

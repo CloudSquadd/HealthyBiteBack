@@ -12,5 +12,5 @@ public interface IRepas {
     List<Repas> retrieveAllRepas();
     void deleteRepas(Long id);
 
-    public Set<Repas> getRepasByRestaurantId(Long id);
+    //public Set<Repas> getRepasByRestaurantId(Long id);
 }

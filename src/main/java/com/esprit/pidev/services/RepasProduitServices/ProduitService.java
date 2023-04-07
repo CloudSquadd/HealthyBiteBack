@@ -39,8 +39,5 @@ public class ProduitService implements IProduit{
         produitRepository.deleteById(id);
     }
 
-    @Override
-    public Set<Produit> getProduitByFournisseurId(Long id) {
-        return produitRepository.findByFournisseurId(id);
-    }
+
 }

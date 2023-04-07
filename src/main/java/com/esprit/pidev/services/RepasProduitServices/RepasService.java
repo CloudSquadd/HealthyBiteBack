@@ -39,8 +39,8 @@ public class RepasService implements IRepas{
             repasRepository.deleteById(id);
     }
 
-    @Override
+   /* @Override
     public Set<Repas> getRepasByRestaurantId(Long id) {
         return repasRepository.findByRestaurantId(id);
-    }
+    }*/
 }

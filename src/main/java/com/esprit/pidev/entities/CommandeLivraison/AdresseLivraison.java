@@ -1,7 +1,6 @@
 package com.esprit.pidev.entities.CommandeLivraison;
 
-import com.esprit.pidev.entities.ProduitRepas.Fournisseur;
-import com.esprit.pidev.entities.ProduitRepas.Restaurant;
+import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,9 +33,9 @@ public class AdresseLivraison {
 
     @ManyToOne
     @JsonIgnore
-    private Restaurant restaurant;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @ManyToOne
-    @JsonIgnore
-    private Fournisseur fournisseur;
+
+
 }

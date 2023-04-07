@@ -38,8 +38,8 @@ public class ProduitController {
     }
 
 
-    @GetMapping("/getProduitByFournisseurId/{id}")
-    public Set<Produit> getProduitByFournisseurId(@PathVariable("id") Long id) {
-        return iProduit.getProduitByFournisseurId(id);
-    }
+   // @GetMapping("/getProduitByFournisseurId/{id}")
+    //public Set<Produit> getProduitByFournisseurId(@PathVariable("id") Long id) {
+      //  return iProduit.getProduitByFournisseurId(id);
+    //}
 }
