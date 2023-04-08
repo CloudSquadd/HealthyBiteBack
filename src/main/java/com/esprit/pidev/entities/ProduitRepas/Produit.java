@@ -1,9 +1,5 @@
-package com.esprit.pidev.entities.RepasProduit;
+package com.esprit.pidev.entities.ProduitRepas;
 
-import com.esprit.pidev.entities.RepasProduit.Aliment;
-import com.esprit.pidev.entities.RepasProduit.CategProduit;
-import com.esprit.pidev.entities.RepasProduit.Fournisseur;
-import com.esprit.pidev.entities.RepasProduit.Nutrition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

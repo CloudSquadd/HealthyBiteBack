@@ -1,7 +1,5 @@
-package com.esprit.pidev.entities.RepasProduit;
+package com.esprit.pidev.entities.ProduitRepas;
 
-import com.esprit.pidev.entities.RepasProduit.Commerciale;
-import com.esprit.pidev.entities.RepasProduit.Repas;
 import lombok.*;
 
 import javax.persistence.*;

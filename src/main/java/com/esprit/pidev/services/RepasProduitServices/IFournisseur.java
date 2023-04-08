@@ -1,6 +1,6 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
-import com.esprit.pidev.entities.RepasProduit.Fournisseur;
+import com.esprit.pidev.entities.ProduitRepas.Fournisseur;
 
 import java.util.List;
 

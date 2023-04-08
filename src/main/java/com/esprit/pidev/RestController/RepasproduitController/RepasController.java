@@ -1,6 +1,6 @@
 package com.esprit.pidev.RestController.RepasproduitController;
 
-import com.esprit.pidev.entities.RepasProduit.Repas;
+import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
