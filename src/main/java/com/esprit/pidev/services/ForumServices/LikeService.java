@@ -1,6 +1,6 @@
 package com.esprit.pidev.services.ForumServices;
 
-import com.esprit.pidev.entities.Forum.Like;
+import com.esprit.pidev.entities.Forum.LikeEntity;
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.repository.ForumRepository.LikeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class LikeService implements ILike{
     @Autowired
     private LikeRepository likeRepository;
 
-    public Like addLike(Like like) {
+    public LikeEntity addLike(LikeEntity like) {
         return likeRepository.save(like);
     }
 
@@ -21,7 +21,7 @@ public class LikeService implements ILike{
         likeRepository.deleteById(likeId);
     }
 
-    public List<Like> getAllLikesForPost(Post pt) {
+    public List<LikeEntity> getAllLikesForPost(Post pt) {
         return likeRepository.findByPost(pt);
     }
 

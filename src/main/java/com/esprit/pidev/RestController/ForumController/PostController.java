@@ -1,9 +1,7 @@
 package com.esprit.pidev.RestController.ForumController;
 
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.RepasProduit.Fournisseur;
 import com.esprit.pidev.services.ForumServices.IPost;
-import com.esprit.pidev.services.RepasProduitServices.IFournisseur;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PostController {
 
-    IPost iPost;
+    private final IPost iPost;
 
     @PostMapping("/addPost")
     public Post addPost(@RequestBody Post pt){
@@ -30,12 +28,10 @@ public class PostController {
         return iPost.retrievePostById(id);
     }
 
-
     @GetMapping("/getAllPost")
     public List<Post> retrieveAllPost(){
         return iPost.retrieveAllPost();
     }
-
 
     @DeleteMapping("deletePost/{id}")
     public void deletePost(@PathVariable("id") Long id){

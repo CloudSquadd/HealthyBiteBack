@@ -20,7 +20,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "feed")
+    @OneToMany(mappedBy = "category")
     private List<Post> posts = new ArrayList<>();
 
 }

@@ -1,7 +1,6 @@
 package com.esprit.pidev.services.ForumServices;
 
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.RepasProduit.Fournisseur;
 
 import java.util.List;
 

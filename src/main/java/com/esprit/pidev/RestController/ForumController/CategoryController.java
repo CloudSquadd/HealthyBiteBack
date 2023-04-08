@@ -1,17 +1,14 @@
 package com.esprit.pidev.RestController.ForumController;
 
 import com.esprit.pidev.entities.Forum.Category;
-import com.esprit.pidev.entities.RepasProduit.Produit;
 import com.esprit.pidev.services.ForumServices.ICategory;
-import com.esprit.pidev.services.RepasProduitServices.IProduit;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor  // tesnaalek constructeur fih les attributs mtaa entité
+@AllArgsConstructor
 public class CategoryController {
 
     ICategory iCategory;
