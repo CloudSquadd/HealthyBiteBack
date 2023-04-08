@@ -2,34 +2,34 @@ package com.esprit.pidev.services.ForumServices;
 
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.repository.ForumRepository.PostRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-public class PostService implements IPost{
+@Service
+
+public class PostService{
 
     PostRepository postRepository;
-    @Override
-    public Post addPost(Post pt) {
-        return postRepository.save(pt);
+    public Post createPost(Post post) {
+        return postRepository.save(post);
     }
 
-    @Override
-    public Post updatePost(Post pt) {
-        return postRepository.save(pt);
+    public Post getPostById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new NoSuchElementException("Post with id " + postId + " not found"));
     }
 
-    @Override
-    public Post retrievePostById(Long id) {
-        return postRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public List<Post> retrieveAllPost() {
+    public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
-    @Override
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
+    public Post updatePost(Post post) {
+        return postRepository.save(post);
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 }

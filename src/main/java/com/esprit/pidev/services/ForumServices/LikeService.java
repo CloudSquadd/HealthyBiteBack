@@ -4,8 +4,10 @@ import com.esprit.pidev.entities.Forum.Like;
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.repository.ForumRepository.LikeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Service
 
 public class LikeService implements ILike{
     @Autowired

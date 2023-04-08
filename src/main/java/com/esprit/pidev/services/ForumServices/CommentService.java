@@ -2,9 +2,11 @@ package com.esprit.pidev.services.ForumServices;
 
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.repository.ForumRepository.CommentRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CommentService implements IComment {
 
     CommentRepository commentRepository;

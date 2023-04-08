@@ -1,8 +1,13 @@
 package com.esprit.pidev.entities;
 
+import com.esprit.pidev.entities.Forum.Comment;
+import com.esprit.pidev.entities.Forum.LikeDislike;
+import com.esprit.pidev.entities.Forum.Post;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,6 +34,7 @@ public class User {
                     @JoinColumn(name = "ROLE_ID")
             }
     )
+
     private Set<Role> role;
     public Set<Role> getRole() {
         return role;
@@ -37,4 +43,17 @@ public class User {
     public void setRole(Set<Role> role) {
         this.role = role;
     }
+
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<LikeDislike> likesDislikes = new ArrayList<>();
+
+
+
 }
