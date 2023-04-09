@@ -4,7 +4,7 @@ import com.esprit.pidev.entities.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+
 
 @Getter
 @Setter
@@ -12,11 +12,12 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Entity
+@Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String content;
 
@@ -25,8 +26,14 @@ public class Comment {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id" ,nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
+
+    public Comment(String content, Post post) {
+        this.content = content;
+        this.post = post;
+    }
+
 
     // Getters and Setters
 }

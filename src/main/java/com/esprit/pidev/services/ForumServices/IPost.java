@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IPost {
     Post addPost(Post pt);
-    Post updatePost(Post pt);
+    Post updatePost(Long id, Post pt);
     Post retrievePostById(Long id);
     List<Post> retrieveAllPost();
     void deletePost(Long id);

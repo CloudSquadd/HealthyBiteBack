@@ -2,39 +2,50 @@ package com.esprit.pidev.RestController.ForumController;
 
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.repository.ForumRepository.CommentRepository;
+import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.services.ForumServices.CommentService;
-import com.esprit.pidev.services.ForumServices.IComment;
-import com.esprit.pidev.services.ForumServices.IPost;
 import com.esprit.pidev.services.ForumServices.PostService;
-import com.esprit.pidev.services.UserRoleService.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
+@RequestMapping("/comments")
 @RestController
 public class CommentController {
 
     private final CommentService commentService;
     private final PostService postService;
 
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    
     @Autowired
-    public CommentController(CommentService commentService, PostService postService) {
+    public CommentController(CommentService commentService, PostService postService, CommentRepository commentRepository, PostRepository postRepository) {
         this.commentService = commentService;
         this.postService = postService;
+        this.commentRepository = commentRepository;
+        this.postRepository = postRepository;
     }
 
-    @PostMapping("/addComment")
-    public ResponseEntity<Comment> addComment(@RequestBody Comment comment,
-                                              @RequestParam Long postId) {
-        Post post = postService.retrievePostById(postId);
+    @PostMapping("/{postId}")
+    public Comment addComment(@PathVariable Long postId, @RequestBody Comment comment) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (!optionalPost.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
+        }
+        Post post = optionalPost.get();
         comment.setPost(post);
-        Comment savedComment = commentService.addComment(comment);
-        return ResponseEntity.ok(savedComment);
+        return commentRepository.save(comment);
     }
+
+
+
 
     @GetMapping("/getPostComments")
     public ResponseEntity<List<Comment>> getPostComments(@RequestParam Long postId) {

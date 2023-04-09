@@ -18,9 +18,9 @@ public class PostController {
         return iPost.addPost(pt);
     }
 
-    @PutMapping("/updatePost")
-    public Post updatePost(@RequestBody Post pt){
-        return iPost.updatePost(pt);
+    @PutMapping("/updatePost/{id}")
+    public Post updatePost(@PathVariable("id") Long id, @RequestBody Post pt){
+        return iPost.updatePost(id, pt);
     }
 
     @GetMapping("getPostById/{id}")

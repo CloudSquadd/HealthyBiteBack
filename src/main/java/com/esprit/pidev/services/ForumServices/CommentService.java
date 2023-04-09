@@ -14,15 +14,30 @@ public class CommentService implements IComment {
     @Autowired
     CommentRepository commentRepository;
 
+
+    @Autowired
+    private IPost postService;
+
+
     @Autowired
     public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
 
+
     @Override
-    public Comment addComment(Comment comment) {
+    public Comment addComment(Comment comment, Long postId) {
+        Post post = postService.retrievePostById(postId);
+        if (post == null) {
+            throw new IllegalArgumentException("Post not found");
+        }
+        if (comment.getContent() == null || comment.getContent().isEmpty()) {
+            throw new IllegalArgumentException("Comment content is empty");
+        }
+        comment.setPost(post);
         return commentRepository.save(comment);
     }
+
 
     @Override
     public Comment updateComment(Comment comment) {
