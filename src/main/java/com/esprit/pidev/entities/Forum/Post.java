@@ -1,6 +1,7 @@
 package com.esprit.pidev.entities.Forum;
 
 import com.esprit.pidev.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,22 +41,17 @@ public class Post {
     private User user;
 
 
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
 
-    public Post(String title, String content, String imageName, User user, Category category) {
-        this.title = title;
-        this.content = content;
-        this.imageName = imageName;
-        this.user = user;
-        this.category = category;
-        this.addedDate = new Date();
-    }
+
 
 
     // Getter and Setter for comments

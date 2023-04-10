@@ -5,6 +5,7 @@ import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.repository.ForumRepository.CommentRepository;
 import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.services.ForumServices.CommentService;
+import com.esprit.pidev.services.ForumServices.IComment;
 import com.esprit.pidev.services.ForumServices.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,36 +14,40 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
-@RequestMapping("/comments")
+// @RequestMapping("/api/comments")
 @RestController
 public class CommentController {
 
+    private final IComment iComment;
+
+
     private final CommentService commentService;
     private final PostService postService;
+
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     
     @Autowired
-    public CommentController(CommentService commentService, PostService postService, CommentRepository commentRepository, PostRepository postRepository) {
+    public CommentController(IComment iComment, CommentService commentService, PostService postService, CommentRepository commentRepository, PostRepository postRepository) {
+        this.iComment = iComment;
         this.commentService = commentService;
         this.postService = postService;
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
     }
 
-    @PostMapping("/{postId}")
+    @PostMapping("/{postId}/comments")
     public Comment addComment(@PathVariable Long postId, @RequestBody Comment comment) {
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        if (!optionalPost.isPresent()) {
+        Post post = postService.retrievePostById(postId);
+        if (post == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
         }
-        Post post = optionalPost.get();
         comment.setPost(post);
-        return commentRepository.save(comment);
+        return commentService.addComment(comment, postId);
     }
+
 
 
 
@@ -63,20 +68,23 @@ public class CommentController {
         return post.getComments();
     }
 
-    @PutMapping("/updateComment")
-    public Comment updateComment(@RequestBody Comment comment){
-        return commentService.updateComment(comment);
+    @PutMapping("/updateComment/{id}")
+    public Comment updateComment(@PathVariable("id") Long id, @RequestBody Comment comment) {
+        return iComment.updateComment(id, comment);
     }
 
-    @GetMapping("getCommentById/{id}")
+
+    @GetMapping("/getCommentById/{id}")
     public Comment retrieveCommentById(@PathVariable("id") Long id){
-        return commentService.retrieveCommentById(id);
+        return iComment.retrieveCommentById(id);
     }
+
 
     @GetMapping("/getAllComment")
     public List<Comment> retrieveAllComment(){
-        return commentService.retrieveAllComments();
+        return iComment.retrieveAllComment();
     }
+
 
     @GetMapping("/getCommentsByPost/{postId}")
     public List<Comment> retrieveCommentsByPost(@PathVariable("postId") Long postId){
@@ -84,8 +92,10 @@ public class CommentController {
         return commentService.retrieveCommentsByPost(post);
     }
 
-    @DeleteMapping("deleteComment/{id}")
+    @DeleteMapping("/deleteComment/{id}")
     public void deleteComment(@PathVariable("id") Long id){
         commentService.deleteComment(id);
     }
+
+
 }

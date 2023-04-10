@@ -3,6 +3,8 @@ package com.esprit.pidev.entities;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.LikeDislike;
 import com.esprit.pidev.entities.Forum.Post;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;

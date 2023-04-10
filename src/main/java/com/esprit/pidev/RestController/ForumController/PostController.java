@@ -23,7 +23,7 @@ public class PostController {
         return iPost.updatePost(id, pt);
     }
 
-    @GetMapping("getPostById/{id}")
+    @GetMapping("/getPostById/{id}")
     public Post retrievePostById(@PathVariable("id") Long id){
         return iPost.retrievePostById(id);
     }
@@ -33,7 +33,7 @@ public class PostController {
         return iPost.retrieveAllPost();
     }
 
-    @DeleteMapping("deletePost/{id}")
+    @DeleteMapping("/deletePost/{id}")
     public void deletePost(@PathVariable("id") Long id){
         iPost.deletePost(id);
     }
