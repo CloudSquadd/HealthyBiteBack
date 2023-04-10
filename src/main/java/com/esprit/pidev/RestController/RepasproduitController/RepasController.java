@@ -38,9 +38,16 @@ public class RepasController {
     }
 
 
-   /* @GetMapping("getRepasByRestaurant/{id}")
-    public Set<Repas> getRepasByRestaurantId(@PathVariable Long id) {
-        return iRepas.getRepasByRestaurantId(id);
-    }*/
+    @GetMapping("getRepasByUserId/{id}")
+    public Set<Repas> getRepasByUserId(@PathVariable Long id) {
+        return iRepas.getRepasByUserId(id);
+
+    }
+
+    @PostMapping("calories/total")
+    public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis) {
+        return iRepas.calculerCaloriesTotales(repasChoisis);
+    }
+
 
 }

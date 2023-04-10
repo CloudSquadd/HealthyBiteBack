@@ -1,6 +1,7 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,17 @@ public class RepasService implements IRepas{
             repasRepository.deleteById(id);
     }
 
-   /* @Override
-    public Set<Repas> getRepasByRestaurantId(Long id) {
-        return repasRepository.findByRestaurantId(id);
-    }*/
+    @Override
+    public Set<Repas> getRepasByUserId(Long id) {
+        return repasRepository.findByUserId(id);
+    }
+
+    @Override
+    public int calculerCaloriesTotales(List<Repas> repasChoisis) {
+        int caloriesTotales = 0;
+        for (Repas repas : repasChoisis) {
+            caloriesTotales += repas.getNutrition().getCalories();
+        }
+        return caloriesTotales;
+    }
 }

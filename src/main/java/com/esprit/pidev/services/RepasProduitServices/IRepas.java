@@ -1,6 +1,7 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.UserRole.User;
 
 import java.util.List;
 import java.util.Set;
@@ -12,5 +13,8 @@ public interface IRepas {
     List<Repas> retrieveAllRepas();
     void deleteRepas(Long id);
 
-    //public Set<Repas> getRepasByRestaurantId(Long id);
+     Set<Repas> getRepasByUserId(Long id);
+
+
+    int calculerCaloriesTotales(List<Repas> repasChoisis);
 }

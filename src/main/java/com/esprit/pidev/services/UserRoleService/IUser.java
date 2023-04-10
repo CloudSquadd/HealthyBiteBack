@@ -10,4 +10,5 @@ public interface IUser {
     User retrieveUserById(Long id);
     List<User> retrieveAllUser();
     void deleteUser(Integer id);
+
 }

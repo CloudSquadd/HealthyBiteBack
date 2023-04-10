@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Set;
 
 public interface ProduitRepository extends JpaRepository<Produit,Long> {
-   // Set<Produit> findByFournisseurId(Long fournisseurId);
+    Set<Produit> findByUserId(Long userId);
 }
