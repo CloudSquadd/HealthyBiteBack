@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -37,4 +38,11 @@ public class ProduitService implements IProduit{
     public void deleteProduit(Long id) {
         produitRepository.deleteById(id);
     }
+
+    @Override
+    public Set<Produit> getProduitByUserId(Long id) {
+        return produitRepository.findByUserId(id);
+    }
+
+
 }

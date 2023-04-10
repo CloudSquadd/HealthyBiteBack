@@ -1,4 +1,4 @@
-package com.esprit.pidev.entities;
+package com.esprit.pidev.entities.UserRole;
 
 import lombok.Getter;
 import lombok.Setter;
