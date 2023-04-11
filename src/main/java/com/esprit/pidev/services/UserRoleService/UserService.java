@@ -38,7 +38,7 @@ public class UserService implements IUser {
 
     @Override
     public User retrieveUserById(Long id) {
-        return null;
+        return repo.findById(id).orElse(null);
     }
 
 
@@ -48,7 +48,7 @@ public class UserService implements IUser {
     }
 
     @Override
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         repo.deleteById(id);
     }
 

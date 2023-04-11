@@ -6,6 +6,7 @@ import com.esprit.pidev.entities.ProduitRepas.Repas;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -16,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,6 +44,18 @@ public class User {
         this.role = role;
     }
 
+    private Long maxCalories;
+
+    private String besoin;
+
+    private Long poids;
+    @Enumerated(EnumType.STRING)
+    private GenderType Gender;
+
+    private int age;
+    private Long perdrePoids;
+    private Long taille;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AdresseLivraison> addresses;
@@ -52,6 +65,8 @@ public class User {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Produit> produits;
+
+
 
 
 }

@@ -12,6 +12,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 
 @Entity
 @Getter
@@ -42,9 +44,9 @@ public class Post {
 
 
 
-    @ManyToOne
+  /*  @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;
+    private Category category;*/
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnore
