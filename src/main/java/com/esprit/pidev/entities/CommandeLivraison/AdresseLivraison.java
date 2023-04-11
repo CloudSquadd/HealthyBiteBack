@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.CommandeLivraison;
 
+import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,12 @@ public class AdresseLivraison {
     @ManyToOne
     @JsonIgnore
     private Livraison livraison;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+
 }

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.esprit</groupId>
     <artifactId>pidev</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>pidev</name>
     <description>pidev</description>
     <properties>
@@ -25,16 +25,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version> 
-        </dependency>
+
 
         <dependency>
             <groupId>com.mysql</groupId>
