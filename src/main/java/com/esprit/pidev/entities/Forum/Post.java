@@ -58,6 +58,13 @@ public class Post {
 
 
 
+    @ManyToMany
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
+
 
     // Getter and Setter for comments
     public List<Comment> getComments() {

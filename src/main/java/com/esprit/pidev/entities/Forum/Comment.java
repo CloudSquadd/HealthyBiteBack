@@ -42,5 +42,12 @@ public class Comment implements Serializable {
     @JsonManagedReference
     private Set<LikeEntity> likes = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "comment_tags",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
+
     // Getters and Setters
 }
