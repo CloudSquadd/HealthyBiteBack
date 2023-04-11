@@ -53,4 +53,30 @@ public class RepasService implements IRepas{
         }
         return caloriesTotales;
     }
+
+    @Override
+    public String checkMealNutrition(Repas repas) {
+        // Logique de vérification des valeurs nutritionnelles d'un repas
+        // Exemple : vérifier si les calories dépassent la limite recommandée
+        if (repas.getNutrition().getCalories() > 600) {
+            return ("Les calories du repas dépassent la limite recommandée.");
+        }
+        return "";
+    }
+
+    @Override
+    public double calculerMetabolismeDeBase(User user) {
+
+        double metabolismeDeBase = 0;
+
+        if (user.getGender().equals("Homme")) {
+            metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
+        } 
+        else {
+            metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
+        } 
+        return metabolismeDeBase;
+    }
+
+
 }

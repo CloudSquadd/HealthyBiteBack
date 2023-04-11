@@ -1,6 +1,7 @@
 package com.esprit.pidev.entities.Forum;
 
-import com.esprit.pidev.entities.User;
+
+import com.esprit.pidev.entities.UserRole.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

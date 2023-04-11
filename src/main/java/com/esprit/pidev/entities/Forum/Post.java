@@ -1,6 +1,6 @@
 package com.esprit.pidev.entities.Forum;
 
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -42,9 +42,9 @@ public class Post {
 
 
 
-    @ManyToOne
+  /*  @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;
+    private Category category;*/
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnore
