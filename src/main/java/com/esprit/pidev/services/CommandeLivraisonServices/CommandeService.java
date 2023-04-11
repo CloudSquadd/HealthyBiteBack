@@ -16,10 +16,7 @@ public class CommandeService implements ICommande {
     @Autowired
     private CommandeRepository commandeRepository;
 
-    @Override
-    public Commande saveCommande(Commande commande) {
-        return commandeRepository.save(commande);
-    }
+
     @Override
     public Commande addCommande(Commande commande) {
         commande.setEtatCommande(EtatCommande.EN_ATTENTE);

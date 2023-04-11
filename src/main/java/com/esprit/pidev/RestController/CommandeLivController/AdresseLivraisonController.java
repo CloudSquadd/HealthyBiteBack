@@ -18,7 +18,7 @@ public class AdresseLivraisonController {
 
     @PostMapping("/{addAdresselivraison}")
     public ResponseEntity<AdresseLivraison> createAdresseLivraison(@RequestBody AdresseLivraison adresseLivraison) {
-        adresseLivraison = adresseLivraisonService.saveAdresseLivraison(adresseLivraison);
+        adresseLivraison = adresseLivraisonService.addAdresseLivraison(adresseLivraison);
         return ResponseEntity.status(HttpStatus.CREATED).body(adresseLivraison);
     }
 

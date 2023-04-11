@@ -8,7 +8,7 @@ import java.util.List;
 
         public interface ICommande {
                 Commande addCommande(Commande commande);
-                Commande saveCommande(Commande commande);
+
                 Commande updateCommande(Commande commande);
                 void deleteCommandeById(Long id);
                 Commande getCommandeById(Long id);
