@@ -1,11 +1,13 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -37,4 +39,44 @@ public class RepasService implements IRepas{
     public void deleteRepas(Long id) {
             repasRepository.deleteById(id);
     }
+
+    @Override
+    public Set<Repas> getRepasByUserId(Long id) {
+        return repasRepository.findByUserId(id);
+    }
+
+    @Override
+    public int calculerCaloriesTotales(List<Repas> repasChoisis) {
+        int caloriesTotales = 0;
+        for (Repas repas : repasChoisis) {
+            caloriesTotales += repas.getNutrition().getCalories();
+        }
+        return caloriesTotales;
+    }
+
+    @Override
+    public String checkMealNutrition(Repas repas) {
+        // Logique de vérification des valeurs nutritionnelles d'un repas
+        // Exemple : vérifier si les calories dépassent la limite recommandée
+        if (repas.getNutrition().getCalories() > 600) {
+            return ("Les calories du repas dépassent la limite recommandée.");
+        }
+        return "";
+    }
+
+    @Override
+    public double calculerMetabolismeDeBase(User user) {
+
+        double metabolismeDeBase = 0;
+
+        if (user.getGender().equals("Homme")) {
+            metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
+        } 
+        else {
+            metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
+        } 
+        return metabolismeDeBase;
+    }
+
+
 }

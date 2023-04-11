@@ -1,6 +1,6 @@
 package com.esprit.pidev.services.UserRoleService;
 
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.UserRole.User;
 
 import java.util.List;
 
@@ -9,5 +9,6 @@ public interface IUser {
     User updateUser(User user);
     User retrieveUserById(Long id);
     List<User> retrieveAllUser();
-    void deleteUser(Integer id);
+    void deleteUser(Long id);
+
 }

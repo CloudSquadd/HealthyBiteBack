@@ -1,6 +1,6 @@
 package com.esprit.pidev.RestController.UserRoleController;
 
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.services.UserRoleService.IUser;
 import com.esprit.pidev.services.UserRoleService.UserService;
 import lombok.AllArgsConstructor;
@@ -62,7 +62,7 @@ public class UserController {
         return iuser.retrieveAllUser();
     }
     @DeleteMapping("deleteUser/{id}")
-    public void deleteUser(@PathVariable("id") Integer id){
+    public void deleteUser(@PathVariable("id") Long id){
         iuser.deleteUser(id);
     }
 }

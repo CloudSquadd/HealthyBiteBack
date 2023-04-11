@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -37,4 +38,8 @@ public class ProduitController {
     }
 
 
+    @GetMapping("/getProduitByUserId/{id}")
+    public Set<Produit> getProduitByUserId(@PathVariable("id") Long id) {
+        return iProduit.getProduitByUserId(id);
+    }
 }

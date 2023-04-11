@@ -1,7 +1,8 @@
 package com.esprit.pidev.RestController.UserRoleController;
 
 
-import com.esprit.pidev.entities.Role;
+
+import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.services.UserRoleService.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

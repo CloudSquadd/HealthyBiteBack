@@ -1,8 +1,14 @@
 package com.esprit.pidev.repository.UserRoleRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.UserRole.User;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface UserRepository extends JpaRepository<User,Integer>{
+import java.util.Set;
+
+public interface UserRepository extends JpaRepository<User,Long>{
     public User findByEmail(String email);
     public User findByEmailAndPassword(String email, String password);
+
+
 }
