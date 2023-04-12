@@ -42,9 +42,9 @@ public class Post {
 
 
 
-  /*  @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;*/
+    private Category category;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnore
