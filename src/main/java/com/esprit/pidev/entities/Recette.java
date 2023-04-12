@@ -1,11 +1,10 @@
 package com.esprit.pidev.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,6 +12,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+
 public class Recette {
 
     @Id
@@ -21,9 +22,20 @@ public class Recette {
 
     private String nom;
 
-    @OneToMany(mappedBy="recette")
-    private List<Ingredient> ingredients;
+    @OneToMany(mappedBy="recette", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Ingredient> ingredients= new ArrayList<>();
 
+
+
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 }
 
 

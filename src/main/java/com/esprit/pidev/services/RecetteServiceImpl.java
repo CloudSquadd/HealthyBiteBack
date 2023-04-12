@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-public class RecetteServiceImpl implements IRecetteService{
+public class RecetteServiceImpl implements IRecetteService {
 
     @Autowired
     private RecetteRepository recetteRepository;
@@ -21,13 +22,22 @@ public class RecetteServiceImpl implements IRecetteService{
     }
 
     @Override
-    public Recette updateRecette(Recette recette) {
-        return recetteRepository.save(recette);
+    public Recette updateRecette(Long id, Recette recette) {
+        Recette existingRecette = recetteRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Recette with id " + id + " not found"));
+        if (recette.getNom() == null || recette.getIngredients() == null) {
+            throw new IllegalArgumentException("no args to update recette");
+        }
+        existingRecette.setNom(recette.getNom());
+        existingRecette.setIngredients(recette.getIngredients());
+
+        return recetteRepository.save(existingRecette);
     }
 
+
     @Override
-    public Optional<Recette> retrieveRecetteById(Long id) {
-        return recetteRepository.findById(id);
+    public Recette retrieveRecetteById(Long id) {
+        return recetteRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));
+
     }
 
     @Override

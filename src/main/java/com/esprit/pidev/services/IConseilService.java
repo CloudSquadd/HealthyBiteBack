@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IConseilService {
 
     Conseil addConseil(Conseil conseil);
-    Conseil updateConseil(Conseil conseil);
+    Conseil updateConseil(Long id, Conseil conseil);
     Optional<Conseil> retrieveConseilById(Long id);
     List<Conseil> retrieveAllConseil();
     void deleteConseil(Long id);

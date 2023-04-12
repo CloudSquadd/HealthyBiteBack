@@ -1,17 +1,18 @@
 package com.esprit.pidev.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
+
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+
 public class Ingredient {
 
     @Id
@@ -24,6 +25,15 @@ public class Ingredient {
 
     private float calories;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Recette recette;
+
+    public Recette getRecette() {
+        return recette;
+    }
+
+    public void setRecette(Recette recette) {
+        this.recette = recette;
+    }
 }

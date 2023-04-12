@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface IRecetteService {
 
     Recette addRecette(Recette recette);
-    Recette updateRecette(Recette recette);
-    Optional<Recette> retrieveRecetteById(Long id);
+    Recette updateRecette(Long id, Recette recette);
+    Recette retrieveRecetteById(Long id);
     List<Recette> retrieveAllRecette();
     void deleteRecette(Long id);
 }

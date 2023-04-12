@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface IObjectifService {
     Objectif addObjectif(Objectif objectif);
-    Objectif updateObjectif(Objectif objectif);
+    Objectif updateObjectif(Long id, Objectif objectif);
     Optional<Objectif> retrieveObjectifById(Long id);
     List<Objectif> retrieveAllObjectif();
     void deleteObjectif(Long id);

@@ -15,41 +15,40 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/recette")
-
+@RequestMapping("/recette")
 public class RecetteController {
     @Autowired
 
     private IRecetteService recetteService;
 
     @PostMapping("/")
-    public ResponseEntity<Recette> add (@RequestBody Recette recette){
+    public ResponseEntity<Recette> addRecette(@RequestBody Recette recette){
 
         Recette saved = recetteService.addRecette(recette);
         return new ResponseEntity<Recette>(saved, HttpStatus.CREATED);
     }
-    @PutMapping("/")
-    public ResponseEntity<Recette> update(@RequestBody Recette recette) {
-        Recette updated = recetteService.updateRecette(recette);
+    @PutMapping("/{id}")
+    public ResponseEntity<Recette> updateRecette(@PathVariable("id")Long id , @RequestBody Recette recette) {
+        Recette updated = recetteService.updateRecette(id,recette);
         return new ResponseEntity<Recette>(updated, HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Recette> findById(@PathVariable(value = "id") Long id) {
-        Optional<Recette> recette = recetteService.retrieveRecetteById(id);
-        return new ResponseEntity<Recette>(recette.get(), HttpStatus.FOUND);
+    public ResponseEntity<Recette> findRecetteById(@PathVariable(value = "id") Long id) {
+        Recette recette = recetteService.retrieveRecetteById(id);
+        return new ResponseEntity<Recette>(recette, HttpStatus.FOUND);
     }
 
 
     @GetMapping(value = "/")
-    public ResponseEntity<Collection<Recette>> getAll() {
+    public ResponseEntity<Collection<Recette>> getAllRecettes() {
         Collection<Recette> recettes = recetteService.retrieveAllRecette();
         return new ResponseEntity<Collection<Recette>>(recettes, HttpStatus.FOUND);
     }
-    @DeleteMapping(value = "/recette")
-    public ResponseEntity<Void> deleteUser(@RequestParam(value = "id", required = true) Long id) {
-        recetteService.retrieveRecetteById(id);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteRecette(@PathVariable(value = "id", required = true) Long id) {
+        recetteService.deleteRecette(id);
         return new ResponseEntity<Void>(HttpStatus.GONE);
     }
 }

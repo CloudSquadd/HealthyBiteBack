@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/objectif")
+@RequestMapping("/objectif")
 public class ObjectifController {
 
     @Autowired
@@ -24,33 +24,33 @@ public class ObjectifController {
     private IObjectifService objectifService;
 
     @PostMapping("/")
-    public ResponseEntity<Objectif> add (@RequestBody Objectif objectif){
+    public ResponseEntity<Objectif> addbjectif(@RequestBody Objectif objectif){
 
         Objectif saved = objectifService.addObjectif(objectif);
         return new ResponseEntity<Objectif>(saved, HttpStatus.CREATED);
     }
-    @PutMapping("/")
-    public ResponseEntity<Objectif> update(@RequestBody Objectif objectif) {
-        Objectif updated = objectifService.updateObjectif(objectif);
+    @PutMapping("/{id}")
+    public ResponseEntity<Objectif> updatebjectif(@PathVariable("id")Long id, @RequestBody Objectif objectif) {
+        Objectif updated = objectifService.updateObjectif(id, objectif);
         return new ResponseEntity<Objectif>(updated, HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Objectif> findById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Objectif> findbjectifById(@PathVariable(value = "id") Long id) {
         Optional<Objectif> objectif = objectifService.retrieveObjectifById(id);
         return new ResponseEntity<Objectif>(objectif.get(), HttpStatus.FOUND);
     }
 
 
     @GetMapping(value = "/")
-    public ResponseEntity<Collection<Objectif>> getAll() {
+    public ResponseEntity<Collection<Objectif>> getAllbjectifs() {
         Collection<Objectif> objectifs = objectifService.retrieveAllObjectif();
         return new ResponseEntity<Collection<Objectif>>(objectifs, HttpStatus.FOUND);
     }
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@RequestParam(value = "id", required = true) Long id) {
-        objectifService.retrieveObjectifById(id);
+    public ResponseEntity<Void> deletebjectif(@PathVariable(value = "id", required = true) Long id) {
+        objectifService.deleteObjectif(id);
         return new ResponseEntity<Void>(HttpStatus.GONE);
     }
 

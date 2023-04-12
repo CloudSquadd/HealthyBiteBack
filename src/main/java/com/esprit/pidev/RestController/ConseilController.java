@@ -14,40 +14,41 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/conseil")
+@RequestMapping("/conseil")
+
 public class ConseilController {
 
     @Autowired
 
     private IConseilService conseilService;
     @PostMapping("/")
-    public ResponseEntity<Conseil> add (@RequestBody Conseil conseil){
+    public ResponseEntity<Conseil> addConseil(@RequestBody Conseil conseil){
 
         Conseil saved = conseilService.addConseil(conseil);
         return new ResponseEntity<Conseil>(saved, HttpStatus.CREATED);
     }
-    @PutMapping("/")
-    public ResponseEntity<Conseil> update(@RequestBody Conseil conseil) {
-        Conseil updated = conseilService.updateConseil(conseil);
+    @PutMapping("/{id}")
+    public ResponseEntity<Conseil> updateConseil(@PathVariable("id")Long id ,@RequestBody Conseil conseil) {
+        Conseil updated = conseilService.updateConseil(id, conseil);
         return new ResponseEntity<Conseil>(updated, HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Conseil> findById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Conseil> findConseilById(@PathVariable(value = "id") Long id) {
         Optional<Conseil> conseil = conseilService.retrieveConseilById(id);
         return new ResponseEntity<Conseil>(conseil.get(), HttpStatus.FOUND);
     }
 
 
     @GetMapping(value = "/")
-    public ResponseEntity<Collection<Conseil>> getAll() {
+    public ResponseEntity<Collection<Conseil>> getAllConseils() {
         Collection<Conseil> conseils = conseilService.retrieveAllConseil();
         return new ResponseEntity<Collection<Conseil>>(conseils, HttpStatus.FOUND);
     }
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@RequestParam(value = "id", required = true) Long id) {
-        conseilService.retrieveConseilById(id);
+    public ResponseEntity<Void> deleteConseil(@PathVariable(value = "id", required = true) Long id) {
+        conseilService.deleteConseil(id);
         return new ResponseEntity<Void>(HttpStatus.GONE);
     }
 }
