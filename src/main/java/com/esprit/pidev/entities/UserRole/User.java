@@ -3,9 +3,16 @@ package com.esprit.pidev.entities.UserRole;
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.Forum.Comment;
+import com.esprit.pidev.entities.Forum.LikeDislike;
+import com.esprit.pidev.entities.Forum.Post;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -35,6 +42,7 @@ public class User implements Serializable {
                     @JoinColumn(name = "ROLE_ID")
             }
     )
+
     private Set<Role> role;
     public Set<Role> getRole() {
         return role;
@@ -65,6 +73,15 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Produit> produits;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<LikeDislike> likeDislikes = new ArrayList<>();
+
 
 
 
