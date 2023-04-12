@@ -46,7 +46,6 @@ public class UserController {
     @PostMapping("/addUser")
     public User addUser(@RequestBody User user){
         return iuser.addUser(user);
-
     }
     @PutMapping("/updateUser")
     public User updateUser(@RequestBody User user){
