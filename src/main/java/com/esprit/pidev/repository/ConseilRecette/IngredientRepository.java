@@ -1,8 +1,7 @@
-package com.esprit.pidev.repository;
+package com.esprit.pidev.repository.ConseilRecette;
 
-import com.esprit.pidev.entities.Ingredient;
-import com.esprit.pidev.entities.ProduitRepas.Produit;
-import com.esprit.pidev.entities.Recette;
+import com.esprit.pidev.entities.ConseilRecette.Ingredient;
+import com.esprit.pidev.entities.ConseilRecette.Recette;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

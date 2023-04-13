@@ -1,17 +1,14 @@
-package com.esprit.pidev.services;
+package com.esprit.pidev.services.ConseilRecetteServices;
 
-import com.esprit.pidev.entities.Conseil;
-import com.esprit.pidev.entities.Ingredient;
-import com.esprit.pidev.entities.Recette;
+import com.esprit.pidev.entities.ConseilRecette.Ingredient;
+import com.esprit.pidev.entities.ConseilRecette.Recette;
 import com.esprit.pidev.exceptions.IngredientNotFoundException;
 import com.esprit.pidev.exceptions.RecetteNotFoundException;
-import com.esprit.pidev.repository.IngredientRepository;
-import com.esprit.pidev.repository.RecetteRepository;
+import com.esprit.pidev.repository.ConseilRecette.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service

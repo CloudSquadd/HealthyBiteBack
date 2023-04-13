@@ -1,8 +1,7 @@
-package com.esprit.pidev.RestController;
+package com.esprit.pidev.RestController.ConseilRecetteController;
 
-import com.esprit.pidev.entities.Conseil;
-import com.esprit.pidev.services.IConseilService;
-import com.esprit.pidev.services.IRecetteService;
+import com.esprit.pidev.entities.ConseilRecette.Conseil;
+import com.esprit.pidev.services.ConseilRecetteServices.IConseilService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

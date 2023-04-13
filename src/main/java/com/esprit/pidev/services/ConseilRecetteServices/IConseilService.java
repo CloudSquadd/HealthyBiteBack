@@ -1,6 +1,6 @@
-package com.esprit.pidev.services;
+package com.esprit.pidev.services.ConseilRecetteServices;
 
-import com.esprit.pidev.entities.Conseil;
+import com.esprit.pidev.entities.ConseilRecette.Conseil;
 
 import java.util.List;
 import java.util.Optional;

@@ -3,7 +3,7 @@ package com.esprit.pidev.services.ForumServices;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.LikeEntity;
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.User;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.ForumRepository.CommentRepository;
 import com.esprit.pidev.repository.ForumRepository.LikeRepository;
 import com.esprit.pidev.repository.ForumRepository.PostRepository;

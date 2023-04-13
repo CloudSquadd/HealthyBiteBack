@@ -1,4 +1,4 @@
-package com.esprit.pidev.entities;
+package com.esprit.pidev.entities.ConseilRecette;
 
 import lombok.*;
 

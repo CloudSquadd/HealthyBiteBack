@@ -1,7 +1,7 @@
-package com.esprit.pidev.RestController;
+package com.esprit.pidev.RestController.ConseilRecetteController;
 
-import com.esprit.pidev.entities.Objectif;
-import com.esprit.pidev.services.IObjectifService;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
+import com.esprit.pidev.services.ConseilRecetteServices.IObjectifService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

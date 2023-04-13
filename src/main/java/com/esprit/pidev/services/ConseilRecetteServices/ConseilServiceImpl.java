@@ -1,8 +1,7 @@
-package com.esprit.pidev.services;
+package com.esprit.pidev.services.ConseilRecetteServices;
 
-import com.esprit.pidev.entities.Conseil;
-import com.esprit.pidev.entities.Recette;
-import com.esprit.pidev.repository.ConseilRepository;
+import com.esprit.pidev.entities.ConseilRecette.Conseil;
+import com.esprit.pidev.repository.ConseilRecette.ConseilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

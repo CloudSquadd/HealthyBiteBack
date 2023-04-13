@@ -1,5 +1,6 @@
-package com.esprit.pidev.entities;
+package com.esprit.pidev.entities.ConseilRecette;
 
+import com.esprit.pidev.entities.ConseilRecette.Ingredient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

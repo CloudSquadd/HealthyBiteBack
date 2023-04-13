@@ -1,6 +1,7 @@
 package com.esprit.pidev.RestController.ForumController;
 
-import com.esprit.pidev.entities.User;
+
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.services.ForumServices.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

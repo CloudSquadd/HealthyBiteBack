@@ -1,12 +1,10 @@
-package com.esprit.pidev.RestController;
+package com.esprit.pidev.RestController.ConseilRecetteController;
 
-import com.esprit.pidev.entities.Ingredient;
-import com.esprit.pidev.entities.Recette;
+import com.esprit.pidev.entities.ConseilRecette.Ingredient;
+import com.esprit.pidev.entities.ConseilRecette.Recette;
 import com.esprit.pidev.exceptions.RecetteNotFoundException;
-import com.esprit.pidev.services.IIngredientService;
-import com.esprit.pidev.services.IRecetteService;
-import com.esprit.pidev.services.RecetteServiceImpl;
-import lombok.AllArgsConstructor;
+import com.esprit.pidev.services.ConseilRecetteServices.IIngredientService;
+import com.esprit.pidev.services.ConseilRecetteServices.IRecetteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

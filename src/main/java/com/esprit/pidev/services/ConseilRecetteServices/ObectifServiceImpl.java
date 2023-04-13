@@ -1,8 +1,8 @@
-package com.esprit.pidev.services;
+package com.esprit.pidev.services.ConseilRecetteServices;
 
-import com.esprit.pidev.entities.Ingredient;
-import com.esprit.pidev.entities.Objectif;
-import com.esprit.pidev.repository.ObjectifRepository;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
+import com.esprit.pidev.repository.ConseilRecette.ObjectifRepository;
+import com.esprit.pidev.services.ConseilRecetteServices.IObjectifService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 @Service
-public class ObectifServiceImpl implements IObjectifService{
+public class ObectifServiceImpl implements IObjectifService {
 
     @Autowired
     private ObjectifRepository objectifRepository;

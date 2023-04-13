@@ -5,7 +5,9 @@ import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
 import com.esprit.pidev.services.UserRoleService.IUser;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class RepasController {
 
     IRepas iRepas;
@@ -27,6 +30,7 @@ public class RepasController {
     public Repas updateRepas(@RequestBody Repas rep){
         return iRepas.updateRepas(rep);
     }
+
     @GetMapping("getRepasById/{id}")
     public Repas retrieveRepasById(@PathVariable("id") Long id){
         return iRepas.retrieveRepasById(id);
@@ -36,10 +40,10 @@ public class RepasController {
     public List<Repas> retrieveAllRepas(){
         return iRepas.retrieveAllRepas();
     }
-    @DeleteMapping("deleteRepas/{id}")
-    public void deleteRepas(@PathVariable("id") Long id){
-        iRepas.deleteRepas(id);
-    }
+   /* @DeleteMapping("deleteRepas/{id}")
+    public void deleteRepas(@PathVariable("id")  Repas rep, User user){
+        iRepas.deleteRepas(rep.getId());
+    }*/
 
 
     @GetMapping("getRepasByUserId/{id}")
@@ -55,13 +59,8 @@ public class RepasController {
 
     @GetMapping("metabolisme/{id}")
     public double calculerMetabolismeDeBase(@PathVariable("id") Long id) {
-        // Récupérer l'utilisateur à partir du repository
         User user = iUser.retrieveUserById(id);
-
-        // Appeler la méthode du service pour calculer le métabolisme de base
         double metabolismeDeBase = iRepas.calculerMetabolismeDeBase(user);
-
-        // Retourner la valeur calculée du métabolisme
         return metabolismeDeBase;
     }
 
