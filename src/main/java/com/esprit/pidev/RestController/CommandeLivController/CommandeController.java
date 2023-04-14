@@ -3,18 +3,15 @@ package com.esprit.pidev.RestController.CommandeLivController;
 import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.CommandeLivraison.EtatCommande;
 import com.esprit.pidev.services.CommandeLivraisonServices.CommandeService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/commandes")
+@AllArgsConstructor
 public class CommandeController {
     private final CommandeService commandeService;
-
-    public CommandeController(CommandeService commandeService) {
-        this.commandeService = commandeService;
-    }
 
 
     @PostMapping("/addCommande")

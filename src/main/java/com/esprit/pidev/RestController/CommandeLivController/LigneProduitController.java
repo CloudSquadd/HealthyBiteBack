@@ -2,12 +2,13 @@ package com.esprit.pidev.RestController.CommandeLivController;
 
 import com.esprit.pidev.entities.CommandeLivraison.LigneProduit;
 import com.esprit.pidev.services.CommandeLivraisonServices.ILigneProduitService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/lignes-produit")
+@AllArgsConstructor
 public class LigneProduitController {
 
     @Autowired
