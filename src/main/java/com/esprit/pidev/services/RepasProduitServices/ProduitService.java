@@ -41,6 +41,7 @@ public class ProduitService implements IProduit{
 
     @Override
     public Produit retrieveProduitById(Long id) {
+
         return produitRepository.findById(id).orElse(null);
     }
 

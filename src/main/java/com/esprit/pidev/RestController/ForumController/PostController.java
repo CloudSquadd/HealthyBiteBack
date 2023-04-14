@@ -30,8 +30,11 @@ public class PostController {
 
     @GetMapping("/getAllPost")
     public List<Post> retrieveAllPost(){
-        return iPost.retrieveAllPost();
+        return iPost.findAll();
     }
+
+
+
 
     @DeleteMapping("/deletePost/{id}")
     public void deletePost(@PathVariable("id") Long id){

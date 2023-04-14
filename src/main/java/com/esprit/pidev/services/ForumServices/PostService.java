@@ -31,7 +31,7 @@ public class PostService implements IPost {
         existingPost.setContent(pt.getContent());
         existingPost.setImageName(pt.getImageName());
         existingPost.setUser(pt.getUser());
-        existingPost.setCategory(pt.getCategory());
+        //existingPost.setCategory(pt.getCategory());
         existingPost.setComments(pt.getComments());
 
         return postRepository.save(existingPost);
@@ -54,6 +54,12 @@ public class PostService implements IPost {
             throw new RuntimeException("Could not get response");
         }
     }
+
+    @Override
+    public List<Post> findAll() {
+        return postRepository.findAll();
+    }
+
 
     @Override
     public void deletePost(Long id) {

@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -14,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Repas  {
+public class Repas implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -11,10 +11,16 @@ public interface IRepas {
     Repas updateRepas(Repas rep);
     Repas retrieveRepasById(Long id);
     List<Repas> retrieveAllRepas();
-    void deleteRepas(Long id);
+    void deleteRepas(Repas rep,User user) throws Exception;
 
      Set<Repas> getRepasByUserId(Long id);
 
     public void updateRepasBloqueStatus(Long idRepas);
     int calculerCaloriesTotales(List<Repas> repasChoisis);
+
+     String checkMealNutrition(Repas repas);
+
+    double calculerMetabolismeDeBase(User user);
+
+
 }
