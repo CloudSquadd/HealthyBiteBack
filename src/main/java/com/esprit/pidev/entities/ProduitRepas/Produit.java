@@ -30,4 +30,6 @@ public class Produit  {
 
     @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Nutrition nutrition;
+
+    private int quantite;
 }

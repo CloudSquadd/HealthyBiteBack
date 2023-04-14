@@ -31,4 +31,6 @@ public class Repas  {
 
     @OneToOne(mappedBy = "repas", cascade = CascadeType.ALL)
     private Nutrition nutrition;
+
+    private int quantite;
 }
