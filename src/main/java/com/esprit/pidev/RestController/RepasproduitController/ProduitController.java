@@ -42,4 +42,8 @@ public class ProduitController {
     public Set<Produit> getProduitByUserId(@PathVariable("id") Long id) {
         return iProduit.getProduitByUserId(id);
     }
+    @PutMapping("/checkReclamationsByProduit/{id}")
+    void checkReclamationsByProduit(@PathVariable("id") Long id){
+        iProduit.updateProduitBloqueStatus(id);
+    }
 }

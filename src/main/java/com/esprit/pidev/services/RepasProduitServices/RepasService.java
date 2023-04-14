@@ -5,6 +5,7 @@ import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -52,5 +53,11 @@ public class RepasService implements IRepas{
             caloriesTotales += repas.getNutrition().getCalories();
         }
         return caloriesTotales;
+    }
+
+    @Override
+    @Transactional
+    public void updateRepasBloqueStatus(Long idRepas) {
+        repasRepository.updateRepasBloqueStatus(idRepas);
     }
 }

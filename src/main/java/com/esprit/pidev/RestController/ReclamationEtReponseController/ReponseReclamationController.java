@@ -13,8 +13,8 @@ public class ReponseReclamationController {
     IReponseReclamation iReponseReclamation;
 
     @PostMapping("/addReponseReclamation")
-    public ReponseReclamation addReponseReclamation(@RequestBody ReponseReclamation repr){
-      return iReponseReclamation.addReponseReclamation(repr) ;
+    public ReponseReclamation addReponseReclamation(@RequestBody ReponseReclamation repr , Long idReclamation){
+      return iReponseReclamation.addReponseReclamation(repr, idReclamation) ;
     }
 
     @PutMapping("/updateReponseReclamation")

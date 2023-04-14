@@ -62,7 +62,8 @@ public class UserController {
         return iuser.retrieveAllUser();
     }
     @DeleteMapping("deleteUser/{id}")
-    public void deleteUser(@PathVariable("id") Integer id){
+    public void deleteUser(@PathVariable("id") Long id){
         iuser.deleteUser(id);
     }
+
 }

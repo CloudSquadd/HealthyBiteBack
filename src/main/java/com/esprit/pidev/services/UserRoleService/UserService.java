@@ -1,6 +1,8 @@
 package com.esprit.pidev.services.UserRoleService;
 
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.esprit.pidev.entities.UserRole.User;
+import com.esprit.pidev.repository.ReclamationEtReponseRepository.ReclamationRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import java.util.List;
 public class UserService implements IUser {
 
     private UserRepository repo;
+    private ReclamationRepository reclamationRepository;
 
 
 
@@ -48,9 +51,11 @@ public class UserService implements IUser {
     }
 
     @Override
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         repo.deleteById(id);
     }
+
+
 
 
 

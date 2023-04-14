@@ -6,6 +6,7 @@ import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.LikeDislike;
 import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -57,6 +58,9 @@ public class User {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Repas> repas;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Reclamation> reclamations;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Produit> produits;

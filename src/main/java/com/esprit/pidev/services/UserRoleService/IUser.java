@@ -9,6 +9,7 @@ public interface IUser {
     User updateUser(User user);
     User retrieveUserById(Long id);
     List<User> retrieveAllUser();
-    void deleteUser(Integer id);
+    void deleteUser(Long id);
+
 
 }

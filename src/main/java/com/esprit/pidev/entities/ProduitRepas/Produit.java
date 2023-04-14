@@ -1,10 +1,12 @@
 package com.esprit.pidev.entities.ProduitRepas;
 
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,6 +25,7 @@ public class Produit  {
     private String ingredient;
     @Enumerated(EnumType.STRING)
     private CategProduit categoriePro;
+    private Boolean bloquee=false;
 
     @ManyToOne
     @JsonIgnore
@@ -30,4 +33,7 @@ public class Produit  {
 
     @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Nutrition nutrition;
+
+    @OneToMany(mappedBy = "produit",cascade = CascadeType.ALL)
+    private Set<Reclamation> reclamations;
 }

@@ -4,6 +4,7 @@ import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.repository.RepasproduitRepository.ProduitRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,20 @@ import java.util.Set;
 public class ProduitService implements IProduit{
 
     ProduitRepository produitRepository;
+
+    //public void checkReclamationsByProduit(Long id) {
+    // List<Object[]> result = produitRepository.countReclamationsByProduit();
+    //// for (Object[] row : result) {
+        //     String nomProduit = (String) row[0];
+    // Long nombreReclamations = (Long) row[1];
+    // if (nombreReclamations > 10) {
+    //  Produit produit = produitRepository.findById(id).orElse(null);
+    //  produit.setBloquee(true);
+    //  produitRepository.save(produit);
+    // }
+    //}
+    // }
+
 
     @Override
     public Produit addProduit(Produit pr) {
@@ -42,6 +57,12 @@ public class ProduitService implements IProduit{
     @Override
     public Set<Produit> getProduitByUserId(Long id) {
         return produitRepository.findByUserId(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateProduitBloqueStatus(Long idProduit) {
+        produitRepository.updateProduitBloqueStatus(idProduit);
     }
 
 

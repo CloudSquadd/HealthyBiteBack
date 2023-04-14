@@ -48,6 +48,10 @@ public class RepasController {
     public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis) {
         return iRepas.calculerCaloriesTotales(repasChoisis);
     }
+    @PutMapping("/checkReclamationsByRepas/{id}")
+    void checkReclamationsByRepas(@PathVariable("id") Long id){
+        iRepas.updateRepasBloqueStatus(id);
+    }
 
 
 }
