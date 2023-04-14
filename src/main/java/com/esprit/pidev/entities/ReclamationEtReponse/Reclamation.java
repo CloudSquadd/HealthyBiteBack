@@ -21,7 +21,7 @@ public class Reclamation implements Serializable {
     private Date dateReclamation;
     private String textReclamation;
     private String etatReclamation;
-    @Column(columnDefinition = "false")
+
     private Boolean archived;
 
     @OneToOne

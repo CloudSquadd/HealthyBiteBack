@@ -1,57 +1,59 @@
 package com.esprit.pidev.entities.UserRole;
 
+
+
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
-import com.esprit.pidev.entities.ProduitRepas.Produit;
-import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.LikeDislike;
 import com.esprit.pidev.entities.Forum.Post;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import com.esprit.pidev.entities.ProduitRepas.Produit;
+import com.esprit.pidev.entities.ProduitRepas.Repas;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @Entity
-@Data
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
-
-public class User implements Serializable {
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
+    @Size(max = 20)
     private String username;
-    private String password;
+
+    @NotBlank
+    @Size(max = 50)
+    @Email
     private String email;
-    private Integer tel;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLE",
-            joinColumns = {
-                    @JoinColumn(name = "USER_ID")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ROLE_ID")
-            }
-    )
+    @NotBlank
+    @Size(max = 120)
+    private String password;
 
-    private Set<Role> role;
-    public Set<Role> getRole() {
-        return role;
-    }
-
-    public void setRole(Set<Role> role) {
-        this.role = role;
-    }
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(  name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
     private Long maxCalories;
 
     private String besoin;
@@ -84,6 +86,53 @@ public class User implements Serializable {
 
 
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
+    public User() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
