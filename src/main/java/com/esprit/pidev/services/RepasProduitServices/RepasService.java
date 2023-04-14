@@ -21,7 +21,7 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    public Repas updateRepas(Repas rep) {
+    public Repas updateRepas(Repas rep){
         return repasRepository.save(rep);
     }
 
@@ -36,8 +36,17 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    public void deleteRepas(Long id) {
-            repasRepository.deleteById(id);
+    public void deleteRepas(Repas rep,User user) throws Exception {
+        // Vérifier si l'utilisateur a le rôle de restaurant
+        if (!user.getRole().equals("restaurant")) {
+            throw new Exception("vous n'avez pas le rôle de restaurant pour effectuer cette action");
+        }
+
+        // Vérifier si l'utilisateur est le propriétaire du repas
+        if (!rep.getUser().getId().equals(user.getId())) {
+            throw new Exception("vous n'etes pas le propriétaire du repas pour effectuer cette action");
+        }
+            repasRepository.deleteById(rep.getId());
     }
 
     @Override
@@ -58,7 +67,7 @@ public class RepasService implements IRepas{
     public String checkMealNutrition(Repas repas) {
         // Logique de vérification des valeurs nutritionnelles d'un repas
         // Exemple : vérifier si les calories dépassent la limite recommandée
-        if (repas.getNutrition().getCalories() > 600) {
+        if (repas.getNutrition().getCalories() >600 ) {
             return ("Les calories du repas dépassent la limite recommandée.");
         }
         return "";

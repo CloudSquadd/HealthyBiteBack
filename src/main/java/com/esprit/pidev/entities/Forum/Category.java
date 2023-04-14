@@ -14,13 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Category {
+public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
+
 }
+

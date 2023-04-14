@@ -7,6 +7,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -20,6 +22,7 @@ public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
     private String content;
@@ -34,8 +37,16 @@ public class Comment implements Serializable {
     @JsonIgnore
     private Post post;
 
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<LikeEntity> likes = new HashSet<>();
 
-
+    @ManyToMany
+    @JoinTable(
+            name = "comment_tags",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
 
     // Getters and Setters
 }

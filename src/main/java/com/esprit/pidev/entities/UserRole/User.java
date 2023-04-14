@@ -4,13 +4,13 @@ package com.esprit.pidev.entities.UserRole;
 
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
 import com.esprit.pidev.entities.Forum.Comment;
-import com.esprit.pidev.entities.Forum.LikeDislike;
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -80,10 +80,17 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "user_liked_posts",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id")})
+    private Set<Post> likedPosts = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<LikeDislike> likeDislikes = new ArrayList<>();
-
+    @ManyToMany
+    @JoinTable(name = "user_liked_comments",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "comment_id")})
+    private Set<Comment> likedComments = new HashSet<>();
 
 
     public User(String username, String email, String password) {
