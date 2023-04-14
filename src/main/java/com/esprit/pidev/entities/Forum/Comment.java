@@ -38,7 +38,7 @@ public class Comment implements Serializable {
     private Post post;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+
     private Set<LikeEntity> likes = new HashSet<>();
 
     @ManyToMany

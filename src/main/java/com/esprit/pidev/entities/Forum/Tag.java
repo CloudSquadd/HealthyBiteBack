@@ -23,9 +23,9 @@ public class Tag {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
+   /* @ManyToMany(mappedBy = "tags")
     @JsonIgnore
-    private Set<Post> posts = new HashSet<>();
+    private Set<Post> posts = new HashSet<>();*/
 
     @ManyToMany(mappedBy = "tags")
     private Set<Comment> comments = new HashSet<>();

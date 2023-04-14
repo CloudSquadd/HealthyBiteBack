@@ -38,9 +38,9 @@ public class RepasService implements IRepas{
     @Override
     public void deleteRepas(Repas rep,User user) throws Exception {
         // Vérifier si l'utilisateur a le rôle de restaurant
-        if (!user.getRole().equals("restaurant")) {
+        /*if (!user.getRole().equals("restaurant")) {
             throw new Exception("vous n'avez pas le rôle de restaurant pour effectuer cette action");
-        }
+        }*/
 
         // Vérifier si l'utilisateur est le propriétaire du repas
         if (!rep.getUser().getId().equals(user.getId())) {
