@@ -2,6 +2,7 @@ package com.esprit.pidev.entities.Forum;
 
 
 import com.esprit.pidev.entities.UserRole.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
