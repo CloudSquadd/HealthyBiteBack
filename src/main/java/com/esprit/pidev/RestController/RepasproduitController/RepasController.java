@@ -58,9 +58,9 @@ public class RepasController {
     }
 
     @GetMapping("metabolisme/{id}")
-    public double calculerMetabolismeDeBase(@PathVariable("id") Long id) {
+    public double calculerMaxCalories(@PathVariable("id") Long id) {
         User user = iUser.retrieveUserById(id);
-        double metabolismeDeBase = iRepas.calculerMetabolismeDeBase(user);
+        double metabolismeDeBase = iRepas.calculerMaxCalories(user);
         return metabolismeDeBase;
     }
 
