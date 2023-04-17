@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/test")
 public class CategoryController {
 
     ICategory iCategory;

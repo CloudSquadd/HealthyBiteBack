@@ -7,12 +7,10 @@ import com.esprit.pidev.services.ForumServices.IComment;
 import com.esprit.pidev.services.ForumServices.IPost;
 import com.esprit.pidev.services.ForumServices.ITag;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/test")
 @AllArgsConstructor
 public class TagController {
     private final ITag iTag;

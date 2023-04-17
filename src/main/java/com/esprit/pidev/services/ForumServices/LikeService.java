@@ -11,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LikeService implements ILike {
 
         @Autowired
         private LikeRepository likeRepository;
+
+
 
         @Autowired
         private PostRepository postRepository;
@@ -28,9 +32,11 @@ public class LikeService implements ILike {
         public void likePost(User user, Long postId) {
                 Post post = postRepository.findById(postId)
                         .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+                LikeEntity like = likeRepository.findByUserAndPost(user, post).orElseGet(() -> new LikeEntity(user, post));
 
-                LikeEntity like = likeRepository.findByUserAndPost(user, post)
-                        .orElseGet(() -> new LikeEntity(user, post));
+                if (like.isLiked()) {
+                        throw new IllegalArgumentException("Post already liked by user");
+                }
 
                 like.setLiked(true);
                 likeRepository.save(like);
@@ -40,9 +46,12 @@ public class LikeService implements ILike {
         public void unlikePost(User user, Long postId) {
                 Post post = postRepository.findById(postId)
                         .orElseThrow(() -> new EntityNotFoundException("Post not found"));
-
                 LikeEntity like = likeRepository.findByUserAndPost(user, post)
                         .orElseThrow(() -> new EntityNotFoundException("Like not found"));
+
+                if (!like.isLiked()) {
+                        throw new IllegalArgumentException("Post is not liked by user");
+                }
 
                 like.setLiked(false);
                 likeRepository.save(like);
@@ -56,6 +65,10 @@ public class LikeService implements ILike {
                 LikeEntity like = likeRepository.findByUserAndComment(user, comment)
                         .orElseGet(() -> new LikeEntity(user, comment));
 
+                if (like.isLiked()) {
+                        throw new IllegalArgumentException("Comment already liked by user");
+                }
+
                 like.setLiked(true);
                 likeRepository.save(like);
         }
@@ -68,7 +81,36 @@ public class LikeService implements ILike {
                 LikeEntity like = likeRepository.findByUserAndComment(user, comment)
                         .orElseThrow(() -> new EntityNotFoundException("Like not found"));
 
+                if (!like.isLiked()) {
+                        throw new IllegalArgumentException("Comment is not liked by user");
+                }
+
                 like.setLiked(false);
                 likeRepository.save(like);
         }
+
+        public List<LikeEntity> getAllPostLikes() {
+                return likeRepository.findAllByPostIsNotNull();
+        }
+
+        public List<LikeEntity> getAllCommentLikes() {
+                return likeRepository.findAllByCommentIsNotNull();
+        }
+
+
+        public boolean isPostLikedByUser(User user, Long postId) {
+                Post post = postRepository.findById(postId)
+                        .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+                Optional<LikeEntity> like = likeRepository.findByUserAndPost(user, post);
+                return like.map(LikeEntity::isLiked).orElse(false);
+        }
+
+        public boolean isCommentLikedByUser(User user, Long commentId) {
+                Comment comment = commentRepository.findById(commentId)
+                        .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+                Optional<LikeEntity> like = likeRepository.findByUserAndComment(user, comment);
+                return like.map(LikeEntity::isLiked).orElse(false);
+        }
+
+
 }
