@@ -15,9 +15,10 @@ public class AdresseLivraisonService implements IAdresseLivraisonService {
     private AdresseLivraisonRepository adresseLivraisonRepository;
 
     @Override
-    public AdresseLivraison saveAdresseLivraison(AdresseLivraison adresseLivraison) {
+    public AdresseLivraison addAdresseLivraison(AdresseLivraison adresseLivraison) {
         return adresseLivraisonRepository.save(adresseLivraison);
     }
+
 
     @Override
     public AdresseLivraison updateAdresseLivraison(AdresseLivraison adresseLivraison) {

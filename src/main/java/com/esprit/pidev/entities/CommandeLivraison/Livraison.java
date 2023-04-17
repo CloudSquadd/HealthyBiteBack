@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.CommandeLivraison;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class Livraison {
     private Long id;
 
     @OneToOne
+    @JsonIgnore
     private AdresseLivraison adresse;
 
     @Enumerated(EnumType.STRING)
