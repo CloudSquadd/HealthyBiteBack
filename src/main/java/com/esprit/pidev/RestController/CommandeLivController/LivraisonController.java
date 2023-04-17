@@ -36,7 +36,7 @@ public class LivraisonController {
         return new ResponseEntity<>(updatedLivraison, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteLivraison(ById/{id}")
+    @DeleteMapping("/deleteLivraisonById/{id}")
     public ResponseEntity<Void> deleteLivraison(@PathVariable("id") Long id) {
         livraisonService.deleteLivraison(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -2,6 +2,7 @@ package com.esprit.pidev.entities.CommandeLivraison;
 
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +23,7 @@ public class Commande {
     @Column(name="idCom")
     private Long idCom;
 
-   //@ManyToOne
-    //@JoinColumn(name = "client_id")
-    //private Client client;
+
 
     @OneToMany
     @JsonIgnore
@@ -41,6 +40,15 @@ public class Commande {
     private EtatCommande etatCommande;
 
     private Date dateCommande;
+    //@ManyToOne
+    //@JsonIgnore
+    //private Coupon coupon;
+    private Integer quantite;
+    private double total;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
 
 

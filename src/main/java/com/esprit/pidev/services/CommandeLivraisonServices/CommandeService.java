@@ -2,6 +2,8 @@ package com.esprit.pidev.services.CommandeLivraisonServices;
 
 import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.CommandeLivraison.EtatCommande;
+import com.esprit.pidev.entities.ProduitRepas.Produit;
+import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.repository.CommandeLivraisonRepo.CommandeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,5 +48,17 @@ public class CommandeService implements ICommande {
     @Override
     public List<Commande> getCommandesByEtat(EtatCommande etatCommande) {
         return commandeRepository.findByEtatCommande(etatCommande);
+    }
+    @Override
+    public double CalculerTolaleCommande(Commande commande) {
+        double total = 0.0;
+        for (Produit produit : commande.getProduit()) {
+            total += produit.getPrix();
+        }
+        for (Repas repas : commande.getRepas()) {
+            total += repas.getPrix();
+        }
+        return total;
+
     }
 }
