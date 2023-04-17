@@ -117,6 +117,23 @@ public class AuthController {
           Role userRole = roleRepository.findByName(ERole.ROLE_USER)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(userRole);
+
+            break;
+          case "restaurant":
+            Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(restaurantRole);
+            break;
+          case "fournisseur":
+            Role FournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(FournisseurRole);
+            break;
+          default:
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+
         }
       });
     }

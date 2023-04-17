@@ -9,6 +9,8 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/test")
 public class NutritionController {
     INutrition iNutrition;
 

@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@AllArgsConstructor
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/test")
+
 public class RepasController {
 
     IRepas iRepas;
@@ -36,9 +38,12 @@ public class RepasController {
     public List<Repas> retrieveAllRepas(){
         return iRepas.retrieveAllRepas();
     }
-    @DeleteMapping("deleteRepas/{id}")
-    public void deleteRepas(@PathVariable("id") Long id){
-        iRepas.deleteRepas(id);
+
+
+    @DeleteMapping("/deleteRepas")
+    public void deleteRepas(@RequestBody Repas rep){
+        iRepas.deleteRepas(rep);
+
     }
 
 
@@ -53,15 +58,10 @@ public class RepasController {
         return iRepas.calculerCaloriesTotales(repasChoisis);
     }
 
-    @GetMapping("metabolisme/{id}")
-    public double calculerMetabolismeDeBase(@PathVariable("id") Long id) {
-        // Récupérer l'utilisateur à partir du repository
+    @GetMapping("maxCalories/{id}")
+    public double calculerMaxCalories(@PathVariable("id") Long id) {
         User user = iUser.retrieveUserById(id);
-
-        // Appeler la méthode du service pour calculer le métabolisme de base
-        double metabolismeDeBase = iRepas.calculerMetabolismeDeBase(user);
-
-        // Retourner la valeur calculée du métabolisme
+        double metabolismeDeBase = iRepas.calculerMaxCalories(user);
         return metabolismeDeBase;
     }
 

@@ -4,6 +4,9 @@ import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +24,24 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    public Repas updateRepas(Repas rep) {
-        return repasRepository.save(rep);
+    public Repas updateRepas(Repas rep){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            // Get the authorities (roles) of the user
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if ("ROLE_RESTAURANT".equals(authority.getAuthority())) {
+                    // User has "restaurant" role, check if they are the owner of the meal
+                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
+                    Repas meal = repasRepository.findById(rep.getId()).orElse(null); // Get the meal by ID
+                    if (meal != null && meal.getUser().getId().equals(loggedInUserId)) {
+                        repasRepository.save(rep); // User is the owner, allow update
+                    }
+                    break;
+                }
+            }
+        }
+        return rep;
     }
 
     @Override
@@ -36,8 +55,23 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    public void deleteRepas(Long id) {
-            repasRepository.deleteById(id);
+    public void deleteRepas(Repas rep){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            // Get the authorities (roles) of the user
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if ("ROLE_RESTAURANT".equals(authority.getAuthority())) {
+                    // User has "restaurant" role, check if they are the owner of the meal
+                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
+                    Repas repas = repasRepository.findById(rep.getId()).orElse(null); // Get the repas by ID
+                    if (repas != null && repas.getUser().getId().equals(loggedInUserId)) {
+                        repasRepository.delete(rep); // User is the owner, allow delete
+                    }
+                    break;
+                }
+            }
+        }
+
     }
 
     @Override
@@ -65,7 +99,7 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    public double calculerMetabolismeDeBase(User user) {
+    public double calculerMaxCalories(User user) {
 
         double metabolismeDeBase = 0;
 
@@ -75,7 +109,7 @@ public class RepasService implements IRepas{
         else {
             metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
         } 
-        return metabolismeDeBase;
+        return Math.round(metabolismeDeBase);
     }
 
 

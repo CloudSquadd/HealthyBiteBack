@@ -10,6 +10,8 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/test")
 public class ProduitController {
 
     IProduit iProduit;
@@ -32,12 +34,10 @@ public class ProduitController {
     public List<Produit> retrieveAllProduit(){
         return iProduit.retrieveAllProduit();
     }
-    @DeleteMapping("deleteProduit/{id}")
-    public void deleteProduit(@PathVariable("id") Long id){
-        iProduit.deleteProduit(id);
+    @DeleteMapping("deleteProduit")
+    public void deleteProduit(@RequestBody Produit pr){
+        iProduit.deleteProduit(pr);
     }
-
-
     @GetMapping("/getProduitByUserId/{id}")
     public Set<Produit> getProduitByUserId(@PathVariable("id") Long id) {
         return iProduit.getProduitByUserId(id);
