@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/test")
 public class CommandeController {
     private final CommandeService commandeService;
 

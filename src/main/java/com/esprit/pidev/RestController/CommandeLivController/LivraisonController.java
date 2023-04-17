@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/test")
 public class LivraisonController {
     @Autowired
     private LivraisonService livraisonService;

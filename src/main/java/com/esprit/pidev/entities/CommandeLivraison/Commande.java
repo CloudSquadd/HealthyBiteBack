@@ -1,5 +1,7 @@
 package com.esprit.pidev.entities.CommandeLivraison;
 
+import com.esprit.pidev.entities.ProduitRepas.Produit;
+import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,9 +27,11 @@ public class Commande {
     //private Client client;
 
     @OneToMany
-    private List<LigneProduit> lignesProduit;
+    @JsonIgnore
+    private List<Produit> Produit;
     @OneToMany
-    private List<LigneRepas> lignesrepas;
+    @JsonIgnore
+    private List<Repas> Repas;
 
     @OneToOne
     @JsonIgnore

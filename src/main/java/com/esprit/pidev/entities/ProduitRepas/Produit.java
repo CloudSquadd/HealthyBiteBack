@@ -22,6 +22,7 @@ public class Produit  {
     private double prix;
     private String ingredient;
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private CategProduit categoriePro;
 
     @ManyToOne
@@ -29,6 +30,7 @@ public class Produit  {
     private User user;
 
     @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Nutrition nutrition;
 
     private int quantite;

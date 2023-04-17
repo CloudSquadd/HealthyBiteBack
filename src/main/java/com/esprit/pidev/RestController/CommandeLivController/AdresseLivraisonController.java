@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/test")
 public class AdresseLivraisonController {
 
     @Autowired
