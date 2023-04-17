@@ -9,6 +9,8 @@ public interface ILike {
 
     void unlikePost(User user, Long postId);
 
+
+
     void likeComment(User user, Long commentId);
 
     void unlikeComment(User user, Long commentId);

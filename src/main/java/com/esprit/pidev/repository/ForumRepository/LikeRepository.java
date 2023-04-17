@@ -18,4 +18,12 @@ public interface LikeRepository extends JpaRepository<LikeEntity,Long> {
 
     Long countByComment(Comment comment);
 
+    Optional<LikeEntity> findByUserAndPostId(User user, Long postId);
+
+
+    List<LikeEntity> findAllByPostIsNotNull();
+
+    List<LikeEntity> findAllByCommentIsNotNull();
+    LikeEntity findByPostIdAndUserId(Long postId, Long userId);
+
 }
