@@ -2,10 +2,12 @@ package com.esprit.pidev.RestController.RepasproduitController;
 
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
+import com.esprit.pidev.security.services.IUser;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
-import com.esprit.pidev.services.UserRoleService.IUser;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public class RepasController {
     public Repas updateRepas(@RequestBody Repas rep){
         return iRepas.updateRepas(rep);
     }
+
     @GetMapping("getRepasById/{id}")
     public Repas retrieveRepasById(@PathVariable("id") Long id){
         return iRepas.retrieveRepasById(id);

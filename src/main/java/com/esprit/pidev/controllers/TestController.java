@@ -1,15 +1,45 @@
 package com.esprit.pidev.controllers;
 
+
+import com.esprit.pidev.entities.UserRole.ERole;
+import com.esprit.pidev.entities.UserRole.Role;
+import com.esprit.pidev.entities.UserRole.User;
+import com.esprit.pidev.payload.request.SignupRequest;
+import com.esprit.pidev.payload.response.MessageResponse;
+import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
+import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
+import com.esprit.pidev.security.services.IUser;
+import com.esprit.pidev.security.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
+  @Autowired
+  UserRepository userRepository;
+
+  @Autowired
+  RoleRepository roleRepository;
+
+  @Autowired
+  PasswordEncoder encoder;
+
+
+  @Autowired
+
+  private UserService service;
+  @Autowired
+  private IUser iuser;
   @GetMapping("/all")
   public String allAccess() {
     return "Public Content.";

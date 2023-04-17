@@ -28,7 +28,7 @@ public class CommentController {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    
+
     @Autowired
     public CommentController(IComment iComment, CommentService commentService, PostService postService, CommentRepository commentRepository, PostRepository postRepository) {
         this.iComment = iComment;
@@ -72,6 +72,7 @@ public class CommentController {
     public Comment updateComment(@PathVariable("id") Long id, @RequestBody Comment comment) {
         return iComment.updateComment(id, comment);
     }
+
 
 
     @GetMapping("/getCommentById/{id}")
