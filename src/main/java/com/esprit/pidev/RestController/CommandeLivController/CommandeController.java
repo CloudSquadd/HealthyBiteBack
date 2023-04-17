@@ -2,16 +2,14 @@ package com.esprit.pidev.RestController.CommandeLivController;
 
 import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.CommandeLivraison.EtatCommande;
-import com.esprit.pidev.entities.ProduitRepas.Repas;
-import com.esprit.pidev.entities.UserRole.User;
-import com.esprit.pidev.security.services.IUser;
 import com.esprit.pidev.services.CommandeLivraisonServices.CommandeService;
 import com.esprit.pidev.services.CommandeLivraisonServices.ICommande;
 import lombok.AllArgsConstructor;
-import org.aspectj.bridge.ICommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -26,6 +24,7 @@ public class CommandeController {
 
     @PostMapping("/addCommande")
     public Commande addCommande(@RequestBody Commande commande) {
+        commande.setTotal(calculerCommandeTotale(commande));
         return commandeService.addCommande(commande);
     }
 
@@ -60,5 +59,11 @@ public class CommandeController {
         return total;
 
 
-    }}
+    }
+    @DeleteMapping("/commande/clear")
+    public void viderPanier(HttpServletRequest request, HttpServletResponse response) {
+        commandeService.viderPanier(request, response);
+    }
+
+}
 

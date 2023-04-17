@@ -2,12 +2,9 @@ package com.esprit.pidev.RestController.RepasproduitController;
 
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
-import com.esprit.pidev.security.services.IUser;
+import security.services.IUser;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
