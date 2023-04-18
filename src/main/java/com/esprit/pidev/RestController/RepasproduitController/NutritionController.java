@@ -3,12 +3,14 @@ package com.esprit.pidev.RestController.RepasproduitController;
 import com.esprit.pidev.entities.ProduitRepas.Nutrition;
 import com.esprit.pidev.services.RepasProduitServices.INutrition;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Data
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/test")
 public class NutritionController {

@@ -1,10 +1,14 @@
 package com.esprit.pidev.RestController.RepasproduitController;
 
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.security.services.IUser;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,10 +20,13 @@ import java.util.Set;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/test")
+@AllArgsConstructor
+@Data
 
 public class RepasController {
-
+    @Autowired
     IRepas iRepas;
+    @Autowired
     IUser iUser;
 
     @PostMapping("/addRepas")
@@ -66,10 +73,22 @@ public class RepasController {
 
         return iRepas.calculerMaxCalories(user);
     }
-   @GetMapping("/repas/search")
+   @GetMapping("/searchRepas")
     public List<Repas> searchRepasByCategorie(@RequestParam("nom") String nom) {
         return iRepas.rechercherRepasParNom(nom);
     }
 
 
+    @GetMapping("/proposer")
+    public ResponseEntity<List<Repas>> proposerRepasSelonObjectifEtActivite(@RequestParam ObjectifType objectif, @RequestParam TypeActivite typeActivite)
+    {
+        List<Repas> repasProposes = iRepas.proposerRepasSelonObjectifEtActivite(objectif, typeActivite);
+        return ResponseEntity.ok(repasProposes);
+    }
+/*
+    @PostMapping("/checkNewRepas")
+    public ResponseEntity<String> checkNewRepas() {
+        iRepas.checkNewRepas();
+        return ResponseEntity.ok("Vérification des nouveaux repas en cours !");
+    }*/
 }

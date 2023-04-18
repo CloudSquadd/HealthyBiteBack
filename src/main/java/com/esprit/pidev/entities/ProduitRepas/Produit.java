@@ -26,6 +26,7 @@ public class Produit implements Serializable {
     @Enumerated(EnumType.STRING)
     private CategProduit categoriePro;
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

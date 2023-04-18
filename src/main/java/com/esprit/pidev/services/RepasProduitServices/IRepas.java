@@ -1,5 +1,7 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 
@@ -23,10 +25,12 @@ public interface IRepas {
 
     double calculerMaxCalories(User user);
 
-    Set<Repas> proposerRepas();
+    List<Repas> proposerRepasSelonObjectifEtActivite(ObjectifType objectif, TypeActivite typeActivite);
 
     //Set<Repas> searchRepasByNom(String nom);
      List<Repas> rechercherRepasParNom(String nom);
+
+   // public void checkNewRepas();
 
 
 }

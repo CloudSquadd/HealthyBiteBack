@@ -1,17 +1,27 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +29,15 @@ public class RepasService implements IRepas {
 
     UserRepository userRepository;
     RepasRepository repasRepository;
+
+ //   SimpMessagingTemplate messagingTemplate;
+
+
+
+    //    LocalDateTime lastCheckTime = LocalDateTime.now();
+
+
+
 
     @Override
     public Repas addRepas(Repas rep) {
@@ -122,66 +141,82 @@ public class RepasService implements IRepas {
     }
 
     //proposer des repas selon les activités des utilisateur
-    @Override
-    public Set<Repas> proposerRepas() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Obtenir les détails de l'utilisateur connecté
-        User user = (User) authentication.getPrincipal();
-        String typeActivite = user.getActivite().toString();
-        Set<Repas> repasProposes;
-        String objectif = String.valueOf(user.getObjectif());
 
-     /*   switch (typeActivite) {
-            case "actif":
-                switch (objectif) {
-                    case "perdre du poids":
-                        // Proposition de repas pour un client actif cherchant à perdre du poids
-                        repasProposes = proposerRepasPourClientActifPerdrePoids();
-                        break;
-                    case "prise de masse":
-                        // Proposition de repas pour un client actif cherchant à prendre de la masse
-                        repasProposes = proposerRepasPourClientActifPriseMasse();
-                        break;
-                    default:
-                        // Logique de proposition de repas par défaut si aucune correspondance trouvée
-                        repasProposes = proposerRepasParDefaut();
-                        break;
-                }
-                break;
-            case "non actif":
-                switch (objectif) {
-                    case "perdre du poids":
-                        // Proposition de repas pour un client non actif cherchant à perdre du poids
-                        repasProposes = proposerRepasPourClientNonActifPerdrePoids();
-                        break;
-                    case "prise de masse":
-                        // Proposition de repas pour un client non actif cherchant à prendre de la masse
-                        repasProposes = proposerRepasPourClientNonActifPriseMasse();
-                        break;
-                    default:
-                        // Logique de proposition de repas par défaut si aucune correspondance trouvée
-                        repasProposes = proposerRepasParDefaut();
-                        break;
-                }
-                break;
-            default:
-                // Logique de proposition de repas par défaut si aucune correspondance trouvée
-                repasProposes = proposerRepasParDefaut();
-                break;
-        }
-*/
-
-        // Retourner la liste des repas proposés
-        //return repasProp;
-        return null;
-    }
 
     @Override
     public List<Repas> rechercherRepasParNom(String nom) {
 
         return repasRepository.findByNomContainingIgnoreCase(nom);
-
     }
+/*
+    @Scheduled(fixedRate = 3600000)
+    @Override
+    public void checkNewRepas() {
+        List<Repas> newRepas = repasRepository.findByDateAjoutIsGreaterThan(lastCheckTime);
+        if (!newRepas.isEmpty()) {
+            // Send a message to a specific topic using SimpMessagingTemplate
+            simpMessagingTemplate.convertAndSend("/topic/newRepasAvailable", "Nouveaux repas disponibles !");
+        }
+        lastCheckTime = LocalDateTime.now();
+    }*/
+
+
+    @Override
+    public List<Repas> proposerRepasSelonObjectifEtActivite(ObjectifType objectif, TypeActivite typeActivite) {
+        // Obtenir l'objet d'authentification de l'utilisateur connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof User) {
+            // Caster l'objet principal en tant que Client
+            User client = (User) principal;
+
+            double maxCalories = calculerMaxCalories(client);
+
+            // Calculer les calories minimales et maximales en fonction de l'objectif et du type d'activité
+            double minCalories = 0;
+            double maxCaloriesProposees = 0;
+
+            switch (objectif) {
+                case Perdre_Poids:
+                    minCalories = maxCalories * 0.75; // 75% des calories maximales
+                    break;
+                case Maintenir_Poids:
+                    minCalories = maxCalories * 0.9; // 90% des calories maximales
+                    break;
+                case Prendre_Poids:
+                    minCalories = maxCalories * 1.1; // 110% des calories maximales
+                    break;
+            }
+
+            switch (typeActivite) {
+                case ACTIF:
+                    maxCaloriesProposees = maxCalories * 1.1; // 110% des calories maximales
+                    break;
+                case MODEREMENT_ACTIF:
+                    maxCaloriesProposees = maxCalories * 1.05; // 105% des calories maximales
+                    break;
+                case SEDENTAIRE:
+                    maxCaloriesProposees = maxCalories; // Les mêmes calories maximales
+                    break;
+            }
+
+            // Rechercher les repas qui ont une quantité de calories entre les calories minimales et maximales proposées
+            List<Repas> repasProposes = repasRepository.findByQuantiteCaloriesBetween(minCalories, maxCaloriesProposees);
+
+            // Filtrer les repas en fonction de l'objectif
+            repasProposes = repasProposes.stream()
+                    .filter(repas -> repas.getObjectif() == objectif)
+                    .collect(Collectors.toList());
+
+            return repasProposes;
+        }
+
+        return Collections.emptyList();
+    }
+
+
+
 }
 
 

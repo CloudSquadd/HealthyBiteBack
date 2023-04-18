@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,13 +23,14 @@ public class Repas implements Serializable {
     private double prix;
     private String ingredient;
     private String allergene;
+    private LocalDateTime dateAjout;
     @Enumerated(EnumType.STRING)
     private  ObjectifType objectif;
+
 
     @Enumerated(EnumType.STRING)
     private CategRepas CategorieRep;
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
