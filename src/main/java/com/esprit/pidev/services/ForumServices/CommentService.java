@@ -2,7 +2,9 @@ package com.esprit.pidev.services.ForumServices;
 
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.ForumRepository.CommentRepository;
+import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,12 +17,11 @@ import java.util.NoSuchElementException;
 @Service
 public class CommentService implements IComment {
 
-    @Autowired
     CommentRepository commentRepository;
-
-
     @Autowired
-    private IPost postService;
+    UserRepository userRepository;
+    @Autowired
+     IPost postService;
 
 
 
@@ -30,7 +31,10 @@ public class CommentService implements IComment {
     }
 
     @Override
-    public Comment addComment(Comment comment, Long postId) {
+    public Comment addComment(Comment comment, Long postId, Long userId) {
+        User retrievedUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
+        comment.setUser(retrievedUser);
         Post post = postService.retrievePostById(postId);
         if (post == null) {
             throw new IllegalArgumentException("Post not found");

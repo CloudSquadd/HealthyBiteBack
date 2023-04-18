@@ -6,17 +6,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor
 public class PostController {
 
-    private final IPost iPost;
+     IPost iPost;
 
-    @PostMapping("/addPost")
-    public Post addPost(@RequestBody Post pt){
-        return iPost.addPost(pt);
+    @PostMapping("/addPost/{userId}")
+    public Post addPost(@PathVariable("userId") Long userId, @RequestBody Post pt){
+        return iPost.addPost(pt, userId);
     }
+
 
     @PutMapping("/updatePost/{id}")
     public Post updatePost(@PathVariable("id") Long id, @RequestBody Post pt){
@@ -33,7 +35,11 @@ public class PostController {
         return iPost.findAll();
     }
 
-
+    @GetMapping("/getAllPosts")
+    @ResponseBody
+    public List<Post> retrieveAllPosts(){
+        return iPost.retrieveAllPosts();
+    }
 
 
     @DeleteMapping("/deletePost/{id}")

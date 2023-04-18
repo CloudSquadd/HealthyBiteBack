@@ -5,6 +5,7 @@ import com.esprit.pidev.entities.Forum.LikeEntity;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.services.ForumServices.ILike;
 import com.esprit.pidev.services.ForumServices.LikeService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,47 +13,47 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @RequestMapping("/api/test")
 @RestController
 public class LikeController {
 
-    @Autowired
-    private LikeService likeService;
+     LikeService likeService;
 
     @PostMapping("/posts/{postId}/like")
-    public ResponseEntity<?> likePost(@AuthenticationPrincipal User user, @PathVariable Long postId) {
-        if (likeService.isPostLikedByUser(user, postId)) {
+    public ResponseEntity<?> likePost(@AuthenticationPrincipal User userId, @PathVariable Long postId) {
+        if (likeService.isPostLikedByUser(userId, postId)) {
             return ResponseEntity.badRequest().body("Post already liked by user");
         }
-        likeService.likePost(user, postId);
-        return ResponseEntity.ok().build();
+        likeService.likePost(userId, postId);
+        return ResponseEntity.ok().body("you liked the post");
     }
 
     @PostMapping("/posts/{postId}/unlike")
-    public ResponseEntity<?> unlikePost(@AuthenticationPrincipal User user, @PathVariable Long postId) {
-        if (!likeService.isPostLikedByUser(user, postId)) {
+    public ResponseEntity<?> unlikePost(@AuthenticationPrincipal User userId, @PathVariable Long postId) {
+        if (!likeService.isPostLikedByUser(userId, postId)) {
             return ResponseEntity.badRequest().body("Post not liked by user");
         }
-        likeService.unlikePost(user, postId);
-        return ResponseEntity.ok().build();
+        likeService.unlikePost(userId, postId);
+        return ResponseEntity.ok().body("you unliked the post");
     }
 
     @PostMapping("/comments/{commentId}/like")
-    public ResponseEntity<?> likeComment(@AuthenticationPrincipal User user, @PathVariable Long commentId) {
-        if (likeService.isCommentLikedByUser(user, commentId)) {
+    public ResponseEntity<?> likeComment(@AuthenticationPrincipal User userId, @PathVariable Long commentId) {
+        if (likeService.isCommentLikedByUser(userId, commentId)) {
             return ResponseEntity.badRequest().body("Comment already liked by user");
         }
-        likeService.likeComment(user, commentId);
-        return ResponseEntity.ok().build();
+        likeService.likeComment(userId, commentId);
+        return ResponseEntity.ok().body("you liked the comment");
     }
 
     @PostMapping("/comments/{commentId}/unlike")
-    public ResponseEntity<?> unlikeComment(@AuthenticationPrincipal User user, @PathVariable Long commentId) {
-        if (!likeService.isCommentLikedByUser(user, commentId)) {
+    public ResponseEntity<?> unlikeComment(@AuthenticationPrincipal User userId, @PathVariable Long commentId) {
+        if (!likeService.isCommentLikedByUser(userId, commentId)) {
             return ResponseEntity.badRequest().body("Comment not liked by user");
         }
-        likeService.unlikeComment(user, commentId);
-        return ResponseEntity.ok().build();
+        likeService.unlikeComment(userId, commentId);
+        return ResponseEntity.ok().body("you unliked the comment");
     }
 
 

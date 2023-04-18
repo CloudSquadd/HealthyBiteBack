@@ -7,6 +7,7 @@ import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.services.ForumServices.CommentService;
 import com.esprit.pidev.services.ForumServices.IComment;
 import com.esprit.pidev.services.ForumServices.PostService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,35 +18,29 @@ import java.util.List;
 
 @RequestMapping("/api/test")
 @RestController
+@AllArgsConstructor
 public class CommentController {
 
-    private final IComment iComment;
+     IComment iComment;
 
 
-    private final CommentService commentService;
-    private final PostService postService;
+     CommentService commentService;
+     PostService postService;
 
 
-    private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
+     CommentRepository commentRepository;
+    PostRepository postRepository;
 
-    @Autowired
-    public CommentController(IComment iComment, CommentService commentService, PostService postService, CommentRepository commentRepository, PostRepository postRepository) {
-        this.iComment = iComment;
-        this.commentService = commentService;
-        this.postService = postService;
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-    }
 
-    @PostMapping("/{postId}/comments")
-    public Comment addComment(@PathVariable Long postId, @RequestBody Comment comment) {
+
+    @PostMapping("/{postId}/comments/{userId}")
+    public Comment addComment(@PathVariable("userId") Long userId, @PathVariable Long postId, @RequestBody Comment comment) {
         Post post = postService.retrievePostById(postId);
         if (post == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
         }
         comment.setPost(post);
-        return commentService.addComment(comment, postId);
+        return commentService.addComment(comment, postId,userId);
     }
 
 

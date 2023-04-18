@@ -1,8 +1,10 @@
 package com.esprit.pidev.entities.Forum;
 
 import com.esprit.pidev.entities.UserRole.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,29 +29,38 @@ public class Post {
     private Long id;
 
     @Column(length = 100, nullable = true, columnDefinition = "VARCHAR(100) DEFAULT 'Untitled'")
+    @JsonProperty
     private String title;
 
+    @JsonProperty
     private String content;
 
+    @JsonProperty
     private String imageName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonProperty
     private Date addedDate = new Date();
 
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "USER_ID")
     private User user;
 
 
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonProperty
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonProperty
     @JoinTable(
             name = "likeDislike",
             joinColumns = @JoinColumn(name = "post_id"),

@@ -1,7 +1,9 @@
 package com.esprit.pidev.RestController.ForumController;
 
 import com.esprit.pidev.entities.Forum.Category;
+import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.services.ForumServices.ICategory;
+import com.esprit.pidev.services.ForumServices.IPost;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,36 +15,24 @@ import java.util.List;
 public class CategoryController {
 
     ICategory iCategory;
+    IPost iPost;
 
-
-    @PostMapping("/addCategory")
+    @GetMapping("/getAllPostsForPosts")
     @ResponseBody
-    public Category addCategory(@RequestBody Category category){
-        return iCategory.addCategory(category);
+    public List<Post> retrieveAllPosts(){
+        List<Post> posts = iPost.retrieveAllPosts();
+
+        return posts;
     }
 
-    @PutMapping("/updateCategory")
+    @GetMapping("/getPostByIdCateg/{id}")
     @ResponseBody
-    public Category updateCategory(@RequestBody Category category){
-        return iCategory.updateCategory(category);
+    public Post retrievePostById(@PathVariable("id") Long id) {
+        Post post = iPost.retrievePostById(id);
+        post.setContent(null);
+        post.setLikes(null);
+        post.setComments(null);
+        return post;
     }
-
-    @GetMapping("/getCategoryById/{id}")
-    @ResponseBody
-    public Category retrieveCategoryById(@PathVariable("id") Long id){
-        return iCategory.retrieveCategoryById(id);
-    }
-
-    @GetMapping("/getAllCategory")
-    @ResponseBody
-    public List<Category> retrieveAllCategory(){
-        return iCategory.retrieveAllCategory();
-    }
-
-    @DeleteMapping("/apideleteCategory/{id}")
-    public void deleteCategory(@PathVariable("id") Long id){
-        iCategory.deleteCategory(id);
-    }
-
 
 }

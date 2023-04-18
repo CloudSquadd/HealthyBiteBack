@@ -7,6 +7,7 @@ import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -60,6 +61,7 @@ public class User {
 
     private Long poids;
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private GenderType Gender;
 
     private int age;
