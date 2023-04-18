@@ -1,6 +1,7 @@
 package com.esprit.pidev.entities.UserRole;
 
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
+import com.esprit.pidev.entities.Objectif;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.Forum.Comment;
@@ -82,6 +83,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<LikeDislike> likeDislikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Objectif> objectifs = new ArrayList<>();
 
 
 
