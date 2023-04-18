@@ -50,22 +50,25 @@ public class RepasController {
     }
 
 
-    @GetMapping("getRepasByUserId/{id}")
+    @GetMapping("/getRepasByUserId/{id}")
     public Set<Repas> getRepasByUserId(@PathVariable("id") Long id) {
         return iRepas.getRepasByUserId(id);
 
     }
 
-    @PostMapping("calories/total")
+    @PostMapping("/totalCalories")
     public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis) {
         return iRepas.calculerCaloriesTotales(repasChoisis);
     }
 
-    @GetMapping("maxCalories/{id}")
-    public double calculerMaxCalories(@PathVariable("id") Long id) {
-        User user = iUser.retrieveUserById(id);
-        double metabolismeDeBase = iRepas.calculerMaxCalories(user);
-        return metabolismeDeBase;
+    @GetMapping("/maxCalories")
+    public double calculerMaxCalories(@RequestBody User user) {
+
+        return iRepas.calculerMaxCalories(user);
+    }
+   @GetMapping("/repas/search")
+    public List<Repas> searchRepasByCategorie(@RequestParam("nom") String nom) {
+        return iRepas.rechercherRepasParNom(nom);
     }
 
 

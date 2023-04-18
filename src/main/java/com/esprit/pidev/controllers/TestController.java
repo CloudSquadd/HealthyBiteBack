@@ -157,4 +157,9 @@ public class TestController {
     return service.updateUser(id, updatedUser, roles);
   }
 
+  @GetMapping("/users/{ville}")
+  public List<User> getUsersByVille(@PathVariable("ville") String ville) {
+    return service.findByVille(ville);
+  }
+
 }

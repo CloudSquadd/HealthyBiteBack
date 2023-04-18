@@ -110,6 +110,13 @@ public class UserService implements IUser{
         return updatedUser;
     }
 
+    @Override
+    public List<User> findByVille(String ville) {
+        return repo.findByVille(ville);
+    }
+
+
+
 
 
 

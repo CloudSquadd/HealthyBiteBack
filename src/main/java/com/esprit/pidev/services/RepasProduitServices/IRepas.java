@@ -20,8 +20,13 @@ public interface IRepas {
 
     int calculerCaloriesTotales(List<Repas> repasChoisis);
 
-     String checkMealNutrition(Repas repas);
 
     double calculerMaxCalories(User user);
+
+    Set<Repas> proposerRepas();
+
+    //Set<Repas> searchRepasByNom(String nom);
+     List<Repas> rechercherRepasParNom(String nom);
+
 
 }

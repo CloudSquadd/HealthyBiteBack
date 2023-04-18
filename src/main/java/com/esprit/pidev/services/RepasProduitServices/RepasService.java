@@ -3,6 +3,7 @@ package com.esprit.pidev.services.RepasProduitServices;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
+import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,16 +15,18 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class RepasService implements IRepas{
+public class RepasService implements IRepas {
 
+    UserRepository userRepository;
     RepasRepository repasRepository;
 
     @Override
     public Repas addRepas(Repas rep) {
         return repasRepository.save(rep);
     }
+
     @Override
-    public Repas updateRepas(Repas rep){
+    public Repas updateRepas(Repas rep) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
@@ -54,7 +57,7 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    public void deleteRepas(Repas rep){
+    public void deleteRepas(Repas rep) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             // Get the authorities (roles) of the user
@@ -78,27 +81,33 @@ public class RepasService implements IRepas{
         return repasRepository.findByUserId(id);
     }
 
+    //calculer nombre de calories dans les repas choisie par le client et verifier qu'il n'a pas exceder le maximum des calories dans les repas choisie
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
-        int caloriesTotales = 0;
-        for (Repas repas : repasChoisis) {
-            caloriesTotales += repas.getNutrition().getCalories();
+        // Obtenir l'objet d'authentification de l'utilisateur connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof User) {
+            // Caster l'objet principal en tant que Client
+            User user = (User) principal;
+
+            double maxCalories = calculerMaxCalories(user);
+            int caloriesTotales = 0;
+            for (Repas repas : repasChoisis) {
+                caloriesTotales += repas.getNutrition().getCalories();
+            }
+            //notifier le client qu'il excede le maxuimum de calories qu'il doit consommer
+            if (caloriesTotales > maxCalories) {
+                System.out.println("Le total des calories dépasse le maximum autorisé !");
+            }
+            return caloriesTotales;
         }
-        return caloriesTotales;
+        return 0;
     }
 
-    @Override
-    public String checkMealNutrition(Repas repas) {
-        // Logique de vérification des valeurs nutritionnelles d'un repas
-        // Exemple : vérifier si les calories dépassent la limite recommandée
-        if (repas.getNutrition().getCalories() >600 ) {
-            return ("Les calories du repas dépassent la limite recommandée.");
-        }
-        return "";
-    }
 
-
-
+    //calculer le nombre maximum qu'un client doit consommer par jour
     @Override
     public double calculerMaxCalories(User user) {
 
@@ -106,12 +115,73 @@ public class RepasService implements IRepas{
 
         if (user.getGender().equals("Homme")) {
             metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
-        }
-        else {
+        } else {
             metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
         }
         return Math.round(metabolismeDeBase);
     }
 
+    //proposer des repas selon les activités des utilisateur
+    @Override
+    public Set<Repas> proposerRepas() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Obtenir les détails de l'utilisateur connecté
+        User user = (User) authentication.getPrincipal();
+        String typeActivite = user.getActivite().toString();
+        Set<Repas> repasProposes;
+        String objectif = String.valueOf(user.getObjectif());
 
+     /*   switch (typeActivite) {
+            case "actif":
+                switch (objectif) {
+                    case "perdre du poids":
+                        // Proposition de repas pour un client actif cherchant à perdre du poids
+                        repasProposes = proposerRepasPourClientActifPerdrePoids();
+                        break;
+                    case "prise de masse":
+                        // Proposition de repas pour un client actif cherchant à prendre de la masse
+                        repasProposes = proposerRepasPourClientActifPriseMasse();
+                        break;
+                    default:
+                        // Logique de proposition de repas par défaut si aucune correspondance trouvée
+                        repasProposes = proposerRepasParDefaut();
+                        break;
+                }
+                break;
+            case "non actif":
+                switch (objectif) {
+                    case "perdre du poids":
+                        // Proposition de repas pour un client non actif cherchant à perdre du poids
+                        repasProposes = proposerRepasPourClientNonActifPerdrePoids();
+                        break;
+                    case "prise de masse":
+                        // Proposition de repas pour un client non actif cherchant à prendre de la masse
+                        repasProposes = proposerRepasPourClientNonActifPriseMasse();
+                        break;
+                    default:
+                        // Logique de proposition de repas par défaut si aucune correspondance trouvée
+                        repasProposes = proposerRepasParDefaut();
+                        break;
+                }
+                break;
+            default:
+                // Logique de proposition de repas par défaut si aucune correspondance trouvée
+                repasProposes = proposerRepasParDefaut();
+                break;
+        }
+*/
+
+        // Retourner la liste des repas proposés
+        //return repasProp;
+        return null;
+    }
+
+    @Override
+    public List<Repas> rechercherRepasParNom(String nom) {
+
+        return repasRepository.findByNomContainingIgnoreCase(nom);
+
+    }
 }
+
+

@@ -22,6 +22,8 @@ public class Repas implements Serializable {
     private double prix;
     private String ingredient;
     private String allergene;
+    @Enumerated(EnumType.STRING)
+    private  ObjectifType objectif;
 
     @Enumerated(EnumType.STRING)
     private CategRepas CategorieRep;
