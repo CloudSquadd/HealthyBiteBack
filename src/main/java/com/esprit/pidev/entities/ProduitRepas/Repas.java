@@ -32,4 +32,6 @@ public class Repas implements Serializable {
 
     @OneToOne(mappedBy = "repas", cascade = CascadeType.ALL)
     private Nutrition nutrition;
+
+    private int quantite;
 }

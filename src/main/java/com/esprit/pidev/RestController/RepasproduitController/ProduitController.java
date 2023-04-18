@@ -32,9 +32,9 @@ public class ProduitController {
     public List<Produit> retrieveAllProduit(){
         return iProduit.retrieveAllProduit();
     }
-    @DeleteMapping("deleteProduit/{id}")
-    public void deleteProduit(@PathVariable("id") Long id){
-        iProduit.deleteProduit(id);
+    @DeleteMapping("deleteProduit")
+    public void deleteProduit(@RequestBody Produit pr){
+        iProduit.deleteProduit(pr);
     }
 
 

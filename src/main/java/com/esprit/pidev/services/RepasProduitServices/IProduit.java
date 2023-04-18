@@ -11,7 +11,7 @@ public interface IProduit {
     Produit updateProduit(Produit pr);
     Produit retrieveProduitById(Long id);
     List<Produit> retrieveAllProduit();
-    void deleteProduit(Long id);
+    void deleteProduit(Produit pr);
 
     public Set<Produit> getProduitByUserId(Long id);
 }

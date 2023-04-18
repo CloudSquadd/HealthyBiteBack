@@ -7,10 +7,8 @@ import com.esprit.pidev.payload.request.LoginRequest;
 import com.esprit.pidev.payload.request.SignupRequest;
 import com.esprit.pidev.payload.response.JwtResponse;
 import com.esprit.pidev.payload.response.MessageResponse;
-import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
-import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
-import com.esprit.pidev.security.jwt.JwtUtils;
-import com.esprit.pidev.security.services.UserDetailsImpl;
+import security.jwt.JwtUtils;
+import security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -105,6 +103,18 @@ public class AuthController {
             Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(modRole);
+
+            break;
+          case "restaurant":
+            Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(restaurantRole);
+
+            break;
+          case "fournisseur":
+            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(fournisseurRole);
 
             break;
           default:
