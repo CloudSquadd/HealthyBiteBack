@@ -1,5 +1,6 @@
 package com.esprit.pidev.RestController.CommandeLivController;
 
+import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.CommandeLivraison.EtatCommande;
 import com.esprit.pidev.entities.CommandeLivraison.Livraison;
 
@@ -30,19 +31,18 @@ public class LivraisonController {
         return new ResponseEntity<>(livraison, HttpStatus.OK);
     }
 
-    @PutMapping("/updateLivraison")
-    public ResponseEntity<Livraison> updateLivraison(@RequestBody Livraison livraison) {
-        Livraison updatedLivraison = livraisonService.updateLivraison(livraison);
-        return new ResponseEntity<>(updatedLivraison, HttpStatus.OK);
+
+    @PutMapping("/updateLivraison/{id}")
+    public void updateLivraison(@PathVariable Long id, @RequestBody Livraison livraison) {
+        livraison.setId(id);
+        livraisonService.updateLivraison(livraison);
     }
 
     @DeleteMapping("/deleteLivraisonById/{id}")
-    public ResponseEntity<Void> deleteLivraison(@PathVariable("id") Long id) {
-        livraisonService.deleteLivraison(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    public void deleteLivraisonById(@PathVariable Long id) {livraisonService.deleteLivraisonById(id);}
 
-    @PutMapping("/{id}/accepter")
+
+    @PutMapping("/accepter/{id}")
     public ResponseEntity<Livraison> accepterLivraison(@PathVariable("id") Long id) {
         Livraison livraison = livraisonService.getLivraisonById(id);
         livraison.setEtat(EtatCommande.CONFIRMEE);
@@ -50,7 +50,7 @@ public class LivraisonController {
         return new ResponseEntity<>(updatedLivraison, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/refuser")
+    @PutMapping("/refuser/{id}")
     public ResponseEntity<Livraison> refuserLivraison(@PathVariable("id") Long id) {
         Livraison livraison = livraisonService.getLivraisonById(id);
         livraison.setEtat(EtatCommande.ANNULEE);

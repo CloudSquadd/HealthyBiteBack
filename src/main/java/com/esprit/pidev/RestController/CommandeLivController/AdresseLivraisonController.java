@@ -18,7 +18,7 @@ public class AdresseLivraisonController {
     @Autowired
     private IAdresseLivraisonService adresseLivraisonService;
 
-    @PostMapping("/{addAdresselivraison}")
+    @PostMapping("/addAdresselivraison")
     public ResponseEntity<AdresseLivraison> createAdresseLivraison(@RequestBody AdresseLivraison adresseLivraison) {
         adresseLivraison = adresseLivraisonService.addAdresseLivraison(adresseLivraison);
         return ResponseEntity.status(HttpStatus.CREATED).body(adresseLivraison);
@@ -33,14 +33,8 @@ public class AdresseLivraisonController {
         adresseLivraison = adresseLivraisonService.updateAdresseLivraison(adresseLivraison);
         return ResponseEntity.ok(adresseLivraison);
     }
-    @DeleteMapping("/deleteAdresseLivraison/{id}")
-    public ResponseEntity<Void> deleteAdresseLivraison(@PathVariable Long id) {
-        if (!adresseLivraisonService.existAdresseLivraison(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        adresseLivraisonService.deleteAdresseLivraisonById(id);
-        return ResponseEntity.noContent().build();
-    }
+
+
     @GetMapping("/getAllAdresseLivraison")
     public List<AdresseLivraison> getAllAdressesLivraison() {
         return adresseLivraisonService.getAllAdressesLivraison();
