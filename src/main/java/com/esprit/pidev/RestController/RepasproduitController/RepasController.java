@@ -1,8 +1,8 @@
 package com.esprit.pidev.RestController.RepasproduitController;
 
 import com.esprit.pidev.entities.ProduitRepas.Repas;
-import com.esprit.pidev.entities.UserRole.User;
-import security.services.IUser;
+
+
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import java.util.Set;
 public class RepasController {
 
     IRepas iRepas;
-    IUser iUser;
+
 
     @PostMapping("/addRepas")
     public Repas addRepas(@RequestBody Repas rep){
@@ -37,10 +37,7 @@ public class RepasController {
     public List<Repas> retrieveAllRepas(){
         return iRepas.retrieveAllRepas();
     }
-   /* @DeleteMapping("deleteRepas/{id}")
-    public void deleteRepas(@PathVariable("id")  Repas rep, User user){
-        iRepas.deleteRepas(rep.getId());
-    }*/
+
 
 
     @GetMapping("getRepasByUserId/{id}")
@@ -54,12 +51,6 @@ public class RepasController {
         return iRepas.calculerCaloriesTotales(repasChoisis);
     }
 
-    @GetMapping("metabolisme/{id}")
-    public double calculerMetabolismeDeBase(@PathVariable("id") Long id) {
-        User user = iUser.retrieveUserById(id);
-        double metabolismeDeBase = iRepas.calculerMetabolismeDeBase(user);
-        return metabolismeDeBase;
-    }
 
 
 }
