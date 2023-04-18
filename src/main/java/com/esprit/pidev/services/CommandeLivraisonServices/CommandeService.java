@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CommandeService implements ICommande {
+    private static final String PANIER_COOKIE_NAME = "panier";
 
     @Autowired
     private CommandeRepository commandeRepository;
@@ -61,4 +65,24 @@ public class CommandeService implements ICommande {
         return total;
 
     }
+    public void viderPanier(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        Cookie panierCookie = findCookieByName(cookies, PANIER_COOKIE_NAME);
+        if (panierCookie != null) {
+            panierCookie.setMaxAge(0);
+            panierCookie.setValue("");
+            response.addCookie(panierCookie);
+        }
+    }
+    private Cookie findCookieByName(Cookie[] cookies, String name) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
+    }
+
 }

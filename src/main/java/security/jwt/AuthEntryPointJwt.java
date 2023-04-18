@@ -1,4 +1,4 @@
-package com.esprit.pidev.security.jwt;
+package security.jwt;
 
 import java.io.IOException;
 import java.util.HashMap;
