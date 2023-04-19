@@ -1,13 +1,12 @@
 package com.esprit.pidev.RestController.ConseilRecetteController;
 
-import com.esprit.pidev.entities.Ingredient;
-import com.esprit.pidev.entities.Objectif;
-import com.esprit.pidev.entities.Recette;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
+
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.exceptions.RecetteNotFoundException;
-import com.esprit.pidev.services.IObjectifService;
-import com.esprit.pidev.services.UserRoleService.IUser;
-import com.esprit.pidev.services.UserRoleService.UserService;
+import com.esprit.pidev.security.services.UserService;
+import com.esprit.pidev.services.ConseilRecetteServices.IObjectifService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

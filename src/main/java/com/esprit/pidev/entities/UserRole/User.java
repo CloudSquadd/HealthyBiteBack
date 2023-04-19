@@ -3,11 +3,11 @@ package com.esprit.pidev.entities.UserRole;
 
 
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
 import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
-import com.esprit.pidev.entities.Objectif;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -82,12 +82,10 @@ public class User {
     private Long ObjectifPoids;
     private Long taille;
 
-    ///********************fin des attributs
 
 
     private String verificationToken;
 
-    ///********************fin des attributs
     public boolean isActive() {
         return enabled;
     }

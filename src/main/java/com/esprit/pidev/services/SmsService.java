@@ -2,9 +2,11 @@ package com.esprit.pidev.services;
 
 import com.esprit.pidev.constants.HealthyBiteBackConstants;
 import com.esprit.pidev.entities.UserRole.User;
-import com.esprit.pidev.services.UserRoleService.UserService;
+
+import com.esprit.pidev.security.services.UserService;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+
 import com.twilio.type.PhoneNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
