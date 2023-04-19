@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @Service
 public class CommandeService implements ICommande {
-    private static final String PANIER_COOKIE_NAME = "panier";
+   
 
     @Autowired
     private CommandeRepository commandeRepository;
