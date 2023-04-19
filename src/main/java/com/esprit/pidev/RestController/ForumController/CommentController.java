@@ -8,6 +8,7 @@ import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import com.esprit.pidev.services.ForumServices.CommentService;
 import com.esprit.pidev.services.ForumServices.IComment;
+import com.esprit.pidev.services.ForumServices.LikeService;
 import com.esprit.pidev.services.ForumServices.PostService;
 import lombok.AllArgsConstructor;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -30,9 +31,11 @@ import java.util.List;
 public class CommentController {
 
      IComment iComment;
-
-
+@Autowired
+LikeService likeService;
+    @Autowired
      CommentService commentService;
+    @Autowired
      PostService postService;
 
 
@@ -41,26 +44,12 @@ public class CommentController {
      UserRepository userRepository;
 
 
-    @PostMapping("/comments/{id}/like")
-    public ResponseEntity<Comment> likeComment(@PathVariable("id") Long commentId,@RequestParam Long userId) {
-        Comment comment = commentService.likeComment(commentId, userId);
-        if (comment != null) {
-            return ResponseEntity.ok(comment);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
 
-    @PostMapping("/{commentId}/dislike")
-    public Comment dislikeComment(@PathVariable Long commentId) {
-        return commentService.dislikeComment(commentId);
-    }
 
-    @GetMapping("/user/{userId}")
-    public List<Comment> getCommentsByUserId(@PathVariable Long userId) {
-        return commentService.getCommentsByUserId(userId);
-    }
+
+
+
 
 
 
@@ -132,6 +121,8 @@ public class CommentController {
     public void deleteComment(@PathVariable("id") Long id){
         commentService.deleteComment(id);
     }
+
+
 
 
 }
