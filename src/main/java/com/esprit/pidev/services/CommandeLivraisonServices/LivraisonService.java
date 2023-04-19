@@ -81,4 +81,8 @@ public class LivraisonService implements ILivraisonService {
 
         return  updateLivraison(livraison);
     }
+    public List<Livraison> findLivraisonsByEtatAndDeliveryTimeSlot(EtatCommande etatCommande, String deliveryTimeSlot) {
+        return livraisonRepository.findLivraisonsByEtatAndDeliveryTimeSlot(etatCommande, deliveryTimeSlot);
+    }
+
 }

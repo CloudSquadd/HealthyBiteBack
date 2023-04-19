@@ -10,11 +10,9 @@ import java.util.List;
 
         public interface ICommande {
                 Commande addCommande(Commande commande);
-
                 Commande updateCommande(Commande commande);
                 void deleteCommandeById(Long id);
                 Commande getCommandeById(Long id);
-
                 List<Commande> getAllCommandes();
                 List<Commande> getCommandesByEtat(EtatCommande etatCommande);
                 double CalculerTolaleCommande(Commande commande);

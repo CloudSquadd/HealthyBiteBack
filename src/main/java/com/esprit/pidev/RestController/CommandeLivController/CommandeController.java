@@ -71,5 +71,7 @@ public class CommandeController {
                                                                      @RequestParam EtatCommande etatCommande) {
         List<Commande> commandes = commandeService.findCommandesByDateAndEtat(startDate, endDate, etatCommande);
         return ResponseEntity.ok(commandes);
-    }}
+    }
+
+}
 

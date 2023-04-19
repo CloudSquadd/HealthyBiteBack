@@ -17,6 +17,7 @@ public interface ILivraisonService {
     Livraison refuserLivraison(Long id);
     Livraison updateLivraisonTimeSlot(Long id, String deliveryTimeSlot);
     Livraison updateCollectionPoint(Long id, String collectionPoint);
+    List<Livraison> findLivraisonsByEtatAndDeliveryTimeSlot(EtatCommande etatCommande, String deliveryTimeSlot);
 }
 
 

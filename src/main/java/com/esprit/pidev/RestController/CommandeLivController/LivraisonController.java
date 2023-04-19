@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -66,5 +67,11 @@ public class LivraisonController {
     @PutMapping("/{id}/collectionPoint")
     public Livraison updateCollectionPoint(@PathVariable Long id, @RequestBody String collectionPoint) {
         return livraisonService.updateCollectionPoint(id, collectionPoint);
+    }
+    @GetMapping("/findByEtatAndDeliveryTimeSlot")
+    public ResponseEntity<List<Livraison>> findLivraisonsByEtatAndDeliveryTimeSlot(@RequestParam EtatCommande etatCommande,
+                                                                                   @RequestParam String deliveryTimeSlot) {
+        List<Livraison> livraisons = livraisonService.findLivraisonsByEtatAndDeliveryTimeSlot(etatCommande, deliveryTimeSlot);
+        return ResponseEntity.ok(livraisons);
     }
 }
