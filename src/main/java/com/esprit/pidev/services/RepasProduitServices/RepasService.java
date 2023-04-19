@@ -22,6 +22,7 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -129,7 +130,7 @@ public class RepasService implements IRepas {
         else {
             metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
         } 
-        return metabolismeDeBase;
+        return Math.round(metabolismeDeBase);
     }
 
     //proposer des repas selon les activités des utilisateur
@@ -144,8 +145,8 @@ public class RepasService implements IRepas {
 
 
 
-    @Override
-    public List<Repas> proposerRepasSelonObjectifEtActivite() {
+
+   /* public List<Repas> proposerRepasSelonObjectifEtActivite() {
         User user = getCurrentUserObjects();
             ObjectifType objectifClient = user.getObjectif();
             TypeActivite typeActiviteClient = user.getActivite();
@@ -185,7 +186,7 @@ public class RepasService implements IRepas {
 
 
 
-    }
+    }*/
 
     @Override
     public Set<Repas> getRepasByUserId() {
@@ -195,6 +196,23 @@ public class RepasService implements IRepas {
             return repasRepository.findByUserId(user.getId());
         }
         return repasRepository.findByUserId(user.getId());
+    }
+
+    @Override
+    public List<Repas> proposerRepasSelonObjectifEtActivite() {
+        User user = getCurrentUserObjects();
+
+       // double maxCalories = calculerMaxCalories(user);
+
+        List<Repas> mealsByUserGoal = new ArrayList<>();
+        List<Repas> meals = repasRepository.findAll();
+        for (Repas meal : meals) {
+            if (meal.getObjectif().equals(user.getObjectif())) {
+                mealsByUserGoal.add(meal);
+            }
+        }
+
+        return mealsByUserGoal;
     }
 
     }
