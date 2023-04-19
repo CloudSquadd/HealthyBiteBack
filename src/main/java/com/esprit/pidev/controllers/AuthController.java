@@ -2,6 +2,7 @@ package com.esprit.pidev.controllers;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,12 +24,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
@@ -139,4 +137,22 @@ public class AuthController {
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+  @GetMapping("/user")
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+  }
+
+  @GetMapping("/userObjects")
+  public User getCurrentUserObjects() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    //return new User(user.getUsername(), user.getPassword(), user.getEmail());
+    return user;
+  }
+
 }

@@ -1,5 +1,6 @@
 package com.esprit.pidev.repository.RepasproduitRepository;
 
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,11 +18,13 @@ public interface RepasRepository extends JpaRepository<Repas,Long> {
     Optional<Repas> findByNom(String nom);
   List<Repas> findByNomContainingIgnoreCase(String nom);
 
-    @Query("SELECT r FROM Repas r WHERE r.nutrition.calories BETWEEN :minCalories AND :maxCalories")
-    List<Repas> findByQuantiteCaloriesBetween(@Param("minCalories") double minCalories, @Param("maxCalories") double maxCalories);
+    @Query("SELECT r FROM Repas r JOIN r.nutrition n WHERE n.calories BETWEEN :minCalories AND :maxCalories AND r.objectif = :objectif")
+    List<Repas> findByCaloriesAndObjectif(double minCalories, double maxCalories, ObjectifType objectif);
+
 
 
     List<Repas> findByDateAjoutIsGreaterThan(LocalDateTime lastCheckTime);
+
 
 
 }

@@ -3,6 +3,7 @@ package com.esprit.pidev.entities.ProduitRepas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +27,12 @@ public class Repas implements Serializable {
     private LocalDateTime dateAjout;
     @Enumerated(EnumType.STRING)
     private  ObjectifType objectif;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Transient
+    private MultipartFile imageFile;
 
 
     @Enumerated(EnumType.STRING)

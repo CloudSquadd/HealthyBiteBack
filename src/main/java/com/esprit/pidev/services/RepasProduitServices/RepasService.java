@@ -8,36 +8,43 @@ import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.Scheduled;
+import lombok.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
+import javax.persistence.Lob;
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @Service
 @AllArgsConstructor
 public class RepasService implements IRepas {
-
     UserRepository userRepository;
     RepasRepository repasRepository;
 
- //   SimpMessagingTemplate messagingTemplate;
 
-
-
-    //    LocalDateTime lastCheckTime = LocalDateTime.now();
-
-
-
+    public User getCurrentUserObjects() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user;
+    }
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
     @Override
     public Repas addRepas(Repas rep) {
@@ -45,22 +52,13 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public Repas updateRepas(Repas rep) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public Repas updateRepas(Repas rep) throws AccessDeniedException {
+        User user = getCurrentUserObjects();
 
-        if (authentication != null) {
-            // Get the authorities (roles) of the user
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                if ("ROLE_RESTAURANT".equals(authority.getAuthority())) {
-                    // User has "restaurant" role, check if they are the owner of the meal
-                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
-                    Repas meal = repasRepository.findById(rep.getId()).orElse(null); // Get the meal by ID
-                    if (meal != null && meal.getUser().getId().equals(loggedInUserId)) {
-                        repasRepository.save(rep); // User is the owner, allow update
-                    }
-                    break;
-                }
-            }
+        if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
+            repasRepository.save(rep);
+        } else {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
         }
         return rep;
     }
@@ -76,62 +74,42 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public void deleteRepas(Repas rep) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            // Get the authorities (roles) of the user
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                if ("ROLE_RESTAURANT".equals(authority.getAuthority())) {
-                    // User has "restaurant" role, check if they are the owner of the meal
-                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
-                    Repas repas = repasRepository.findById(rep.getId()).orElse(null); // Get the repas by ID
-                    if (repas != null && repas.getUser().getId().equals(loggedInUserId)) {
-                        repasRepository.delete(rep); // User is the owner, allow delete
-                    }
-                    break;
-                }
-            }
+    public void deleteRepas(Repas rep) throws AccessDeniedException {
+        User user = getCurrentUserObjects();
+
+        if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
+            repasRepository.delete(rep);
+        } else {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
         }
-
     }
 
-    @Override
-    public Set<Repas> getRepasByUserId(Long id) {
-        return repasRepository.findByUserId(id);
-    }
+
+
 
     //calculer nombre de calories dans les repas choisie par le client et verifier qu'il n'a pas exceder le maximum des calories dans les repas choisie
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
-        // Obtenir l'objet d'authentification de l'utilisateur connecté
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof User) {
-            // Caster l'objet principal en tant que Client
-            User user = (User) principal;
-
-            double maxCalories = calculerMaxCalories(user);
-            int caloriesTotales = 0;
+        double caloriesTotales = 0;
+            double maxCalories = calculerMaxCalories(getCurrentUser());
             for (Repas repas : repasChoisis) {
                 caloriesTotales += repas.getNutrition().getCalories();
             }
+            System.out.println("le nombre totale des calories est : " + caloriesTotales);
             //notifier le client qu'il excede le maxuimum de calories qu'il doit consommer
             if (caloriesTotales > maxCalories) {
                 System.out.println("Le total des calories dépasse le maximum autorisé !");
             }
-            return caloriesTotales;
-        }
-        return 0;
+
+        return (int) caloriesTotales;
+
     }
 
 
     //calculer le nombre maximum qu'un client doit consommer par jour
     @Override
     public double calculerMaxCalories(User user) {
-
         double metabolismeDeBase = 0;
-
         if (user.getGender().equals("Homme")) {
             metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
         } else {
@@ -148,36 +126,21 @@ public class RepasService implements IRepas {
 
         return repasRepository.findByNomContainingIgnoreCase(nom);
     }
-/*
-    @Scheduled(fixedRate = 3600000)
-    @Override
-    public void checkNewRepas() {
-        List<Repas> newRepas = repasRepository.findByDateAjoutIsGreaterThan(lastCheckTime);
-        if (!newRepas.isEmpty()) {
-            // Send a message to a specific topic using SimpMessagingTemplate
-            simpMessagingTemplate.convertAndSend("/topic/newRepasAvailable", "Nouveaux repas disponibles !");
-        }
-        lastCheckTime = LocalDateTime.now();
-    }*/
+
+
 
 
     @Override
-    public List<Repas> proposerRepasSelonObjectifEtActivite(ObjectifType objectif, TypeActivite typeActivite) {
-        // Obtenir l'objet d'authentification de l'utilisateur connecté
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof User) {
-            // Caster l'objet principal en tant que Client
-            User client = (User) principal;
-
-            double maxCalories = calculerMaxCalories(client);
-
+    public List<Repas> proposerRepasSelonObjectifEtActivite() {
+        User user = getCurrentUserObjects();
+            ObjectifType objectifClient = user.getObjectif();
+            TypeActivite typeActiviteClient = user.getActivite();
+            double maxCalories = calculerMaxCalories(user);
             // Calculer les calories minimales et maximales en fonction de l'objectif et du type d'activité
             double minCalories = 0;
             double maxCaloriesProposees = 0;
 
-            switch (objectif) {
+            switch (objectifClient) {
                 case Perdre_Poids:
                     minCalories = maxCalories * 0.75; // 75% des calories maximales
                     break;
@@ -188,8 +151,7 @@ public class RepasService implements IRepas {
                     minCalories = maxCalories * 1.1; // 110% des calories maximales
                     break;
             }
-
-            switch (typeActivite) {
+            switch (typeActiviteClient) {
                 case ACTIF:
                     maxCaloriesProposees = maxCalories * 1.1; // 110% des calories maximales
                     break;
@@ -201,22 +163,30 @@ public class RepasService implements IRepas {
                     break;
             }
 
-            // Rechercher les repas qui ont une quantité de calories entre les calories minimales et maximales proposées
-            List<Repas> repasProposes = repasRepository.findByQuantiteCaloriesBetween(minCalories, maxCaloriesProposees);
-
-            // Filtrer les repas en fonction de l'objectif
-            repasProposes = repasProposes.stream()
-                    .filter(repas -> repas.getObjectif() == objectif)
-                    .collect(Collectors.toList());
+            // Rechercher les repas qui ont une quantité de calories entre les calories minimales et maximales proposées et
+            // qui correspondent à l'objectif du client
+            List<Repas> repasProposes = repasRepository.findByCaloriesAndObjectif(minCalories,maxCaloriesProposees,objectifClient);
 
             return repasProposes;
-        }
 
-        return Collections.emptyList();
+
+
+    }
+
+    @Override
+    public Set<Repas> getRepasByUserId() {
+        User user = getCurrentUserObjects();
+
+        if (user.getRoles().equals("ROLE_RESTAURANT")) { 
+            return repasRepository.findByUserId(user.getId());
+        }
+        return repasRepository.findByUserId(user.getId());
+    }
+
     }
 
 
 
-}
+
 
 

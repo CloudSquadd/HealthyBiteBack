@@ -9,11 +9,17 @@ import com.esprit.pidev.services.RepasProduitServices.IRepas;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +41,7 @@ public class RepasController {
 
     }
     @PutMapping("/updateRepas")
-    public Repas updateRepas(@RequestBody Repas rep){
+    public Repas updateRepas(@RequestBody Repas rep) throws AccessDeniedException {
         return iRepas.updateRepas(rep);
     }
 
@@ -51,38 +57,39 @@ public class RepasController {
 
 
     @DeleteMapping("/deleteRepas")
-    public void deleteRepas(@RequestBody Repas rep){
+    public void deleteRepas(@RequestBody Repas rep) throws AccessDeniedException {
         iRepas.deleteRepas(rep);
 
     }
 
 
-    @GetMapping("/getRepasByUserId/{id}")
-    public Set<Repas> getRepasByUserId(@PathVariable("id") Long id) {
-        return iRepas.getRepasByUserId(id);
+    @GetMapping("/getRepasByUserId")
+    public Set<Repas> getRepasByUserId() {
+        return iRepas.getRepasByUserId();
 
     }
+
 
     @PostMapping("/totalCalories")
     public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis) {
         return iRepas.calculerCaloriesTotales(repasChoisis);
     }
 
-    @GetMapping("/maxCalories")
+    @PostMapping ("/maxCalories")
     public double calculerMaxCalories(@RequestBody User user) {
-
         return iRepas.calculerMaxCalories(user);
     }
    @GetMapping("/searchRepas")
-    public List<Repas> searchRepasByCategorie(@RequestParam("nom") String nom) {
+    public List<Repas> searchRepasByNom(@RequestParam("nom") String nom) {
         return iRepas.rechercherRepasParNom(nom);
     }
 
 
+
     @GetMapping("/proposer")
-    public ResponseEntity<List<Repas>> proposerRepasSelonObjectifEtActivite(@RequestParam ObjectifType objectif, @RequestParam TypeActivite typeActivite)
+    public ResponseEntity<List<Repas>> proposerRepasSelonObjectifEtActivite()
     {
-        List<Repas> repasProposes = iRepas.proposerRepasSelonObjectifEtActivite(objectif, typeActivite);
+        List<Repas> repasProposes = iRepas.proposerRepasSelonObjectifEtActivite();
         return ResponseEntity.ok(repasProposes);
     }
 /*
@@ -91,4 +98,6 @@ public class RepasController {
         iRepas.checkNewRepas();
         return ResponseEntity.ok("Vérification des nouveaux repas en cours !");
     }*/
+
+
 }
