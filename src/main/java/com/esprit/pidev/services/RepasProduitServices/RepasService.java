@@ -4,6 +4,9 @@ import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +22,25 @@ public class RepasService implements IRepas{
     public Repas addRepas(Repas rep) {
         return repasRepository.save(rep);
     }
-
     @Override
     public Repas updateRepas(Repas rep){
-        return repasRepository.save(rep);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            // Get the authorities (roles) of the user
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if ("ROLE_RESTAURANT".equals(authority.getAuthority())) {
+                    // User has "restaurant" role, check if they are the owner of the meal
+                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
+                    Repas meal = repasRepository.findById(rep.getId()).orElse(null); // Get the meal by ID
+                    if (meal != null && meal.getUser().getId().equals(loggedInUserId)) {
+                        repasRepository.save(rep); // User is the owner, allow update
+                    }
+                    break;
+                }
+            }
+        }
+        return rep;
     }
 
     @Override
@@ -36,17 +54,23 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    public void deleteRepas(Repas rep,User user) throws Exception {
-        // Vérifier si l'utilisateur a le rôle de restaurant
-        /*if (!user.getRole().equals("restaurant")) {
-            throw new Exception("vous n'avez pas le rôle de restaurant pour effectuer cette action");
-        }*/
-
-        // Vérifier si l'utilisateur est le propriétaire du repas
-        if (!rep.getUser().getId().equals(user.getId())) {
-            throw new Exception("vous n'etes pas le propriétaire du repas pour effectuer cette action");
+    public void deleteRepas(Repas rep){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            // Get the authorities (roles) of the user
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if ("ROLE_RESTAURANT".equals(authority.getAuthority())) {
+                    // User has "restaurant" role, check if they are the owner of the meal
+                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
+                    Repas repas = repasRepository.findById(rep.getId()).orElse(null); // Get the repas by ID
+                    if (repas != null && repas.getUser().getId().equals(loggedInUserId)) {
+                        repasRepository.delete(rep); // User is the owner, allow delete
+                    }
+                    break;
+                }
+            }
         }
-            repasRepository.deleteById(rep.getId());
+
     }
 
     @Override
@@ -73,18 +97,20 @@ public class RepasService implements IRepas{
         return "";
     }
 
+
+
     @Override
-    public double calculerMetabolismeDeBase(User user) {
+    public double calculerMaxCalories(User user) {
 
         double metabolismeDeBase = 0;
 
         if (user.getGender().equals("Homme")) {
             metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
-        } 
+        }
         else {
             metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
-        } 
-        return metabolismeDeBase;
+        }
+        return Math.round(metabolismeDeBase);
     }
 
 
