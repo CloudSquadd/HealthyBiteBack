@@ -177,7 +177,7 @@ public class RepasService implements IRepas {
     public Set<Repas> getRepasByUserId() {
         User user = getCurrentUserObjects();
 
-        if (user.getRoles().equals("ROLE_RESTAURANT")) { 
+        if (user.getRoles().equals("ROLE_RESTAURANT")) {
             return repasRepository.findByUserId(user.getId());
         }
         return repasRepository.findByUserId(user.getId());
