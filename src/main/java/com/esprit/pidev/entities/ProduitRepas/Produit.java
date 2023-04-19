@@ -1,5 +1,6 @@
 package com.esprit.pidev.entities.ProduitRepas;
 
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -25,7 +26,6 @@ public class Produit implements Serializable {
     @Enumerated(EnumType.STRING)
     @JsonIgnore
     private CategProduit categoriePro;
-
     @ManyToOne
     @JsonIgnore
     private User user;

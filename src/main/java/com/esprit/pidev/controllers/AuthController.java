@@ -1,5 +1,14 @@
 package com.esprit.pidev.controllers;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
+
 import com.esprit.pidev.entities.UserRole.ERole;
 import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.entities.UserRole.User;
@@ -15,6 +24,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -104,23 +114,23 @@ public class AuthController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(modRole);
 
+          break;
+        default:
+          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+          roles.add(userRole);
+
             break;
           case "restaurant":
             Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(restaurantRole);
-
             break;
           case "fournisseur":
-            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+            Role FournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(fournisseurRole);
-
+            roles.add(FournisseurRole);
             break;
-          default:
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
         }
       });
     }
@@ -130,4 +140,22 @@ public class AuthController {
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+  @GetMapping("/user")
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+  }
+
+  @GetMapping("/userObjects")
+  public User getCurrentUserObjects() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    //return new User(user.getUsername(), user.getPassword(), user.getEmail());
+    return user;
+  }
+
 }

@@ -3,15 +3,19 @@ package com.esprit.pidev.entities.UserRole;
 
 
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,12 +30,13 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 @Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,20 +59,28 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-    private Long maxCalories;
 
-    private String besoin;
+
+
+    // **************** attribut qui concerne le client
+
+    @Enumerated(EnumType.STRING)
+    private TypeActivite activite;
+
+    @Enumerated(EnumType.STRING)
+    private ObjectifType objectif;
 
     private Long poids;
     @Enumerated(EnumType.STRING)
     private GenderType Gender;
 
     private int age;
-    private Long perdrePoids;
+    private Long ObjectifPoids;
     private Long taille;
 
-
+    ///********************fin des attributs
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<AdresseLivraison> addresses;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)

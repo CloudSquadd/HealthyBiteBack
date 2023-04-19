@@ -13,12 +13,16 @@ import security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -62,6 +66,7 @@ public class TestController {
   public String adminAccess() {
     return "Admin Board.";
   }
+
   @PostMapping("/addUser")
   public ResponseEntity<?> addUser(@Valid @RequestBody SignupRequest signUpRequest){
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -95,6 +100,18 @@ public class TestController {
             Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(adminRole);
+
+            break;
+          case "restaurant":
+            Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(restaurantRole);
+
+            break;
+          case "fournisseur":
+            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(fournisseurRole);
 
             break;
           case "mod":
@@ -142,6 +159,11 @@ public class TestController {
   @PutMapping("/update/{id}")
   public User updateUser(@PathVariable Long id, @RequestBody User updatedUser, @RequestParam(required = false) Set<String> roles) {
     return service.updateUser(id, updatedUser, roles);
+  }
+
+  @GetMapping("/users/{ville}")
+  public List<User> getUsersByVille(@PathVariable("ville") String ville) {
+    return service.findByVille(ville);
   }
 
 

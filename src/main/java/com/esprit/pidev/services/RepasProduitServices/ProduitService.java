@@ -1,14 +1,18 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.Produit;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.ProduitRepository;
+import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -16,6 +20,22 @@ import java.util.Set;
 public class ProduitService implements IProduit{
 
     ProduitRepository produitRepository;
+    UserRepository userRepository;
+
+    public User getCurrentUserObjects() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        //return new User(user.getUsername(), user.getPassword(), user.getEmail());
+        return user;
+    }
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
     @Override
     public Produit addProduit(Produit pr) {
@@ -23,27 +43,20 @@ public class ProduitService implements IProduit{
     }
 
     @Override
-    public Produit updateProduit(Produit pr) {
+    public Produit updateProduit(Produit pr) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (authentication != null) {
-            // Get the authorities (roles) of the user
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                if ("ROLE_FOURNISSEUR".equals(authority.getAuthority())) {
-                    // User has "fournisseur" role, check if they are the owner of the produit
-                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
-                    Produit produit = produitRepository.findById(pr.getId()).orElse(null); // Get the produit by ID
-                    if (produit != null && produit.getUser().getId().equals(loggedInUserId)) {
-                        return produitRepository.save(pr); // User is the owner, allow update
-                    }
-                    break;
-                }
-            }
+        if (user.getRoles().equals("ROLE_RESTAURANT") && pr.getUser().getId() == user.getId()) {
+            produitRepository.save(pr);
+        } else {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
         }
         return pr;
-
-
     }
+
     @Override
     public Produit retrieveProduitById(Long id) {
 
@@ -56,27 +69,26 @@ public class ProduitService implements IProduit{
     }
 
     @Override
-    public void deleteProduit(Produit pr) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            // Get the authorities (roles) of the user
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                if ("ROLE_Fournisseur".equals(authority.getAuthority())) {
-                    // User has "restaurant" role, check if they are the owner of the meal
-                    Long loggedInUserId = Long.parseLong(authentication.getName()); // Get the ID of the currently logged-in user
-                    Produit produit = produitRepository.findById(pr.getId()).orElse(null); // Get the repas by ID
-                    if (produit != null && produit.getUser().getId().equals(loggedInUserId)) {
-                        produitRepository.deleteById(pr.getId()); // User is the owner, allow delete
-                    }
-                    break;
-                }
-            }
+    public void deleteProduit(Produit pr) throws AccessDeniedException {
+       User user = getCurrentUserObjects();
+
+        if (user.getRoles().equals("ROLE_FOURNISSEUR") && pr.getUser().getId() == user.getId()) {
+            produitRepository.delete(pr);
+        } else {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
         }
     }
 
+
     @Override
-    public Set<Produit> getProduitByUserId(Long id) {
-        return produitRepository.findByUserId(id);
+    public Set<Produit> getProduitByUserId() {
+        User user = getCurrentUserObjects();
+
+        if (user.getRoles().equals("ROLE_FOURNISSEUR")) {
+            return produitRepository.findByUserId(user.getId());
+        }
+
+        return produitRepository.findByUserId(user.getId());
     }
 
 

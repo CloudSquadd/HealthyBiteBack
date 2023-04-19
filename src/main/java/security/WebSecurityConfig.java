@@ -20,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
+import java.security.Principal;
+
 @Configuration
 @EnableGlobalMethodSecurity(
     // securedEnabled = true,
@@ -36,6 +39,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
+
+
 
 //  @Override
 //  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -85,7 +90,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     http.cors().and().csrf().disable()
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+        .authorizeRequests().antMatchers("/api/auth/**","/**").permitAll()
         .antMatchers("/api/test/**").permitAll()
         .anyRequest().authenticated();
     
@@ -95,4 +100,5 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     
     return http.build();
   }
+
 }

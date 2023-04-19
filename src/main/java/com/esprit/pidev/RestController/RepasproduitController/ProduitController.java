@@ -3,13 +3,18 @@ package com.esprit.pidev.RestController.RepasproduitController;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.services.RepasProduitServices.IProduit;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Set;
 
 @RestController
+@Data
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/test")
 public class ProduitController {
 
     IProduit iProduit;
@@ -20,7 +25,7 @@ public class ProduitController {
 
     }
     @PutMapping("/updateProduit")
-    public Produit updateProduit(@RequestBody Produit pr){
+    public Produit updateProduit(@RequestBody Produit pr) throws AccessDeniedException {
         return iProduit.updateProduit(pr);
     }
     @GetMapping("getProduitById/{id}")
@@ -33,13 +38,11 @@ public class ProduitController {
         return iProduit.retrieveAllProduit();
     }
     @DeleteMapping("deleteProduit")
-    public void deleteProduit(@RequestBody Produit pr){
+    public void deleteProduit(@RequestBody Produit pr) throws AccessDeniedException {
         iProduit.deleteProduit(pr);
     }
-
-
-    @GetMapping("/getProduitByUserId/{id}")
-    public Set<Produit> getProduitByUserId(@PathVariable("id") Long id) {
-        return iProduit.getProduitByUserId(id);
+    @GetMapping("/getProduitByUserId")
+    public Set<Produit> getProduitByUserId() {
+        return iProduit.getProduitByUserId();
     }
 }
