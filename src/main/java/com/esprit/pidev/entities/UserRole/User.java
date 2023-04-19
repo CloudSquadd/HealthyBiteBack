@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,6 +75,7 @@ public class User {
 
     private Long poids;
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private GenderType Gender;
 
     private int age;
@@ -133,9 +133,7 @@ public class User {
 
     }
 
-    public Long getId() {
-        return id;
-    }
+
 
     public void setId(Long id) {
         this.id = id;

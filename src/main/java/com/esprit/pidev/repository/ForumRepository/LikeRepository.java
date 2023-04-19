@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<LikeEntity,Long> {
-    Optional<LikeEntity> findByUserAndPost(User user, Post post);
+    Optional<LikeEntity> findByCommentAndUser(Comment comment, User user);
 
-    Optional<LikeEntity> findByUserAndComment(User user, Comment comment);
+    Optional<LikeEntity> findByUserAndPost(User userId, Post post);
+
+    Optional<LikeEntity> findByUserAndComment(User userId, Comment comment);
 
     Long countByPost(Post post);
 
