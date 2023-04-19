@@ -1,7 +1,6 @@
 package com.esprit.pidev.controllers;
 
-<<<<<<< Updated upstream
-=======
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
->>>>>>> Stashed changes
+
 import com.esprit.pidev.entities.UserRole.ERole;
 
 import com.esprit.pidev.entities.UserRole.Role;
@@ -20,37 +19,31 @@ import com.esprit.pidev.payload.request.LoginRequest;
 import com.esprit.pidev.payload.request.SignupRequest;
 import com.esprit.pidev.payload.response.JwtResponse;
 import com.esprit.pidev.payload.response.MessageResponse;
-<<<<<<< Updated upstream
-import security.jwt.JwtUtils;
-import security.services.UserDetailsImpl;
-=======
-import com.esprit.pidev.repository.UserRoleRepository.VerificationTokenRepository;
+import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
+import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import com.esprit.pidev.security.jwt.JwtUtils;
+import com.esprit.pidev.security.services.UserDetailsImpl;
+
+import com.esprit.pidev.repository.UserRoleRepository.VerificationTokenRepository;
 import com.esprit.pidev.security.services.EmailSenderService;
 import com.esprit.pidev.security.services.PasswordResetTokenService;
-import com.esprit.pidev.security.services.UserDetailsImpl;
 import com.esprit.pidev.security.services.UserService;
->>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-<<<<<<< Updated upstream
-=======
+
 import org.springframework.ui.Model;
->>>>>>> Stashed changes
+
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

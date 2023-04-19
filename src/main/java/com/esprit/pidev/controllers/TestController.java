@@ -8,14 +8,12 @@ import com.esprit.pidev.payload.request.SignupRequest;
 import com.esprit.pidev.payload.response.MessageResponse;
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
-<<<<<<< Updated upstream
-import security.services.IUser;
-import security.services.UserService;
-=======
+
 import com.esprit.pidev.security.services.IUser;
-import com.esprit.pidev.security.services.RoleService;
 import com.esprit.pidev.security.services.UserService;
->>>>>>> Stashed changes
+
+import com.esprit.pidev.security.services.RoleService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
