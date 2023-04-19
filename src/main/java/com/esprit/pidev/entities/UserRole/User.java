@@ -7,6 +7,7 @@ import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
+import com.esprit.pidev.entities.Objectif;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -119,6 +120,8 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "comment_id")})
     private Set<Comment> likedComments = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Objectif> objectifs = new ArrayList<>();
 
     public User(String username, String email, String password) {
         this.username = username;
