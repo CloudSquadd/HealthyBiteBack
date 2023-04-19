@@ -11,7 +11,7 @@ public interface IRepas {
     Repas updateRepas(Repas rep);
     Repas retrieveRepasById(Long id);
     List<Repas> retrieveAllRepas();
-    void deleteRepas(Repas rep,User user) throws Exception;
+    void deleteRepas(Repas rep);
 
      Set<Repas> getRepasByUserId(Long id);
 
@@ -19,7 +19,7 @@ public interface IRepas {
 
      String checkMealNutrition(Repas repas);
 
-    double calculerMetabolismeDeBase(User user);
+    double calculerMaxCalories(User user);
 
 
 }

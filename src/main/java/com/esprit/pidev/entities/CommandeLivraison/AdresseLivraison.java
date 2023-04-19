@@ -27,9 +27,7 @@ public class AdresseLivraison {
 
     private String num;
 
-    @ManyToOne
-    @JsonIgnore
-    private Livraison livraison;
+
 
     @ManyToOne
     @JsonIgnore
