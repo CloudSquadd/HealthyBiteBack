@@ -4,6 +4,7 @@ import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.CommandeLivraison.EtatCommande;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -13,7 +14,9 @@ import java.util.List;
                 Commande updateCommande(Commande commande);
                 void deleteCommandeById(Long id);
                 Commande getCommandeById(Long id);
+
                 List<Commande> getAllCommandes();
                 List<Commande> getCommandesByEtat(EtatCommande etatCommande);
                 double CalculerTolaleCommande(Commande commande);
+                List<Commande> findCommandesByDateAndEtat(Date startDate, Date endDate, EtatCommande etatCommande);
         }

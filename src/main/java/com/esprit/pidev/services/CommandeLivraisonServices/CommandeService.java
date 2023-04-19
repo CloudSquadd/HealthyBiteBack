@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,8 @@ public class CommandeService implements ICommande {
         return commandeOptional.orElse(null);
     }
 
+
+
     @Override
     public List<Commande> getAllCommandes() {
         return commandeRepository.findAll();
@@ -60,5 +63,10 @@ public class CommandeService implements ICommande {
         }
         return total;
 
+    }
+
+    @Override
+    public List<Commande> findCommandesByDateAndEtat(Date startDate, Date endDate, EtatCommande etatCommande) {
+        return commandeRepository.getCommandesByDateAndEtat(startDate, endDate, etatCommande);
     }
 }

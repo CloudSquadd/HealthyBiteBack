@@ -10,6 +10,7 @@ import com.esprit.pidev.services.CommandeLivraisonServices.ILivraisonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,5 +66,19 @@ public class LivraisonService implements ILivraisonService {
         Livraison livraison = getLivraisonById(id);
         livraison.setEtat(EtatCommande.ANNULEE);
         return updateLivraison(livraison);
+    }
+    @Override
+    public Livraison updateLivraisonTimeSlot(Long id, String deliveryTimeSlot) {
+        Livraison livraison = getLivraisonById(id);
+        livraison.setDeliveryTimeSlot(deliveryTimeSlot);
+        return updateLivraison(livraison);
+    }
+    @Override
+    public Livraison updateCollectionPoint(Long id, String pointCollecte) {
+        Livraison livraison = getLivraisonById(id);
+
+        livraison.setCollectionPoint(pointCollecte);
+
+        return  updateLivraison(livraison);
     }
 }

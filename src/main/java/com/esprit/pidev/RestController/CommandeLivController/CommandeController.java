@@ -10,8 +10,11 @@ import com.esprit.pidev.services.CommandeLivraisonServices.ICommande;
 import lombok.AllArgsConstructor;
 import org.aspectj.bridge.ICommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -60,5 +63,13 @@ public class CommandeController {
         return total;
 
 
+    }
+
+    @GetMapping("/findByDateAndEtat")
+    public ResponseEntity<List<Commande>> findCommandesByDateAndEtat(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+                                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+                                                                     @RequestParam EtatCommande etatCommande) {
+        List<Commande> commandes = commandeService.findCommandesByDateAndEtat(startDate, endDate, etatCommande);
+        return ResponseEntity.ok(commandes);
     }}
 
