@@ -1,8 +1,8 @@
-package security;
+package com.esprit.pidev.security;
 
-import security.jwt.AuthEntryPointJwt;
-import security.jwt.AuthTokenFilter;
-import security.services.UserDetailsServiceImpl;
+import com.esprit.pidev.security.jwt.AuthEntryPointJwt;
+import com.esprit.pidev.security.jwt.AuthTokenFilter;
+import com.esprit.pidev.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

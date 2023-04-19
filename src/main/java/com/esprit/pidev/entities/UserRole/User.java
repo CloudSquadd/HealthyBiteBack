@@ -40,7 +40,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private boolean enabled;
     @NotBlank
     @Size(max = 20)
     private String username;
@@ -77,8 +77,12 @@ public class User implements Serializable {
     private int age;
     private Long ObjectifPoids;
     private Long taille;
+    private String verificationToken;
 
     ///********************fin des attributs
+    public boolean isActive() {
+        return enabled;
+    }
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<AdresseLivraison> addresses;

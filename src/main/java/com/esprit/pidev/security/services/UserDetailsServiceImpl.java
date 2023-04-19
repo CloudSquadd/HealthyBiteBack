@@ -1,4 +1,4 @@
-package security.services;
+package com.esprit.pidev.security.services;
 
 import com.esprit.pidev.entities.UserRole.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
     return UserDetailsImpl.build(user);
   }
 

@@ -4,7 +4,7 @@ import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
-import security.services.IUser;
+import com.esprit.pidev.security.services.IUser;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
 import lombok.AllArgsConstructor;
 import lombok.Data;
