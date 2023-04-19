@@ -35,7 +35,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private boolean enabled;
     @NotBlank
     @Size(max = 20)
     private String username;
@@ -65,8 +65,11 @@ public class User {
     private int age;
     private Long perdrePoids;
     private Long taille;
+    private String verificationToken;
 
-
+    public boolean isActive() {
+        return enabled;
+    }
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AdresseLivraison> addresses;
 

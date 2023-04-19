@@ -6,7 +6,11 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
+<<<<<<< Updated upstream
           <factory-entry name="pidev" />
+=======
+          <factory-entry name="entityManagerFactory" />
+>>>>>>> Stashed changes
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

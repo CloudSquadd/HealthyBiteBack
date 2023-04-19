@@ -8,11 +8,19 @@ import com.esprit.pidev.payload.request.SignupRequest;
 import com.esprit.pidev.payload.response.MessageResponse;
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
+<<<<<<< Updated upstream
 import security.services.IUser;
 import security.services.UserService;
+=======
+import com.esprit.pidev.security.services.IUser;
+import com.esprit.pidev.security.services.RoleService;
+import com.esprit.pidev.security.services.UserService;
+>>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +41,8 @@ public class TestController {
 
   @Autowired
   PasswordEncoder encoder;
-
+@Autowired
+  private RoleService roleservice;
 
   @Autowired
 
@@ -126,7 +135,7 @@ public class TestController {
   public User retrieveUserById(@PathVariable("id") Long id){
     return iuser.retrieveUserById(id);
   }
-
+  @PreAuthorize("hasAuthority('ROLE_USER') and isAuthenticated() and principal.isEnabled()")
   @GetMapping("/getAllUser")
   public List<User> retrieveAllUser(){
     return iuser.retrieveAllUser();
@@ -139,10 +148,63 @@ public class TestController {
   public List<User> searchUsersByUsername(@RequestParam("username") String username) {
     return iuser.searchUsersByUsername(username);
   }
-  @PutMapping("/update/{id}")
-  public User updateUser(@PathVariable Long id, @RequestBody User updatedUser, @RequestParam(required = false) Set<String> roles) {
-    return service.updateUser(id, updatedUser, roles);
+  @PutMapping("/{id}")
+  public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
+                                         @RequestBody User user,
+                                         @RequestParam(value = "roles", required = false) Set<String> roleNames) {
+    User updatedUser = service.updateUser(id, user, roleNames);
+    return ResponseEntity.ok(updatedUser);
   }
+  @PostMapping("/{id}/roles")
+  public ResponseEntity<?> assignRoleToUser(@PathVariable Long id, @RequestParam ERole roleName) {
+    User user = service.retrieveUserById(id);
+    if (user == null) {
+      return ResponseEntity.notFound().build();
+    }
+    Role role = roleservice.findByName(roleName);
+    if (role == null) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    roleservice.assignRoleToUser(id, roleName);
+    return ResponseEntity.ok().build();
+  }
+  @PutMapping("/{id}/enable")
+  public ResponseEntity<?> enableUser(@PathVariable Long id) {
+    User user = service.enableUser(id);
+    if (user == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(user);
+  }
+
+  @PutMapping("/{id}/disable")
+  public ResponseEntity<?> disableUser(@PathVariable Long id) {
+    User user = service.disableUser(id);
+    if (user == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(user);
+  }
+  @GetMapping("/users")
+  public ResponseEntity<List<User>> getAllUsers(@AuthenticationPrincipal User user) {
+    if (user != null && user.isEnabled()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+    List<User> users = service.retrieveAllUser();
+    return ResponseEntity.ok(users);
+  }
+  @PutMapping("/disableU3-roles")
+  public ResponseEntity<?> disableUsersWithMoreThan3Roles() {
+    service.disableUsersWithMoreThan3Roles();
+    return ResponseEntity.ok().build();
+  }
+  @PutMapping("/disable-by-role")
+  public ResponseEntity<String> disableUsersByRoleName(@RequestParam("roleName") String roleName) {
+    service.disableUsersByRoleName(roleName);
+    return ResponseEntity.ok("Users with role " + roleName + " have been disabled.");
+  }
+
 
 
 }

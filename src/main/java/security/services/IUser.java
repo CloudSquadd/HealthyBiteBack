@@ -12,4 +12,5 @@ public interface IUser {
     void deleteUser(Long id);
     List<User> searchUsersByUsername(String username);
     User updateUser(Long id, User user, Set<String> role);
+    User findByEmail(String email);
 }

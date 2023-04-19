@@ -1,21 +1,49 @@
 package com.esprit.pidev.controllers;
 
+<<<<<<< Updated upstream
+=======
+import java.util.*;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+
+>>>>>>> Stashed changes
 import com.esprit.pidev.entities.UserRole.ERole;
+
 import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.entities.UserRole.User;
+import com.esprit.pidev.entities.UserRole.VerificationToken;
+import com.esprit.pidev.entities.UserRole.PasswordResetToken;
 import com.esprit.pidev.payload.request.LoginRequest;
 import com.esprit.pidev.payload.request.SignupRequest;
 import com.esprit.pidev.payload.response.JwtResponse;
 import com.esprit.pidev.payload.response.MessageResponse;
+<<<<<<< Updated upstream
 import security.jwt.JwtUtils;
 import security.services.UserDetailsImpl;
+=======
+import com.esprit.pidev.repository.UserRoleRepository.VerificationTokenRepository;
+import com.esprit.pidev.security.jwt.JwtUtils;
+import com.esprit.pidev.security.services.EmailSenderService;
+import com.esprit.pidev.security.services.PasswordResetTokenService;
+import com.esprit.pidev.security.services.UserDetailsImpl;
+import com.esprit.pidev.security.services.UserService;
+>>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+<<<<<<< Updated upstream
+=======
+import org.springframework.ui.Model;
+>>>>>>> Stashed changes
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,9 +58,18 @@ import java.util.stream.Collectors;
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
+  @Autowired
+  private EmailSenderService emailSenderService;
+  @Autowired
+
+  private VerificationTokenRepository tok;
+  @Autowired
+  private UserService userservice;
 
   @Autowired
   UserRepository userRepository;
+  @Autowired
+  private PasswordResetTokenService tokenService;
 
   @Autowired
   RoleRepository roleRepository;
@@ -42,17 +79,21 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
-
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
     Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+    // Check if the user is enabled
+    if (!userDetails.isEnabled()) {
+      return ResponseEntity.badRequest().body("User is disabled");
+    }
+
     String jwt = jwtUtils.generateJwtToken(authentication);
 
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     List<String> roles = userDetails.getAuthorities().stream()
             .map(item -> item.getAuthority())
             .collect(Collectors.toList());
@@ -63,7 +104,14 @@ public class AuthController {
             userDetails.getEmail(),
             roles));
   }
-
+  @GetMapping("/user")
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    return new User(user.getUsername(), user.getPassword(), user.getEmail());
+  }
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -126,8 +174,66 @@ public class AuthController {
     }
 
     user.setRoles(roles);
+    user.setEnabled(true);
     userRepository.save(user);
+
+    String token = UUID.randomUUID().toString();
+    VerificationToken verificationToken = new VerificationToken(token, user);
+    tok.save(verificationToken);
+    String confirmationUrl = "http://localhost:8080/api/auth/confirm-account?token=" + verificationToken.getToken();; // add token to URL
+
+    emailSenderService.sendVerificationEmail(user, verificationToken,confirmationUrl);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+  @PostMapping("/confirm-account")
+  public ResponseEntity<?> confirmAccount(@RequestParam("token") String token) {
+    VerificationToken verificationToken = tok.findByToken(token);
+
+    if (verificationToken == null) {
+      return ResponseEntity.badRequest().body("Invalid token");
+    }
+
+    User user = verificationToken.getUser();
+    user.setEnabled(true);
+    userRepository.save(user);
+
+    return ResponseEntity.ok(new MessageResponse("Account confirmed successfully!"));
+  }
+  @GetMapping("/reset-password")
+  public String showResetPasswordForm(Model model, @RequestParam("token") String token) {
+    // Check if the token is valid and not expired
+    PasswordResetToken passwordResetToken = tokenService.getPasswordResetToken(token);
+    if (passwordResetToken == null) {
+      model.addAttribute("errorMessage", "Invalid or expired password reset token");
+      return "error";
+    }
+
+    // Add the token to the model and display the password reset form
+    model.addAttribute("token", token);
+    return "reset-password";
+  }
+  @PostMapping("/forgot-password")
+  public String processForgotPasswordForm(HttpServletRequest request, Model model, @RequestParam("email") String email) {
+    // Find the user by email
+    User user = userservice.findByEmail(email);
+    if (user == null) {
+      model.addAttribute("errorMessage", "No user found with email: " + email);
+      return "forgot-password";
+    }
+
+    PasswordResetToken passwordResetToken = tokenService.createTokenForUser(user);
+
+    // Create password reset URL with token
+    String resetUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + "/reset-password?token=" + passwordResetToken.getToken();
+
+    // Send an email to the user with the password reset link
+    emailSenderService.sendResetPasswordEmail(user, passwordResetToken,resetUrl);
+
+    // Display a success message and redirect to the login page
+    model.addAttribute("successMessage", "An email with instructions to reset your password has been sent to " + email);
+    return "redirect:/login";
+  }
 }
+
