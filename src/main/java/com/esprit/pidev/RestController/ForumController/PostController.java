@@ -5,6 +5,7 @@ import com.esprit.pidev.services.ForumServices.IPost;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RequestMapping("/api/test")
@@ -14,9 +15,9 @@ public class PostController {
 
      IPost iPost;
 
-    @PostMapping("/addPost/{userId}")
-    public Post addPost(@PathVariable("userId") Long userId, @RequestBody Post pt){
-        return iPost.addPost(pt, userId);
+    @PostMapping("/addPost")
+    public Post addPost(@RequestBody Post pt) {
+        return iPost.addPost(pt);
     }
 
 

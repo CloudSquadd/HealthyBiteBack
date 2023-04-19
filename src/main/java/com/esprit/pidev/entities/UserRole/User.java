@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -105,9 +104,7 @@ public class User {
 
     }
 
-    public Long getId() {
-        return id;
-    }
+
 
     public void setId(Long id) {
         this.id = id;

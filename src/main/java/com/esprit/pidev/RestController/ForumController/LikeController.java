@@ -19,33 +19,23 @@ import java.util.List;
 public class LikeController {
 
      LikeService likeService;
+     ILike ilike;
 
-    @PostMapping("/posts/{postId}/like")
-    public ResponseEntity<?> likePost(@AuthenticationPrincipal User userId, @PathVariable Long postId) {
-        if (likeService.isPostLikedByUser(userId, postId)) {
-            return ResponseEntity.badRequest().body("Post already liked by user");
-        }
-        likeService.likePost(userId, postId);
-        return ResponseEntity.ok().body("you liked the post");
+
+    @PostMapping("/likePost/{postId}")
+    public LikeEntity likePost( @PathVariable Long postId, LikeEntity liked) {
+        return  ilike.likePost(liked,postId );
     }
 
     @PostMapping("/posts/{postId}/unlike")
-    public ResponseEntity<?> unlikePost(@AuthenticationPrincipal User userId, @PathVariable Long postId) {
-        if (!likeService.isPostLikedByUser(userId, postId)) {
+    public ResponseEntity<?> unlikePost( @PathVariable Long postId) {
+        if (!likeService.isPostLikedByUser( postId)) {
             return ResponseEntity.badRequest().body("Post not liked by user");
         }
-        likeService.unlikePost(userId, postId);
+        likeService.unlikePost( postId);
         return ResponseEntity.ok().body("you unliked the post");
     }
 
-    @PostMapping("/comments/{commentId}/like")
-    public ResponseEntity<?> likeComment(@AuthenticationPrincipal User userId, @PathVariable Long commentId) {
-        if (likeService.isCommentLikedByUser(userId, commentId)) {
-            return ResponseEntity.badRequest().body("Comment already liked by user");
-        }
-        likeService.likeComment(userId, commentId);
-        return ResponseEntity.ok().body("you liked the comment");
-    }
 
     @PostMapping("/comments/{commentId}/unlike")
     public ResponseEntity<?> unlikeComment(@AuthenticationPrincipal User userId, @PathVariable Long commentId) {

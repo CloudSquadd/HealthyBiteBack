@@ -2,10 +2,11 @@ package com.esprit.pidev.services.ForumServices;
 
 import com.esprit.pidev.entities.Forum.Post;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 public interface IPost {
-    Post addPost(Post pt,Long userId);
+    Post addPost(Post pt);
 
     Post updatePost(Long id, Post pt);
 

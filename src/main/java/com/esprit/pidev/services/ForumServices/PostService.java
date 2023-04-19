@@ -7,13 +7,18 @@ import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletResponse;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,12 +26,19 @@ public class PostService implements IPost {
     PostRepository postRepository;
     UserRepository userRepository;
 
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
     @Override
-    public Post addPost(Post pt, Long userId) {
-        User retrievedUser = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
-        pt.setUser(retrievedUser);
-        return postRepository.save(pt);
+    public Post addPost(Post pt) {
+        User user = getCurrentUser();
+        pt.setUser(user);
+            postRepository.save(pt);
+    return pt;
     }
 
 
