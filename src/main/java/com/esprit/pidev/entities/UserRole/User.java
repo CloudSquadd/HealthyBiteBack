@@ -3,8 +3,10 @@ package com.esprit.pidev.entities.UserRole;
 
 
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -63,17 +65,25 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-    private Long maxCalories;
+    // **************** attribut qui concerne le client
 
-    private String besoin;
+    @Enumerated(EnumType.STRING)
+    private TypeActivite activite;
+
+    @Enumerated(EnumType.STRING)
+    private ObjectifType objectif;
 
     private Long poids;
     @Enumerated(EnumType.STRING)
     private GenderType Gender;
 
     private int age;
-    private Long perdrePoids;
+    private Long ObjectifPoids;
     private Long taille;
+
+    ///********************fin des attributs
+
+
     private String verificationToken;
 
     ///********************fin des attributs
