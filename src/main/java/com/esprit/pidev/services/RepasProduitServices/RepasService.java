@@ -5,6 +5,7 @@ import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
+import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class RepasService implements IRepas {
         if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
             repasRepository.save(rep);
         } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à modifier ce repas.");
         }
         return rep;
     }
