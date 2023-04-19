@@ -11,6 +11,7 @@ import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
