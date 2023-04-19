@@ -5,18 +5,21 @@ import com.esprit.pidev.services.ForumServices.IPost;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor
 public class PostController {
 
-    private final IPost iPost;
+     IPost iPost;
 
     @PostMapping("/addPost")
-    public Post addPost(@RequestBody Post pt){
+    public Post addPost(@RequestBody Post pt) {
         return iPost.addPost(pt);
     }
+
 
     @PutMapping("/updatePost/{id}")
     public Post updatePost(@PathVariable("id") Long id, @RequestBody Post pt){
@@ -33,7 +36,11 @@ public class PostController {
         return iPost.findAll();
     }
 
-
+    @GetMapping("/getAllPosts")
+    @ResponseBody
+    public List<Post> retrieveAllPosts(){
+        return iPost.retrieveAllPosts();
+    }
 
 
     @DeleteMapping("/deletePost/{id}")

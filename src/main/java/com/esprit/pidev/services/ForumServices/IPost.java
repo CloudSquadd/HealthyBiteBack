@@ -2,6 +2,7 @@ package com.esprit.pidev.services.ForumServices;
 
 import com.esprit.pidev.entities.Forum.Post;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 public interface IPost {
@@ -11,7 +12,11 @@ public interface IPost {
 
     Post retrievePostById(Long id);
 
+/*
     List<Post> retrieveAllPost();
+*/
+
+    List<Post> retrieveAllPosts();
 
 
 

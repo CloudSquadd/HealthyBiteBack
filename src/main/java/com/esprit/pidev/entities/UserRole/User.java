@@ -15,6 +15,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -67,6 +72,7 @@ public class User {
 
     private Long poids;
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private GenderType Gender;
 
     private int age;
@@ -124,9 +130,7 @@ public class User {
 
     }
 
-    public Long getId() {
-        return id;
-    }
+
 
     public void setId(Long id) {
         this.id = id;
