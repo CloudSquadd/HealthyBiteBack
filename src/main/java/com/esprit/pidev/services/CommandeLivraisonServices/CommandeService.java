@@ -15,12 +15,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+
 import java.util.Date;
+
+
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CommandeService implements ICommande {
+    private static final String PANIER_COOKIE_NAME = "panier";
 
     @Autowired
     private CommandeRepository commandeRepository;
@@ -30,7 +35,7 @@ public class CommandeService implements ICommande {
     @Override
     public Commande addCommande(Commande commande) {
         commande.setEtatCommande(EtatCommande.EN_ATTENTE);
-       // commande.setUser(getCurrentUser());
+        commande.setUser(getCurrentUser());
         return commandeRepository.save(commande);
     }
     public User getCurrentUser() {
@@ -66,23 +71,15 @@ public class CommandeService implements ICommande {
     public List<Commande> getCommandesByEtat(EtatCommande etatCommande) {
         return commandeRepository.findByEtatCommande(etatCommande);
     }
-    @Override
-    public double CalculerTolaleCommande(Commande commande) {
-        double total = 0.0;
-        for (Produit produit : commande.getProduit()) {
-            total += produit.getPrix();
-        }
-        for (Repas repas : commande.getRepas()) {
-            total += repas.getPrix();
-        }
-        return total;
 
-    }
 
     @Override
     public List<Commande> findCommandesByDateAndEtat(Date startDate, Date endDate, EtatCommande etatCommande) {
         return commandeRepository.getCommandesByDateAndEtat(startDate, endDate, etatCommande);
     }
+
+
+
 
 
 
