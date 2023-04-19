@@ -3,10 +3,8 @@ package com.esprit.pidev.entities.UserRole;
 
 
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
-import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,8 +18,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,13 +35,12 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 @Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User implements Serializable {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,23 +63,16 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+    private Long maxCalories;
 
-
-
-    // **************** attribut qui concerne le client
-
-    @Enumerated(EnumType.STRING)
-    private TypeActivite activite;
-
-    @Enumerated(EnumType.STRING)
-    private ObjectifType objectif;
+    private String besoin;
 
     private Long poids;
     @Enumerated(EnumType.STRING)
     private GenderType Gender;
 
     private int age;
-    private Long ObjectifPoids;
+    private Long perdrePoids;
     private Long taille;
     private String verificationToken;
 
@@ -90,8 +80,8 @@ public class User implements Serializable {
     public boolean isActive() {
         return enabled;
     }
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private Set<AdresseLivraison> addresses;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)

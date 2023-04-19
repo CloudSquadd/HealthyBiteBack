@@ -13,8 +13,6 @@ import java.util.Set;
 @RestController
 @Data
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/test")
 public class ProduitController {
 
     IProduit iProduit;

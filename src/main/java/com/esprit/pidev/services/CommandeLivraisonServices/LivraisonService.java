@@ -1,6 +1,7 @@
 
 package com.esprit.pidev.services.CommandeLivraisonServices;
 
+import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.CommandeLivraison.EtatCommande;
 import com.esprit.pidev.entities.CommandeLivraison.Livraison;
 
@@ -28,10 +29,12 @@ public class LivraisonService implements ILivraisonService {
         return livraisonRepository.save(livraison);
     }
 
+
     @Override
-    public void deleteLivraison(Long id) {
+    public void deleteLivraisonById(Long id) {
         livraisonRepository.deleteById(id);
     }
+
 
     @Override
     public Livraison getLivraisonById(Long id) {

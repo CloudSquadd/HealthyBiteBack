@@ -73,7 +73,6 @@ public class TestController {
   public String adminAccess() {
     return "Admin Board.";
   }
-
   @PostMapping("/addUser")
   public ResponseEntity<?> addUser(@Valid @RequestBody SignupRequest signUpRequest){
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -107,18 +106,6 @@ public class TestController {
             Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(adminRole);
-
-            break;
-          case "restaurant":
-            Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(restaurantRole);
-
-            break;
-          case "fournisseur":
-            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(fournisseurRole);
 
             break;
           case "mod":
@@ -220,10 +207,6 @@ public class TestController {
     return ResponseEntity.ok("Users with role " + roleName + " have been disabled.");
   }
 
-  @GetMapping("/users/{ville}")
-  public List<User> getUsersByVille(@PathVariable("ville") String ville) {
-    return service.findByVille(ville);
-  }
 
 
 

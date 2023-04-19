@@ -5,8 +5,8 @@ import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
-import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import lombok.Value;
 import org.springframework.security.core.Authentication;
@@ -88,7 +88,6 @@ public class RepasService implements IRepas {
 
 
 
-    //calculer nombre de calories dans les repas choisie par le client et verifier qu'il n'a pas exceder le maximum des calories dans les repas choisie
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
         double caloriesTotales = 0;
@@ -125,10 +124,11 @@ public class RepasService implements IRepas {
         double metabolismeDeBase = 0;
         if (user.getGender().equals("Homme")) {
             metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
-        } else {
+        } 
+        else {
             metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
-        }
-        return Math.round(metabolismeDeBase);
+        } 
+        return metabolismeDeBase;
     }
 
     //proposer des repas selon les activités des utilisateur

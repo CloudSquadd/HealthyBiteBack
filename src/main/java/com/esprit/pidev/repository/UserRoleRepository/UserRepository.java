@@ -30,8 +30,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Boolean existsByEmail(String email);
   public User findByEmail(String email);
   public User findByEmailAndPassword(String email, String password);
-  @Query("SELECT u FROM User u JOIN u.addresses a WHERE a.ville = :ville")
-  List<User> findByVille(@Param("ville") String ville);
-
-
 }
