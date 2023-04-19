@@ -15,7 +15,7 @@ public interface IProduit {
     List<Produit> retrieveAllProduit();
     void deleteProduit(Produit pr) throws AccessDeniedException;
 
-    public Set<Produit> getProduitByUserId(Long id);
+    public Set<Produit> getProduitByUserId();
     //void checkReclamationsByProduit(Long id);
     void updateProduitBloqueStatus();
 }
