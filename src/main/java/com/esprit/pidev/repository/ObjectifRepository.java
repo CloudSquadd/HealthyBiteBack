@@ -10,16 +10,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-
 public interface ObjectifRepository extends JpaRepository<Objectif, Long> {
 
     @Query(value = "" +
             "SELECT * " +
             "FROM Objectif " +
             "WHERE " +
-            "   poidDepart BETWEEN :poidDepart and :poidDepartTolerated " +
+            "   poidDepart BETWEEN ?1 and ?2 " +
             "AND " +
-            "   objectifPoid BETWEEN  objectifPoid  AND objectifPoidTolerated"
+            "   objectifPoid BETWEEN  ?3  AND ?4"
             , nativeQuery = true)
     public List<Objectif> findByPoidDeDepardWithTolerance(
             @Param("poidDepart") Long poidDepart,

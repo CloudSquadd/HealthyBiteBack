@@ -23,7 +23,7 @@ public class Objectif {
     private Long id;
 
     private Long poidDepart;
-    private Long poidActuel;
+        private Long poidActuel;
     private Long taille;
     private Long objectifPoid;
 

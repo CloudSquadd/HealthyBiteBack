@@ -65,7 +65,6 @@ public class User implements Serializable {
     private Long perdrePoids;
     private Long taille;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AdresseLivraison> addresses;
 

@@ -2,12 +2,7 @@ package com.esprit.pidev.RestController;
 
 import com.esprit.pidev.entities.Conseil;
 import com.esprit.pidev.entities.Objectif;
-import com.esprit.pidev.entities.UserRole.User;
-import com.esprit.pidev.exceptions.RecetteNotFoundException;
-import com.esprit.pidev.services.ConseilServiceImpl;
-import com.esprit.pidev.services.IConseilService;
-import com.esprit.pidev.services.IObjectifService;
-import com.esprit.pidev.services.IRecetteService;
+import com.esprit.pidev.services.*;
 import com.esprit.pidev.services.UserRoleService.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +16,18 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
+ @RequestMapping("/conseil")
 @AllArgsConstructor
-@RequestMapping("/conseil")
-
 public class ConseilController {
 
-    @Autowired
+
+
+    private UserService userService;
 
     private IConseilService conseilService;
 
-    @Autowired
-    private UserService userService;
+    private  IObjectifService objectifService;
 
-    @Autowired
-    private IObjectifService objectifService;
 
     @PostMapping("/")
     public ResponseEntity<Conseil> addConseil(@RequestBody Conseil conseil) {
@@ -88,7 +81,19 @@ public class ConseilController {
     }
 
 
-
+//    @Autowired
+//    public void setConseilServiceImpl(ConseilServiceImpl conseilServiceImpl) {
+//        this.conseilService = conseilServiceImpl;
+//    }
+//
+//    @Autowired
+//    public void setObjectifService(ObectifServiceImpl objectifServiceImpl) {
+//        this.objectifService = objectifServiceImpl;
+//    }
+//    @Autowired
+//    public void setUserService(UserService userService) {
+//        this.userService = userService;
+//    }
 
 
 }

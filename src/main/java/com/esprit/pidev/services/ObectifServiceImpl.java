@@ -9,6 +9,7 @@ import com.esprit.pidev.services.UserRoleService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,6 +22,9 @@ public class ObectifServiceImpl implements IObjectifService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SmsService smsService;
 
     @Override
     public Objectif addObjectif(Objectif objectif) {
@@ -35,6 +39,11 @@ public class ObectifServiceImpl implements IObjectifService {
             throw new RecetteNotFoundException("Recette not found");
         }
         objectif.setUser(user);
+        String messageBody = "felicitation votre objectif a ete enregistre avec succes \n "+
+                "poid actuel : " + objectif.getPoidActuel() + "\n" +
+                "objectif poid : " + objectif.getObjectifPoid() + "\n" +
+                "taille" + objectif.getTaille() + "\n";
+        smsService.sendSms(user.getId(), messageBody);
         return objectifRepository.save(objectif);
     }
 
@@ -73,13 +82,11 @@ public class ObectifServiceImpl implements IObjectifService {
     @Override
     public void deleteObjectif(Long id) {
         this.objectifRepository.deleteById(id);
-
     }
 
     @Override
-    public List<Objectif> findSimilarObjectifs(Long poidDepart, Long objectifPoid ) {
+    public List<Objectif> findSimilarObjectifs(Long poidDepart, Long objectifPoid) {
 
-
-        return objectifRepository.findByPoidDeDepardWithTolerance(poidDepart-5, poidDepart + 5, objectifPoid-5, objectifPoid+5  );
+        return objectifRepository.findByPoidDeDepardWithTolerance(poidDepart - 5, poidDepart + 5, objectifPoid - 5, objectifPoid + 5);
     }
 }
