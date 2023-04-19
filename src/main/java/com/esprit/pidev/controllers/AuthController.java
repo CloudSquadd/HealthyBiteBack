@@ -106,14 +106,7 @@ public class AuthController {
             userDetails.getEmail(),
             roles));
   }
-  @GetMapping("/user")
-  public User getCurrentUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = authentication.getName();
-    Optional<User> userOptional = userRepository.findByUsername(username);
-    User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    return new User(user.getUsername(), user.getPassword(), user.getEmail());
-  }
+
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
