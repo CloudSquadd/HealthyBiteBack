@@ -65,7 +65,6 @@ public class AuthController {
   @Autowired
   private EmailSenderService emailSenderService;
   @Autowired
-
   private VerificationTokenRepository tok;
   @Autowired
   private UserService userservice;
@@ -148,6 +147,18 @@ public class AuthController {
             Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(modRole);
+
+            break;
+          case "fournisseur":
+            Role fournisseur = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(fournisseur);
+
+            break;
+          case "restaurant":
+            Role restaurant = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(restaurant);
 
             break;
           default:

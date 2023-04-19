@@ -1,37 +1,28 @@
 package com.esprit.pidev.entities.UserRole;
 
 
-
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
 import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
+
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
-import com.esprit.pidev.entities.Objectif;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import com.esprit.pidev.entities.Forum.Comment;
-
-import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.*;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity

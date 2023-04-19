@@ -1,10 +1,12 @@
 package com.esprit.pidev.services.ConseilRecetteServices;
 
-import com.esprit.pidev.entities.Conseil;
-import com.esprit.pidev.entities.Objectif;
+
+import com.esprit.pidev.entities.ConseilRecette.Conseil;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
 import com.esprit.pidev.entities.UserRole.User;
-import com.esprit.pidev.repository.ConseilRepository;
-import com.esprit.pidev.services.UserRoleService.UserService;
+
+import com.esprit.pidev.repository.ConseilRecette.ConseilRepository;
+import com.esprit.pidev.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ public class ConseilServiceImpl implements IConseilService {
 
     @Autowired
     private UserService userService;
+
 
     @Override
     public Conseil addConseil(Conseil conseil) {
@@ -47,6 +50,8 @@ public class ConseilServiceImpl implements IConseilService {
 
         return conseilRepository.save(existingConseil);
     }
+
+
 
     @Override
     public Optional<Conseil> retrieveConseilById(Long id) {

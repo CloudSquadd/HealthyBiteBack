@@ -56,13 +56,7 @@ public class RepasService implements IRepas {
 
     @Override
     public Repas updateRepas(Repas rep) throws AccessDeniedException {
-        User user = getCurrentUserObjects();
-
-        if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
             repasRepository.save(rep);
-        } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à modifier ce repas.");
-        }
         return rep;
     }
 
@@ -78,13 +72,7 @@ public class RepasService implements IRepas {
 
     @Override
     public void deleteRepas(Repas rep) throws AccessDeniedException {
-        User user = getCurrentUserObjects();
-
-        if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
             repasRepository.delete(rep);
-        } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
-        }
     }
 
 
