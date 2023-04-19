@@ -6,11 +6,10 @@ import com.esprit.pidev.entities.UserRole.User;
 
 public interface ILike {
 
-    LikeEntity likePost(LikeEntity liked,Long postId);
+    void likePost(User userId, Long postId);
 
     void unlikePost( Long postId);
     void likeComment(User userId, Long commentId);
 
     void unlikeComment(User userId, Long commentId);
 }
-

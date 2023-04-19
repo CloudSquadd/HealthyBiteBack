@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,17 +29,14 @@ import java.util.Optional;
 @Service
 public class CommentService implements IComment {
     @Autowired
-
     CommentRepository commentRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
      IPost postService;
     @Autowired
-
     LikeRepository likeRepository;
     @Autowired
-
     PostRepository postRepository;
 
 
@@ -89,44 +87,38 @@ public class CommentService implements IComment {
 
 
 
-    @Override
-    public Comment likeComment(Long commentId, Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        Comment comment = commentRepository.findById(commentId).orElse(null);
-        if (comment != null) {
-            Optional<LikeEntity> like = likeRepository.findByCommentAndUser(comment, user);
-            if (like.isPresent()) {
-                throw new IllegalArgumentException("Comment already liked by user");
-            } else {
-                comment.setLikes(comment.getLikes() + 1);
-                LikeEntity newLike = new LikeEntity(user, comment);
-                likeRepository.save(newLike);
-                return commentRepository.save(comment);
-            }
+
+
+    /*@Override
+    public void likeComment(User userId, Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        LikeEntity like = likeRepository.findByUserAndComment(userId, comment).orElseGet(() -> new LikeEntity(userId, comment));
+
+        if (like.isLiked()) {
+            throw new IllegalArgumentException("Comment already liked by user");
         }
-        return null;
+
+        like.setLiked(true);
+        likeRepository.save(like);
     }
 
-
-
-
     @Override
-    public Comment dislikeComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElse(null);
-        if (comment != null) {
-            comment.setDislikes(comment.getDislikes() + 1);
-            return commentRepository.save(comment);
+    public void unlikeComment(User userId, Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        LikeEntity like = likeRepository.findByUserAndComment(userId, comment)
+                .orElseThrow(() -> new EntityNotFoundException("Like not found"));
+
+        if (!like.isLiked()) {
+            throw new IllegalArgumentException("Comment is not liked by user");
         }
-        return null;
+
+        like.setLiked(false);
+        likeRepository.save(like);
     }
-
-
-
-
-
-
+*/
 
 
     public List<Comment> getCommentsByUserId(Long userId) {
