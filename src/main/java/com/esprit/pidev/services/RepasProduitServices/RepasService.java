@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Lob;
 import java.io.IOException;
@@ -105,6 +106,18 @@ public class RepasService implements IRepas {
 
     }
 
+    @Override
+    public void updateRepasBloqueStatus() {
+        repasRepository.blockRepasWithTooManyReclamations();
+    }
+    public String checkMealNutrition(Repas repas) {
+        // Logique de vérification des valeurs nutritionnelles d'un repas
+        // Exemple : vérifier si les calories dépassent la limite recommandée
+        if (repas.getNutrition().getCalories() >600 ) {
+            return ("Les calories du repas dépassent la limite recommandée.");
+        }
+        return "";
+    }
 
     //calculer le nombre maximum qu'un client doit consommer par jour
     @Override

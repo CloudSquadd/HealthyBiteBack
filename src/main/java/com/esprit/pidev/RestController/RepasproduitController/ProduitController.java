@@ -45,4 +45,8 @@ public class ProduitController {
     public Set<Produit> getProduitByUserId() {
         return iProduit.getProduitByUserId();
     }
+    @PutMapping("/checkReclamationsByProduit")
+    void checkReclamationsByProduit(){
+        iProduit.updateProduitBloqueStatus();
+    }
 }

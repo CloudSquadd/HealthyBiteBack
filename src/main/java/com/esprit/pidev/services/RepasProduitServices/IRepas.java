@@ -17,6 +17,7 @@ public interface IRepas {
     void deleteRepas(Repas rep) throws AccessDeniedException;
      Set<Repas> getRepasByUserId();
 
+    void updateRepasBloqueStatus( );
     int calculerCaloriesTotales(List<Repas> repasChoisis);
 
     double calculerMaxCalories(User user);

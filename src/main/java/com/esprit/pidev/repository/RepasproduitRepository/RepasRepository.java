@@ -6,6 +6,10 @@ import com.esprit.pidev.entities.UserRole.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,5 +30,12 @@ public interface RepasRepository extends JpaRepository<Repas,Long> {
     List<Repas> findByDateAjoutIsGreaterThan(LocalDateTime lastCheckTime);
 
 
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Repas r SET r.bloquee = true WHERE r.id IN " +
+            "(SELECT rp.id FROM Repas rp JOIN rp.reclamations rc " +
+            "GROUP BY rp HAVING COUNT(rc) > 3)")
+    void blockRepasWithTooManyReclamations();
 
 }

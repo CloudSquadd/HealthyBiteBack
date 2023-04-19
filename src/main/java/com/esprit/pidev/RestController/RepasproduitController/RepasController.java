@@ -25,10 +25,9 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/test")
 @AllArgsConstructor
 @Data
-
+@RequestMapping("/api/test")
 public class RepasController {
     @Autowired
     IRepas iRepas;
@@ -73,6 +72,10 @@ public class RepasController {
     @PostMapping("/totalCalories")
     public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis) {
         return iRepas.calculerCaloriesTotales(repasChoisis);
+    }
+    @PutMapping("/checkReclamationsByRepas")
+    public void checkReclamationsByRepas(){
+        iRepas.updateRepasBloqueStatus();
     }
 
     @PostMapping ("/maxCalories")

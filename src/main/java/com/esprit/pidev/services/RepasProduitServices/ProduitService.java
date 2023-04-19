@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -36,6 +37,20 @@ public class ProduitService implements IProduit{
         Optional<User> userOptional = userRepository.findByUsername(username);
         return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
+    //public void checkReclamationsByProduit(Long id) {
+    // List<Object[]> result = produitRepository.countReclamationsByProduit();
+    //// for (Object[] row : result) {
+        //     String nomProduit = (String) row[0];
+    // Long nombreReclamations = (Long) row[1];
+    // if (nombreReclamations > 10) {
+    //  Produit produit = produitRepository.findById(id).orElse(null);
+    //  produit.setBloquee(true);
+    //  produitRepository.save(produit);
+    // }
+    //}
+    // }
+
 
     @Override
     public Produit addProduit(Produit pr) {
@@ -89,6 +104,11 @@ public class ProduitService implements IProduit{
         }
 
         return produitRepository.findByUserId(user.getId());
+    }
+
+    @Override
+    public void updateProduitBloqueStatus() {
+        produitRepository.blockProduitWithTooManyReclamations();
     }
 
 

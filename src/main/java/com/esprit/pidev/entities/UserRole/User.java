@@ -11,6 +11,12 @@ import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import com.esprit.pidev.entities.Forum.Comment;
+
+import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,6 +31,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
 
 @Entity
 @Getter
@@ -89,6 +96,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Repas> repas;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Reclamation> reclamations;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Produit> produits;
