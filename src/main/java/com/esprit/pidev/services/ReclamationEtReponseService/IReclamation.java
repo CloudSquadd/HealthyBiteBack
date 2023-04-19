@@ -2,8 +2,11 @@ package com.esprit.pidev.services.ReclamationEtReponseService;
 
 import com.esprit.pidev.entities.ReclamationEtReponse.Notification;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
+import com.esprit.pidev.entities.ReclamationEtReponse.ReponseReclamation;
 import com.esprit.pidev.entities.UserRole.User;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IReclamation {
@@ -15,10 +18,11 @@ public interface IReclamation {
     List<Reclamation> retrieveAllReclamationByUser(long id);
     List<Reclamation> retrieveReclamation(boolean archived);
     void ArchiverReclamation(Long idReclamation);
-    void assignRepasToReclamation(Long idReclamation,Long id);
-    void assignProduitToReclamation(Long idReclamation,Long id);
-    void assignResponseToReclamation(Long idReclamation, Long idReponseReclamation);
-    //void assignNotificationToReclamation(Long idReclamation, Long idNotification);
+    public Reclamation assignRepasToReclamation(Reclamation rec ,Long id);
+    public Reclamation assignProduitToReclamation(Reclamation rec,Long id);
+
+    void archiveReclamationsNonTraitees();
+    List<Object[]> countReclamationsByMonth();
     public List<Reclamation> recupererReclamationsTrieesParDate();
     //void assignReclamationToUser(Long idReclamation, Long id);
 

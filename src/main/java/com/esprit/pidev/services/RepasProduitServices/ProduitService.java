@@ -61,9 +61,8 @@ public class ProduitService implements IProduit{
     }
 
     @Override
-    @Transactional
-    public void updateProduitBloqueStatus(Long idProduit) {
-        produitRepository.updateProduitBloqueStatus(idProduit);
+    public void updateProduitBloqueStatus() {
+        produitRepository.blockProduitWithTooManyReclamations();
     }
 
 

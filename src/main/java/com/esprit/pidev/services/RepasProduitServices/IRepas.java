@@ -15,7 +15,7 @@ public interface IRepas {
 
      Set<Repas> getRepasByUserId(Long id);
 
-    public void updateRepasBloqueStatus(Long idRepas);
+    void updateRepasBloqueStatus( );
     int calculerCaloriesTotales(List<Repas> repasChoisis);
 
      String checkMealNutrition(Repas repas);

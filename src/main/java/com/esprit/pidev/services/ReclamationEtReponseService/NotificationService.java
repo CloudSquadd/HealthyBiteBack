@@ -1,15 +1,14 @@
 package com.esprit.pidev.services.ReclamationEtReponseService;
 
 import com.esprit.pidev.entities.ReclamationEtReponse.Notification;
-import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
-import com.esprit.pidev.entities.UserRole.User;
+
 import com.esprit.pidev.repository.ReclamationEtReponseRepository.NotificationRepository;
 import com.esprit.pidev.repository.ReclamationEtReponseRepository.ReclamationRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+
 import java.util.List;
 @Service
 @AllArgsConstructor
@@ -41,6 +40,5 @@ public class NotificationService implements INotification{
     public void deleteNotification(Long idNotification) {
         notificationRepository.deleteById(idNotification);
     }
-
 
 }

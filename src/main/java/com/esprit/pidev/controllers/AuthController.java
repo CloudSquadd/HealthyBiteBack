@@ -4,10 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-
 import com.esprit.pidev.entities.UserRole.ERole;
 import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.entities.UserRole.User;
@@ -32,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
+
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

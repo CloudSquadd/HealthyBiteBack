@@ -16,6 +16,7 @@ import java.util.Set;
 @RestController
 @AllArgsConstructor
 @CrossOrigin("http://localhost:4200")
+@RequestMapping("/api/test")
 public class RepasController {
 
     IRepas iRepas;
@@ -56,9 +57,9 @@ public class RepasController {
     public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis) {
         return iRepas.calculerCaloriesTotales(repasChoisis);
     }
-    @PutMapping("/checkReclamationsByRepas/{id}")
-    void checkReclamationsByRepas(@PathVariable("id") Long id){
-        iRepas.updateRepasBloqueStatus(id);
+    @PutMapping("/checkReclamationsByRepas")
+    public void checkReclamationsByRepas(){
+        iRepas.updateRepasBloqueStatus();
     }
 
     @GetMapping("metabolisme/{id}")

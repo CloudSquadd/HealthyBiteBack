@@ -16,5 +16,5 @@ public interface IProduit {
 
     public Set<Produit> getProduitByUserId(Long id);
     //void checkReclamationsByProduit(Long id);
-    void updateProduitBloqueStatus(Long idProduit);
+    void updateProduitBloqueStatus();
 }

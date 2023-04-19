@@ -9,11 +9,12 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/test")
 public class ReponseReclamationController {
     IReponseReclamation iReponseReclamation;
 
-    @PostMapping("/addReponseReclamation")
-    public ReponseReclamation addReponseReclamation(@RequestBody ReponseReclamation repr , Long idReclamation){
+    @PostMapping("/addReponseReclamation/{idReclamation}")
+    public ReponseReclamation addReponseReclamation(@RequestBody ReponseReclamation repr ,@PathVariable Long idReclamation){
       return iReponseReclamation.addReponseReclamation(repr, idReclamation) ;
     }
 

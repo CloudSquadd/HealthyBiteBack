@@ -36,6 +36,7 @@ public class UserService implements IUser{
     public User fetchUserByEmailAndPassword(String email, String password) {
         return repo.findByEmailAndPassword(email, password);
     }
+
     @Override
     public User addUser(User user) {
         return repo.save(user);    }

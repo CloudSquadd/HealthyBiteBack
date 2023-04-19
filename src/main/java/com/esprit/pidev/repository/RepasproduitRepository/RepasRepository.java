@@ -5,13 +5,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 public interface RepasRepository extends JpaRepository<Repas,Long> {
     Set<Repas> findByUserId(Long userId);
+
     @Modifying
-    @Query("UPDATE Repas p SET p.bloquee= CASE WHEN SIZE(p.reclamations) > 2 THEN TRUE ELSE FALSE END WHERE p.id = :idRepas")
-    void updateRepasBloqueStatus(@Param("idRepas") Long idRepas);
+    @Transactional
+    @Query("UPDATE Repas r SET r.bloquee = true WHERE r.id IN " +
+            "(SELECT rp.id FROM Repas rp JOIN rp.reclamations rc " +
+            "GROUP BY rp HAVING COUNT(rc) > 3)")
+    void blockRepasWithTooManyReclamations();
 
 }

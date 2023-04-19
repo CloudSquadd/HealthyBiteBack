@@ -2,22 +2,24 @@ package com.esprit.pidev.services.ReclamationEtReponseService;
 
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
-import com.esprit.pidev.entities.ReclamationEtReponse.Notification;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
-import com.esprit.pidev.entities.ReclamationEtReponse.ReponseReclamation;
 import com.esprit.pidev.entities.UserRole.User;
-import com.esprit.pidev.repository.ReclamationEtReponseRepository.NotificationRepository;
 import com.esprit.pidev.repository.ReclamationEtReponseRepository.ReclamationRepository;
-import com.esprit.pidev.repository.ReclamationEtReponseRepository.ReponseReclamationRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
+import com.esprit.pidev.security.services.UserService;
 import com.esprit.pidev.services.RepasProduitServices.ProduitService;
 import com.esprit.pidev.services.RepasProduitServices.RepasService;
-import com.esprit.pidev.services.UserRoleService.UserService;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
 
+import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,26 +27,47 @@ public class ReclamationService implements IReclamation {
 
     ReclamationRepository reclamationRepository;
     INotification notificationService;
-    ReponseReclamationRepository reponseReclamationRepository;
+
     UserService userService;
     RepasService repasService;
     ProduitService produitService;
+    UserRepository userRepository;
 
 
     @Override
-    public void assignRepasToReclamation(Long idReclamation,Long id){
-        Reclamation rec = reclamationRepository.findById(idReclamation).orElse(null);
+    public Reclamation assignRepasToReclamation(Reclamation rec,Long id){
         Repas repas = repasService.retrieveRepasById(id);
         rec.setRepas(repas);
-        reclamationRepository.save(rec);
+        rec.setUser(getCurrentUser());
+        return reclamationRepository.save(rec);
     }
 
     @Override
-    public void assignProduitToReclamation(Long idReclamation,Long id) {
-        Reclamation rec = reclamationRepository.findById(idReclamation).orElse(null);
+    public Reclamation assignProduitToReclamation(Reclamation rec,Long id) {
         Produit produit = produitService.retrieveProduitById(id);
         rec.setProduit(produit);
-        reclamationRepository.save(rec);
+        rec.setUser(getCurrentUser());
+        return reclamationRepository.save(rec);
+    }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+
+        @Scheduled(cron = "0 0 0 * * *")
+        public void archiveReclamationsNonTraitees() {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, -1);
+            Date dateLimite = cal.getTime();
+            reclamationRepository.archiveReclamations(dateLimite);
+    }
+
+    public List<Object[]> countReclamationsByMonth() {
+        return reclamationRepository.countReclamationsByMonth();
     }
 
     @Override
@@ -84,21 +107,6 @@ public class ReclamationService implements IReclamation {
     //public void deleteReclamation(Long idReclamation) {
      //   reclamationRepository.deleteById(idReclamation);
     //}
-    @Override
-    public void assignResponseToReclamation(Long idReclamation, Long idReponseReclamation) {
-        Reclamation rec = reclamationRepository.findById(idReclamation).orElse(null);
-        ReponseReclamation rep =reponseReclamationRepository.findById(idReponseReclamation).orElse(null);
-        Notification not = new Notification();
-        not.setTextNotification("Votre Reclamation a ete traitee");
-        not.setDateNotification(rep.getDateReponseReclamation());
-        notificationService.addNotification(not);
-        rec.setNotifications(not);
-        //assignNotificationToReclamation(idReclamation, not.getIdNotification());
-        rec.setReponseReclamation(rep);
-        rec.setEtatReclamation("Traitee");
-        reclamationRepository.save(rec);
-
-    }
 
 
     public void ArchiverReclamation(Long idReclamation) {
@@ -113,6 +121,8 @@ public class ReclamationService implements IReclamation {
     public List<Reclamation> recupererReclamationsTrieesParDate() {
         return reclamationRepository.findAllByOrderByDateReclamation();
     }
+
+
 
 
 

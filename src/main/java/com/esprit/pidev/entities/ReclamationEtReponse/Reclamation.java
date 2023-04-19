@@ -24,7 +24,7 @@ public class Reclamation implements Serializable {
     @Temporal(TemporalType.DATE )
     private Date dateReclamation;
     private String textReclamation;
-    @Column(columnDefinition = "Non traitée")
+
     private String etatReclamation;
     private Boolean archived=false;
 

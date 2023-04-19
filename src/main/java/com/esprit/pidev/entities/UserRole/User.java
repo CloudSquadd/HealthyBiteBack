@@ -8,7 +8,7 @@ import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.Forum.Comment;
-import com.esprit.pidev.entities.Forum.LikeDislike;
+
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -27,6 +27,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
 
 @Entity
 @Getter

@@ -65,9 +65,8 @@ public class RepasService implements IRepas{
     }
 
     @Override
-    @Transactional
-    public void updateRepasBloqueStatus(Long idRepas) {
-        repasRepository.updateRepasBloqueStatus(idRepas);
+    public void updateRepasBloqueStatus() {
+        repasRepository.blockRepasWithTooManyReclamations();
     }
     public String checkMealNutrition(Repas repas) {
         // Logique de vérification des valeurs nutritionnelles d'un repas

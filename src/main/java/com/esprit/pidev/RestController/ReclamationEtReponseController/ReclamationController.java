@@ -4,6 +4,7 @@ import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.esprit.pidev.repository.ReclamationEtReponseRepository.ReclamationRepository;
 import com.esprit.pidev.services.ReclamationEtReponseService.IReclamation;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,22 +12,23 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/test")
 public class ReclamationController {
     IReclamation iReclamation;
     ReclamationRepository reclamationRepository;
 
-    @PostMapping("/assignRepasToReclamation/{idReclamation}/{idRepas}")
-    public void assignRepasToReclamation( @PathVariable("idReclamation") Long idReclamation , @PathVariable("idRepas")Long idRepas) {
-        iReclamation.assignRepasToReclamation( idReclamation, idRepas);
+    @PostMapping("/assignRepasToReclamation/{idRepas}")
+    public void assignRepasToReclamation( @RequestBody Reclamation rec , @PathVariable("idRepas")Long idRepas) {
+        iReclamation.assignRepasToReclamation( rec, idRepas);
     }
-    @PostMapping("/assignResponseToReclamation/{idReclamation}/{idReponseReclamation}")
-    public void assignResponseToReclamation(@PathVariable("idReclamation") Long idReclamation, @PathVariable("idReponseReclamation") Long idReponseReclamation) {
-        iReclamation.assignResponseToReclamation(idReclamation, idReponseReclamation);
+    @PostMapping("/addReclamation/{idUser}")
+    public void addReclamation( @RequestBody Reclamation rec ,@PathVariable("idUser") Long idUser) {
+        iReclamation.addReclamation( rec, idUser);
     }
 
-    @PostMapping("/assignProduitToReclamation/{idReclamation}/{idProduit}")
-    public void assignProduitToReclamation( @PathVariable("idReclamation") Long idReclamation , @PathVariable("idProduit")Long idProduit) {
-        iReclamation.assignProduitToReclamation(idReclamation, idProduit);
+    @PostMapping("/assignProduitToReclamation/{idProduit}")
+    public void assignProduitToReclamation( @RequestBody Reclamation rec ,@PathVariable("idProduit")Long idProduit) {
+        iReclamation.assignProduitToReclamation(rec, idProduit);
     }
 
     @PutMapping("/updateReclamation")
@@ -58,6 +60,10 @@ public class ReclamationController {
         model.addAttribute("archivedReclamations", archivedReclamations);
         return archivedReclamations;
     }
+    @PutMapping("/archiverReclamationNonTraitee")
+    public void archiveReclamationsNonTraitees(){
+        iReclamation.archiveReclamationsNonTraitees();
+    }
 
     @GetMapping("/retrieveReclamation")
     public List<Reclamation> retrieveReclamation(boolean archived) {
@@ -74,6 +80,11 @@ public class ReclamationController {
         List<Reclamation> reclamations = reclamationRepository.findAllByOrderByDateReclamation();
         model.addAttribute("reclamations", reclamations);
         return reclamations;
+    }
+
+    @GetMapping("/reclamations/mois")
+    public List<Object[]> countReclamationsByMonth() {
+        return iReclamation.countReclamationsByMonth();
     }
 }
 
