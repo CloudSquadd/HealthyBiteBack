@@ -20,7 +20,6 @@ import java.util.*;
 public class Commande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idCom")
     private Long idCom;
 
 
@@ -40,13 +39,11 @@ public class Commande {
     private EtatCommande etatCommande;
 
     private Date dateCommande;
-    //@ManyToOne
-    //@JsonIgnore
-    //private Coupon coupon;
+
     private Integer quantite;
     private double total;
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 

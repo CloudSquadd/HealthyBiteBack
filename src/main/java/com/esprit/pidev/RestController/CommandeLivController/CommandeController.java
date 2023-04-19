@@ -6,10 +6,13 @@ import com.esprit.pidev.services.CommandeLivraisonServices.CommandeService;
 import com.esprit.pidev.services.CommandeLivraisonServices.ICommande;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import java.util.Date;
+
 import java.util.List;
 
 @RestController
@@ -24,7 +27,6 @@ public class CommandeController {
 
     @PostMapping("/addCommande")
     public Commande addCommande(@RequestBody Commande commande) {
-        commande.setTotal(calculerCommandeTotale(commande));
         return commandeService.addCommande(commande);
     }
 
@@ -33,6 +35,7 @@ public class CommandeController {
         commande.setIdCom(id);
         commandeService.updateCommande(commande);
     }
+
     @DeleteMapping("/deleteCommandeById/{id}")
     public void deleteCommandeById(@PathVariable Long id) {
         commandeService.deleteCommandeById(id);
@@ -48,22 +51,21 @@ public class CommandeController {
     public Commande getCommandeById(@PathVariable Long id) {
         return commandeService.getCommandeById(id);
     }
+
     @GetMapping("/getCommandeByEtat/{etatCommande}")
     public List<Commande> getCommandesByEtatCommande(@PathVariable EtatCommande etatCommande) {
         return commandeService.getCommandesByEtat(etatCommande);
     }
 
-    @PostMapping("commande/total")
-    public double calculerCommandeTotale(@RequestBody Commande commande) {
-        double total = iCommande.CalculerTolaleCommande(commande);
-        return total;
+
+    @GetMapping("/findByDateAndEtat")
+    public ResponseEntity<List<Commande>> findCommandesByDateAndEtat(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+                                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+                                                                     @RequestParam EtatCommande etatCommande) {
+        List<Commande> commandes = commandeService.findCommandesByDateAndEtat(startDate, endDate, etatCommande);
+        return ResponseEntity.ok(commandes);
 
 
     }
-    @DeleteMapping("/commande/clear")
-    public void viderPanier(HttpServletRequest request, HttpServletResponse response) {
-        commandeService.viderPanier(request, response);
-    }
-
 }
 

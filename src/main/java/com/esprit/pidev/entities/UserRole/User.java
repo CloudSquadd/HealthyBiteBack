@@ -4,6 +4,7 @@ package com.esprit.pidev.entities.UserRole;
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
 import com.esprit.pidev.entities.ConseilRecette.Objectif;
 import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
 
@@ -101,6 +102,10 @@ public class User {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Produit> produits;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Commande> commande;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
