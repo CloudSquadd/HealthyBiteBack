@@ -16,17 +16,16 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
- @RequestMapping("/conseil")
+@RequestMapping("/conseil")
 @AllArgsConstructor
 public class ConseilController {
-
 
 
     private UserService userService;
 
     private IConseilService conseilService;
 
-    private  IObjectifService objectifService;
+    private IObjectifService objectifService;
 
 
     @PostMapping("/")
@@ -81,19 +80,11 @@ public class ConseilController {
     }
 
 
-//    @Autowired
-//    public void setConseilServiceImpl(ConseilServiceImpl conseilServiceImpl) {
-//        this.conseilService = conseilServiceImpl;
-//    }
-//
-//    @Autowired
-//    public void setObjectifService(ObectifServiceImpl objectifServiceImpl) {
-//        this.objectifService = objectifServiceImpl;
-//    }
-//    @Autowired
-//    public void setUserService(UserService userService) {
-//        this.userService = userService;
-//    }
+    @GetMapping("/user/{userId}/recommend")
+    public ResponseEntity<List<Conseil>> conseilRecommendations(@PathVariable("userId") Long userId) {
+        List<Conseil> list = conseilService.recommend(userId);
+        return new ResponseEntity<List<Conseil>>(list, HttpStatus.CREATED);
+    }
 
 
 }

@@ -14,4 +14,5 @@ public interface IConseilService {
     Optional<Conseil> retrieveConseilById(Long id);
     List<Conseil> retrieveAllConseil();
     void deleteConseil(Long id);
+    List<Conseil> recommend(Long id);
 }

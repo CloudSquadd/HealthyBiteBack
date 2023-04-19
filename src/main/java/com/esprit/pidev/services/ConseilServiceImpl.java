@@ -63,6 +63,7 @@ public class ConseilServiceImpl implements IConseilService {
         conseilRepository.deleteById(id);
     }
 
+    @Override
     public List<Conseil> recommend(Long id) {
 
         User u = userService.retrieveUserById(id);
