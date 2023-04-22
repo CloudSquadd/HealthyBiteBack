@@ -25,7 +25,7 @@ public class TagController {
         return iTag.addTag(tag);
     }
 
-   /* @PostMapping("/addTagToPost")
+    @PostMapping("/addTagToPost")
     public Post addTagToPost(@RequestParam Long postId, @RequestParam Long tagId) {
         Post post = iPost.retrievePostById(postId);
         Tag tag = iTag.retrieveTagById(tagId);
@@ -34,7 +34,7 @@ public class TagController {
         iPost.addPost(post);
 
         return post;
-    }*/
+    }
 
 
     @PostMapping("/addTagToComment")

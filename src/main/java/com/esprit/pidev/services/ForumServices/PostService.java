@@ -39,6 +39,7 @@ public class PostService implements IPost {
         pt.setUser(user);
             postRepository.save(pt);
     return pt;
+
     }
 
 
@@ -51,7 +52,6 @@ public class PostService implements IPost {
 
         existingPost.setTitle(pt.getTitle());
         existingPost.setContent(pt.getContent());
-        existingPost.setImageName(pt.getImageName());
         existingPost.setUser(pt.getUser());
         //existingPost.setCategory(pt.getCategory());
         existingPost.setComments(pt.getComments());

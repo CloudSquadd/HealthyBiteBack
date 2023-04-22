@@ -35,8 +35,7 @@ public class Post {
     @JsonProperty
     private String content;
 
-    @JsonProperty
-    private String imageName;
+
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonProperty
@@ -69,13 +68,21 @@ public class Post {
 
 
 
+    @Column(name = "image_data")
+    private byte[] imageData;
 
-   /* @ManyToMany
+    @Column(name = "image_type")
+   private String imageType;
+
+    @Column(name = "image_path")
+    private String imagePath;
+
+    @ManyToMany
     @JoinTable(
             name = "post_tags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>()*/
+    private Set<Tag> tags = new HashSet<>();
 
 
     // Getter and Setter for comments
