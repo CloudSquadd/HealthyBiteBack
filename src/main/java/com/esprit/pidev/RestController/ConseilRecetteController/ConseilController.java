@@ -1,9 +1,13 @@
 package com.esprit.pidev.RestController.ConseilRecetteController;
 
-import com.esprit.pidev.entities.Conseil;
-import com.esprit.pidev.entities.Objectif;
+
+import com.esprit.pidev.entities.ConseilRecette.Conseil;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
+import com.esprit.pidev.security.services.UserService;
 import com.esprit.pidev.services.*;
-import com.esprit.pidev.services.UserRoleService.UserService;
+
+import com.esprit.pidev.services.ConseilRecetteServices.IConseilService;
+import com.esprit.pidev.services.ConseilRecetteServices.IObjectifService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,7 +79,7 @@ public class ConseilController {
     //    show conseil per objectif
     @GetMapping("/objectif/{objectifId}/conseils")
     public List<Conseil> getConseilPerObjectif(@PathVariable("objectifId") Long objectifId) {
-        Objectif o = objectifService.retrieveObjectifById(objectifId).orElseThrow(() -> new NoSuchElementException("No Objectif Found with id:" + objectifId));
+        Objectif o = objectifService.retrieveObjectifById(objectifId).orElse(null);
         return o.getConseils();
     }
 

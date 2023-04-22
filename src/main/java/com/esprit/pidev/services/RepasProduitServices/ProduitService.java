@@ -57,16 +57,7 @@ public class ProduitService implements IProduit{
 
     @Override
     public Produit updateProduit(Produit pr) throws AccessDeniedException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        if (user.getRoles().equals("ROLE_RESTAURANT") && pr.getUser().getId() == user.getId()) {
             produitRepository.save(pr);
-        } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
-        }
         return pr;
     }
 
@@ -83,15 +74,8 @@ public class ProduitService implements IProduit{
 
     @Override
     public void deleteProduit(Produit pr) throws AccessDeniedException {
-       User user = getCurrentUserObjects();
-
-        if (user.getRoles().equals("ROLE_FOURNISSEUR") && pr.getUser().getId() == user.getId()) {
             produitRepository.delete(pr);
-        } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
-        }
     }
-
 
     @Override
     public Set<Produit> getProduitByUserId() {

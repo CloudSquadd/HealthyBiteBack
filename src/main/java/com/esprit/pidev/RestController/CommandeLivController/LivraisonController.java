@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/test")
@@ -56,5 +59,19 @@ public class LivraisonController {
         livraison.setEtat(EtatCommande.ANNULEE);
         Livraison updatedLivraison = livraisonService.updateLivraison(livraison);
         return new ResponseEntity<>(updatedLivraison, HttpStatus.OK);
+    }
+    @PutMapping("/deliveryTimeSlot/{id}")
+    public Livraison updateDeliveryTimeSlot(@PathVariable Long id, @RequestBody String deliveryTimeSlot) {
+        return livraisonService.updateLivraisonTimeSlot(id, deliveryTimeSlot);
+    }
+    @PutMapping("/{id}/collectionPoint")
+    public Livraison updateCollectionPoint(@PathVariable Long id, @RequestBody String collectionPoint) {
+        return livraisonService.updateCollectionPoint(id, collectionPoint);
+    }
+    @GetMapping("/findByEtatAndDeliveryTimeSlot")
+    public ResponseEntity<List<Livraison>> findLivraisonsByEtatAndDeliveryTimeSlot(@RequestParam EtatCommande etatCommande,
+                                                                                   @RequestParam String deliveryTimeSlot) {
+        List<Livraison> livraisons = livraisonService.findLivraisonsByEtatAndDeliveryTimeSlot(etatCommande, deliveryTimeSlot);
+        return ResponseEntity.ok(livraisons);
     }
 }

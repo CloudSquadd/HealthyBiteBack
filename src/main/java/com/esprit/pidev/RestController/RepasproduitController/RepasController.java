@@ -40,6 +40,7 @@ public class RepasController {
 
     }
     @PutMapping("/updateRepas")
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and isAuthenticated() and principal.isEnabled()")
     public Repas updateRepas(@RequestBody Repas rep) throws AccessDeniedException {
         return iRepas.updateRepas(rep);
     }
@@ -56,6 +57,7 @@ public class RepasController {
 
 
     @DeleteMapping("/deleteRepas")
+    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and isAuthenticated() and principal.isEnabled()")
     public void deleteRepas(@RequestBody Repas rep) throws AccessDeniedException {
         iRepas.deleteRepas(rep);
 
