@@ -1,11 +1,15 @@
 package com.esprit.pidev.entities.ProduitRepas;
 
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,11 +26,21 @@ public class Repas implements Serializable {
     private double prix;
     private String ingredient;
     private String allergene;
+    private LocalDateTime dateAjout;
+    @Enumerated(EnumType.STRING)
+    private  ObjectifType objectif;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Transient
+    private MultipartFile imageFile;
+
+    private Boolean bloquee=false;
 
     @Enumerated(EnumType.STRING)
     private CategRepas CategorieRep;
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
@@ -34,4 +48,6 @@ public class Repas implements Serializable {
     private Nutrition nutrition;
 
     private int quantite;
+    @OneToMany(mappedBy = "repas",cascade = CascadeType.ALL)
+    private Set<Reclamation> reclamations;
 }

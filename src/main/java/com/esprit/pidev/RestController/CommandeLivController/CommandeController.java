@@ -28,12 +28,12 @@ public class CommandeController {
         return commandeService.addCommande(commande);
     }
 
-    @PutMapping("updateCommande/{id}")
+    @PutMapping("/updateCommande/{id}")
     public void updateCommande(@PathVariable Long id, @RequestBody Commande commande) {
         commande.setIdCom(id);
         commandeService.updateCommande(commande);
     }
-    @DeleteMapping("deleteCommande/{id}")
+    @DeleteMapping("/deleteCommandeById/{id}")
     public void deleteCommandeById(@PathVariable Long id) {
         commandeService.deleteCommandeById(id);
     }

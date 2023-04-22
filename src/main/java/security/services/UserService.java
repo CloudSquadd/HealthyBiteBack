@@ -5,6 +5,7 @@ import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
+import com.esprit.pidev.security.services.IUser;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +20,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class UserService implements IUser{
+public class UserService implements IUser {
     private UserRepository repo;
     @Autowired
 
@@ -112,8 +113,15 @@ public class UserService implements IUser{
         return updatedUser;
     }
 
+    @Override
+    public List<User> findByVille(String ville) {
+        return repo.findByVille(ville);
+    }
 
-
+    @Override
+    public User findByEmail(String email) {
+        return null;
+    }
 
 
 }

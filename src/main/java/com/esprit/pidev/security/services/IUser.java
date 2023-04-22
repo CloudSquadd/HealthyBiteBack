@@ -1,4 +1,4 @@
-package security.services;
+package com.esprit.pidev.security.services;
 
 import com.esprit.pidev.entities.UserRole.User;
 
@@ -12,4 +12,7 @@ public interface IUser {
     void deleteUser(Long id);
     List<User> searchUsersByUsername(String username);
     User updateUser(Long id, User user, Set<String> role);
+
+    public List<User> findByVille(String ville);
+    User findByEmail(String email);
 }

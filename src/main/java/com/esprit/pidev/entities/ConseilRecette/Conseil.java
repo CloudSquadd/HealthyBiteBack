@@ -1,11 +1,10 @@
 package com.esprit.pidev.entities.ConseilRecette;
 
+import com.esprit.pidev.entities.UserRole.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -20,4 +19,8 @@ public class Conseil {
     private Long id;
 
     private String description;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Objectif objectif;
 }

@@ -6,7 +6,7 @@ import com.esprit.pidev.entities.ReclamationEtReponse.ReponseReclamation;
 import java.util.List;
 
 public interface IReponseReclamation {
-    ReponseReclamation addReponseReclamation(ReponseReclamation repr);
+    ReponseReclamation addReponseReclamation(ReponseReclamation repr, Long idReclamation);
     ReponseReclamation updateReponseReclamation(ReponseReclamation repr);
     ReponseReclamation retrieveReponseReclamationById(Long idReponseReclamation);
     List<ReponseReclamation> retrieveAllReponseReclamation();

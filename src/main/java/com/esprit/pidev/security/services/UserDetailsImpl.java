@@ -1,4 +1,4 @@
-package security.services;
+package com.esprit.pidev.security.services;
 
 
 import java.util.Collection;
@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
 
@@ -28,13 +27,16 @@ public class UserDetailsImpl implements UserDetails {
 
   private Collection<? extends GrantedAuthority> authorities;
 
+  private User user; // new field to hold the User object
+
   public UserDetailsImpl(Long id, String username, String email, String password,
-                         Collection<? extends GrantedAuthority> authorities) {
+                         Collection<? extends GrantedAuthority> authorities, User user) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
     this.authorities = authorities;
+    this.user = user;
   }
 
   public static UserDetailsImpl build(User user) {
@@ -47,7 +49,9 @@ public class UserDetailsImpl implements UserDetails {
             user.getUsername(),
             user.getEmail(),
             user.getPassword(),
-            authorities);
+            authorities,
+            user // initialize the User field
+    );
   }
 
   @Override
@@ -90,7 +94,7 @@ public class UserDetailsImpl implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return user.isActive();
   }
 
   @Override
@@ -103,3 +107,4 @@ public class UserDetailsImpl implements UserDetails {
     return Objects.equals(id, user.id);
   }
 }
+

@@ -23,5 +23,7 @@ public class Livraison {
 
     @Enumerated(EnumType.STRING)
     private EtatCommande etat;
+
+
     
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface ILivraisonService {
     Livraison addLivraison(Livraison livraison);
     Livraison updateLivraison(Livraison livraison);
-    void deleteLivraison(Long id);
+    void deleteLivraisonById(Long id);
     Livraison getLivraisonById(Long id);
     List<Livraison> getAllLivraisons();
     List<Livraison> getLivraisonsByEtatCommande(String etatCommande);
