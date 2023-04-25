@@ -30,6 +30,7 @@ public class Post {
 
     @Column(length = 100, nullable = true, columnDefinition = "VARCHAR(100) DEFAULT 'Untitled'")
     @JsonProperty
+
     private String title;
 
     @JsonProperty
@@ -72,7 +73,7 @@ public class Post {
     private byte[] imageData;
 
     @Column(name = "image_type")
-   private String imageType;
+    private String imageType;
 
     @Column(name = "image_path")
     private String imagePath;
