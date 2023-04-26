@@ -46,10 +46,6 @@ public class PostService implements IPost {
 
 
 
-
-
-
-
     //method to upload an image to a post
     @Override
     public ResponseEntity<Void> uploadImageToAPost(Long id, MultipartFile image) throws IOException {
@@ -65,7 +61,6 @@ public class PostService implements IPost {
         Path filePath = directory.resolve(imagePath);
         Files.write(filePath, image.getBytes());
         return ResponseEntity.ok().build();
-
     }
 
 
@@ -103,7 +98,6 @@ public class PostService implements IPost {
         existingPost.setComments(pt.getComments());
         return postRepository.save(existingPost);
     }
-
 
     @Override
     public Post addPost(Post pt) {

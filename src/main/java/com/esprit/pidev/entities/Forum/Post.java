@@ -70,6 +70,7 @@ public class Post {
 
 
     @Column(name = "image_data")
+    @Lob
     private byte[] imageData;
 
     @Column(name = "image_type")
