@@ -11,21 +11,8 @@ import java.util.List;
 @Repository
 public interface ObjectifRepository extends JpaRepository<Objectif, Long> {
 
-    @Query(value = "" +
-            "SELECT * " +
-            "FROM Objectif " +
-            "WHERE " +
-            "   poid_depart BETWEEN ?1 and ?2 " +
-            "AND " +
-            "   objectif_poid BETWEEN  ?3  AND ?4"
-            , nativeQuery = true)
-    public List<Objectif> findByPoidDeDepardWithTolerance(
-            @Param("poidDepart") Long poidDepart,
-            @Param("poidDepartTolerated") Long poidDepartTolerated,
-            @Param("objectifPoid") Long objectifPoid,
-            @Param("objectifPoidTolerated") Long objectifPoidTolerated
-
-    );
+    @Query(value = "SELECT * FROM Objectif WHERE  poid_depart BETWEEN ?1 and ?2 AND objectif_poid BETWEEN  ?3  AND ?4", nativeQuery = true)
+    public List<Objectif> findByPoidDeDepardWithTolerance(long poidDepart,long poidDepartTolerated, long objectifPoid, long objectifPoidTolerated);
 
 
 }

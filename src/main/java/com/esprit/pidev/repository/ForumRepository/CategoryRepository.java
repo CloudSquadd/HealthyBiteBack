@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    @Query("SELECT c FROM Category c LEFT JOIN FETCH c.posts WHERE c.id = :id")
+    @Query("SELECT c FROM Category c")
     Category findByIdWithPosts(@Param("id") Long id);
 
-    @Query("SELECT DISTINCT c FROM Category c LEFT JOIN FETCH c.posts")
+    @Query("SELECT c FROM Category c")
     List<Category> findAllWithPosts();
 }

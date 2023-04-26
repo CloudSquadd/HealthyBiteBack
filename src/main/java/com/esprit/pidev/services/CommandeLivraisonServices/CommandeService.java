@@ -35,14 +35,12 @@ public class CommandeService implements ICommande {
     @Override
     public Commande addCommande(Commande commande) {
         commande.setEtatCommande(EtatCommande.EN_ATTENTE);
-        commande.setUser(getCurrentUser());
+        //commande.setUser(getCurrentUser());
         return commandeRepository.save(commande);
     }
     public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
     @Override
     public Commande updateCommande(Commande commande) {
@@ -56,8 +54,8 @@ public class CommandeService implements ICommande {
 
     @Override
     public Commande getCommandeById(Long id) {
-        Optional<Commande> commandeOptional = commandeRepository.findById(id);
-        return commandeOptional.orElse(null);
+
+        return commandeRepository.findById(id).orElse(null);
     }
 
 
@@ -75,7 +73,7 @@ public class CommandeService implements ICommande {
 
     @Override
     public List<Commande> findCommandesByDateAndEtat(Date startDate, Date endDate, EtatCommande etatCommande) {
-        return commandeRepository.getCommandesByDateAndEtat(startDate, endDate, etatCommande);
+        return commandeRepository.findByDateCommandeBetweenAndEtatCommande(startDate, endDate, etatCommande);
     }
 
 

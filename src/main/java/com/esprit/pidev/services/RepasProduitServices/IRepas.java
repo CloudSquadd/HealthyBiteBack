@@ -1,7 +1,5 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
-import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 
@@ -20,7 +18,7 @@ public interface IRepas {
     void updateRepasBloqueStatus( );
     int calculerCaloriesTotales(List<Repas> repasChoisis);
 
-    double calculerMaxCalories(User user);
+    long calculerMaxCalories(User user);
 
     List<Repas> proposerRepasSelonObjectifEtActivite();
 

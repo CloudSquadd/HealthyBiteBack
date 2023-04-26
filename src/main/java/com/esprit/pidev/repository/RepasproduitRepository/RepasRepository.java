@@ -21,7 +21,7 @@ public interface RepasRepository extends JpaRepository<Repas,Long> {
     Optional<Repas> findByNom(String nom);
   List<Repas> findByNomContainingIgnoreCase(String nom);
 
-    @Query("SELECT r FROM Repas r JOIN r.nutrition n WHERE n.calories BETWEEN :minCalories AND :maxCalories AND r.objectif = :objectif")
+    @Query("SELECT r FROM Repas r WHERE r.nutrition.calories BETWEEN :minCalories AND :maxCalories AND r.objectif = :objectif")
     List<Repas> findByCaloriesAndObjectif(double minCalories, double maxCalories, ObjectifType objectif);
 
 
@@ -32,9 +32,11 @@ public interface RepasRepository extends JpaRepository<Repas,Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Repas r SET r.bloquee = true WHERE r.id IN " +
+    /*@Query("UPDATE Repas r SET r.bloquee = true WHERE r.id IN " +
             "(SELECT rp.id FROM Repas rp JOIN rp.reclamations rc " +
             "GROUP BY rp HAVING COUNT(rc) > 3)")
+    */
+    @Query("UPDATE Repas r SET r.bloquee = true WHERE r.reclamations.size> 3")
     void blockRepasWithTooManyReclamations();
 
 }

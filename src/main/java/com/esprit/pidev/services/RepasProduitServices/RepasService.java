@@ -1,7 +1,5 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
-import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
@@ -9,19 +7,11 @@ import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import lombok.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Lob;
-import java.io.IOException;
 import java.nio.file.AccessDeniedException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,8 +70,8 @@ public class RepasService implements IRepas {
 
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
-        double caloriesTotales = 0;
-            double maxCalories = calculerMaxCalories(getCurrentUser());
+        int caloriesTotales = 0;
+            long maxCalories = calculerMaxCalories(getCurrentUser());
             for (Repas repas : repasChoisis) {
                 caloriesTotales += repas.getNutrition().getCalories();
             }
@@ -90,8 +80,8 @@ public class RepasService implements IRepas {
             if (caloriesTotales > maxCalories) {
                 System.out.println("Le total des calories dépasse le maximum autorisé !");
             }
-
-        return (int) caloriesTotales;
+        proposerRepasSelonObjectifEtActivite();
+        return caloriesTotales;
 
     }
 
@@ -110,7 +100,7 @@ public class RepasService implements IRepas {
 
     //calculer le nombre maximum qu'un client doit consommer par jour
     @Override
-    public double calculerMaxCalories(User user) {
+    public long calculerMaxCalories(User user) {
         double metabolismeDeBase = 0;
         if (user.getGender().equals("Homme")) {
             metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());

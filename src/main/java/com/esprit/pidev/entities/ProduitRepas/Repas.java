@@ -30,8 +30,8 @@ public class Repas implements Serializable {
     @Enumerated(EnumType.STRING)
     private  ObjectifType objectif;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image")
+    private String image;
 
     @Transient
     private MultipartFile imageFile;

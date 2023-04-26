@@ -47,16 +47,14 @@ public class CommentService implements IComment {
     }
 
     @Override
-    public Comment addReply(Long commentId, Comment reply, Long postId) {
+    public Comment addReply(Long commentId, Comment reply) {
         reply.setUser(getCurrentUser());
         Comment parentComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + commentId));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + postId));
+
         reply.setParentComment(parentComment);
-        reply.setPost(post);
-        parentComment.getReplies().add(reply);
-        return commentRepository.save(parentComment);
+
+        return commentRepository.save(reply);
     }
 
 

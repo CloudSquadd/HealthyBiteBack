@@ -32,8 +32,8 @@ public class AdresseLivraisonService implements IAdresseLivraisonService {
 
     @Override
     public AdresseLivraison getAdresseLivraisonById(Long id) {
-        Optional<AdresseLivraison> adresseLivraisonOptional = adresseLivraisonRepository.findById(id);
-        return adresseLivraisonOptional.orElse(null);
+         ;
+        return adresseLivraisonRepository.findById(id).orElse(null);
     }
 
     @Override

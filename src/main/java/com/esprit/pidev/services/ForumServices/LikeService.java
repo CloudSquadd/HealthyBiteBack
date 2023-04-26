@@ -41,10 +41,13 @@ public class LikeService implements ILike {
 
 
         @Override
-        public void likePost(User userId, Long postId) {
+        public void likePost( Long postId) {
+                //User currentUser = getCurrentUser();
+                User currentUser = new User();
+                currentUser.setId(14L);
                 Post post = postRepository.findById(postId)
                         .orElseThrow(() -> new EntityNotFoundException("post not found"));
-                LikeEntity like = likeRepository.findByUserAndPost(userId, post).orElseGet(() -> new LikeEntity(userId, post));
+                LikeEntity like = likeRepository.findByUserAndPost(getCurrentUser(), post).orElseGet(() -> new LikeEntity(currentUser, post));
 
                 if (like.isLiked()) {
                         throw new IllegalArgumentException("Comment already liked by user");
@@ -112,7 +115,10 @@ public class LikeService implements ILike {
 
 
         public boolean isPostLikedByUser( Long postId) {
-                User currentUser = getCurrentUser();
+                //User currentUser = getCurrentUser();
+                User currentUser = new User();
+                currentUser.setId(14L);
+
                 Post post = postRepository.findById(postId)
                         .orElseThrow(() -> new EntityNotFoundException("Post not found"));
                 Optional<LikeEntity> like = likeRepository.findByUserAndPost(currentUser, post);

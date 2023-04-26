@@ -58,7 +58,7 @@ public class LivraisonService implements ILivraisonService {
     public Livraison accepterLivraison(Long id) {
         Livraison livraison = getLivraisonById(id);
         livraison.setEtat(EtatCommande.CONFIRMEE);
-        return updateLivraison(livraison);
+        return this.updateLivraison(livraison);
     }
 
     @Override

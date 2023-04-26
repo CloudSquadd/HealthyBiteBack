@@ -79,13 +79,12 @@ public class ConseilServiceImpl implements IConseilService {
             if (fetched.size() == 0) {
                 return;
             }
-            for (Objectif obj : fetched) {
-                similarObjectifs.add(obj);
-            }
+
+                similarObjectifs.addAll(fetched);
         });
         List<Conseil> conseils = new ArrayList<>();
         for (Objectif obj : similarObjectifs) {
-            obj.getConseils().forEach(conseil -> conseils.add(conseil));
+            conseils.addAll(obj.getConseils());
         }
         return conseils;
     }

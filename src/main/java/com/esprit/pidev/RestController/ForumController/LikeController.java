@@ -33,11 +33,11 @@ public class LikeController {
 
 
     @PostMapping("/posts/{postId}/like")
-    public ResponseEntity<?> likePost(@AuthenticationPrincipal User userId, @PathVariable Long postId) {
+    public ResponseEntity<?> likePost (@PathVariable Long postId) {
         if (likeService.isPostLikedByUser( postId)) {
             return ResponseEntity.badRequest().body("Post already liked by user");
         }
-        likeService.likePost(userId, postId);
+        likeService.likePost(postId);
         return ResponseEntity.ok().body("you liked the post");
     }
 
