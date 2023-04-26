@@ -57,8 +57,9 @@ public class ProduitService implements IProduit{
 
     @Override
     public Produit updateProduit(Produit pr) throws AccessDeniedException {
-            produitRepository.save(pr);
-        return pr;
+
+        return  produitRepository.save(pr);
+
     }
 
     @Override

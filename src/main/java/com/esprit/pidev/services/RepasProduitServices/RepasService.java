@@ -1,21 +1,27 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
+import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.CategRepas;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 
 @Service
@@ -118,6 +124,30 @@ public class RepasService implements IRepas {
     public List<Repas> rechercherRepasParNom(String nom) {
 
         return repasRepository.findByNomContainingIgnoreCase(nom);
+    }
+
+    @Override
+    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, long user, MultipartFile image) throws IOException {
+        Repas pt = new Repas();
+
+        pt.setNom(nom);
+        pt.setDescription(description);
+        pt.setPrix(prix);
+        pt.setIngredient(ingredient);
+        pt.setAllergene(allergene);
+        pt.setObjectif(objectifType);
+        pt.setCategorieRep(categRepas);
+        pt.setUser(userRepository.findById(user).get());
+        byte[] imageData = image.getBytes();
+        System.err.println(imageData.toString());
+        pt.setImageData(imageData);
+        // Save the image file to a folder named 'images' in your project directory
+        Path directory = Paths.get("images");
+        if (!Files.exists(directory)) {Files.createDirectories(directory);}
+        Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+        Files.write(imagePath, imageData);
+        repasRepository.save(pt);
+        return pt;
     }
 
 

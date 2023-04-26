@@ -30,11 +30,16 @@ public class Repas implements Serializable {
     @Enumerated(EnumType.STRING)
     private  ObjectifType objectif;
 
-    @Column(name = "image")
-    private String image;
+    @Column(name = "image_data")
+    @Lob
+    private byte[] imageData;
 
-    @Transient
-    private MultipartFile imageFile;
+
+    @Column(name = "image_type")
+    private String imageType;
+
+    @Column(name = "image_path")
+    private String imagePath;
 
     private Boolean bloquee=false;
 

@@ -72,15 +72,14 @@ public class Post {
     @Column(name = "image_data")
     private byte[] imageData;
 
-<<<<<<< Updated upstream
+
     @Column(name = "image_type")
     private String imageType;
 
     @Column(name = "image_path")
     private String imagePath;
 
-=======
->>>>>>> Stashed changes
+
     @ManyToMany
     @JoinTable(
             name = "post_tags",

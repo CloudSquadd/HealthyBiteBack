@@ -1,6 +1,8 @@
 package com.esprit.pidev.RestController.RepasproduitController;
 
 import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.CategRepas;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
@@ -18,7 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Set;
@@ -40,9 +44,13 @@ public class RepasController {
 
     }
     @PutMapping("/updateRepas")
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and isAuthenticated() and principal.isEnabled()")
     public Repas updateRepas(@RequestBody Repas rep) throws AccessDeniedException {
         return iRepas.updateRepas(rep);
+    }
+    @PostMapping("/addRepasWithImg")
+    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("user") long user,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
+        return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
+        categRepas,user, image);
     }
 
     @GetMapping("getRepasById/{id}")
