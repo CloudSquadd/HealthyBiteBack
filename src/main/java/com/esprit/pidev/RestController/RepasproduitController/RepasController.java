@@ -44,6 +44,14 @@ public class RepasController {
     public Repas updateRepas(@RequestBody Repas rep) throws AccessDeniedException {
         return iRepas.updateRepas(rep);
     }
+<<<<<<< Updated upstream
+=======
+    @PostMapping("/addRepasWithImg")
+    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
+        return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
+        categRepas, image);
+    }
+>>>>>>> Stashed changes
 
     @GetMapping("getRepasById/{id}")
     public Repas retrieveRepasById(@PathVariable("id") Long id){
@@ -62,6 +70,10 @@ public class RepasController {
 
     }
 
+    @GetMapping("getAllRepasWithImage")
+    public List<Repas> getAllRepasAndImage(){
+        return iRepas.getAllRepasAndImage();
+    }
 
     @GetMapping("/getRepasByUserId")
     public Set<Repas> getRepasByUserId() {

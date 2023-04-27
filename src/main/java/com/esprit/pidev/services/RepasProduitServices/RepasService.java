@@ -58,7 +58,11 @@ public class RepasService implements IRepas {
         if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
             repasRepository.save(rep);
         } else {
+<<<<<<< Updated upstream
             throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
+=======
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à modifier ce repas.");
+>>>>>>> Stashed changes
         }
         return rep;
     }
@@ -131,7 +135,54 @@ public class RepasService implements IRepas {
 
 
     @Override
+<<<<<<< Updated upstream
     public List<Repas> proposerRepasSelonObjectifEtActivite() {
+=======
+    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
+        Repas pt = new Repas();
+
+        pt.setNom(nom);
+        pt.setDescription(description);
+        pt.setPrix(prix);
+        pt.setIngredient(ingredient);
+        pt.setAllergene(allergene);
+        pt.setObjectif(objectifType);
+        pt.setCategorieRep(categRepas);
+        //pt.setUser(userRepository.findById(user).get());
+        byte[] imageData = image.getBytes();
+        System.err.println(imageData.toString());
+        pt.setImageData(imageData);
+        // Save the image file to a folder named 'images' in your project directory
+        Path directory = Paths.get("images");
+        if (!Files.exists(directory)) {Files.createDirectories(directory);}
+        Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+        Files.write(imagePath, imageData);
+        repasRepository.save(pt);
+        return pt;
+    }
+
+
+    public List<Repas> getAllRepasAndImage() {
+        List<Repas> repas = repasRepository.findAll();
+        for (Repas repasItem : repas) {
+            if (repasItem.getImageData() != null) {
+                try {
+                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
+                    repasItem.setImageBase64(imageBase64);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return repas;
+    }
+
+
+
+
+
+   /* public List<Repas> proposerRepasSelonObjectifEtActivite() {
+>>>>>>> Stashed changes
         User user = getCurrentUserObjects();
             ObjectifType objectifClient = user.getObjectif();
             TypeActivite typeActiviteClient = user.getActivite();

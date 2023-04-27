@@ -25,5 +25,10 @@ public interface IRepas {
 
      List<Repas> rechercherRepasParNom(String nom);
 
+<<<<<<< Updated upstream
+=======
+    Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image)throws IOException;
+>>>>>>> Stashed changes
 
+    public List<Repas> getAllRepasAndImage();
 }
