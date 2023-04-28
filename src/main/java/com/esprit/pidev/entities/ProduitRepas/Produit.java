@@ -34,8 +34,8 @@ public class Produit implements Serializable {
     @JsonIgnore
     private User user;
 
-    @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nutrition_id")
     private Nutrition nutrition;
 
     private int quantite;

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.Base64;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -63,7 +64,8 @@ public class Repas implements Serializable {
     @JsonIgnore
     private User user;
 
-    @OneToOne(mappedBy = "repas", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nutrition_id")
     private Nutrition nutrition;
 
     private int quantite;

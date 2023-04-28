@@ -5,6 +5,7 @@ import com.esprit.pidev.entities.ProduitRepas.CategRepas;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
+import com.esprit.pidev.repository.RepasproduitRepository.NutritionRepository;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.*;
 public class RepasService implements IRepas {
     UserRepository userRepository;
     RepasRepository repasRepository;
+    NutritionRepository nutritionRepository;
 
 
     public User getCurrentUserObjects() {
@@ -128,7 +130,7 @@ public class RepasService implements IRepas {
 
     @Override
 
-    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, long nutritionId,MultipartFile image) throws IOException {
         Repas pt = new Repas();
         pt.setNom(nom);
         pt.setDescription(description);
@@ -137,7 +139,8 @@ public class RepasService implements IRepas {
         pt.setAllergene(allergene);
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
-        //pt.setUser(userRepository.findById(user).get());
+        pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+        //pt.setUser(userRepository.findById(user).orElse(null));
         byte[] imageData = image.getBytes();
         System.err.println(imageData.toString());
         pt.setImageData(imageData);
