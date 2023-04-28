@@ -1,17 +1,19 @@
 package com.esprit.pidev.security.services;
 
-import com.esprit.pidev.entities.UserRole.ERole;
 import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,10 +27,43 @@ public class UserService implements IUser{
 
     PasswordEncoder encoder;
     private RoleRepository rolo;
+    @Autowired
+    private JavaMailSender mailSender;
 
-    public User saveUser(User user) {
+
+    public User enableUser(Long id) {
+        User user = repo.findById(id).orElse(null);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+        user.setEnabled(true);
         return repo.save(user);
     }
+
+    public User disableUser(Long id) {
+        User user = repo.findById(id).orElse(null);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+        user.setEnabled(false);
+        return repo.save(user);
+    }
+    @Transactional
+    public void disableUsersWithMoreThan3Roles() {
+        repo.disableUsersWithMoreThan3Roles();
+    }
+    @Transactional
+    public void disableUsersByRoleName(String roleName) {
+        List<User> users = repo.findByRolesName(roleName);
+        for (User user : users) {
+            user.setEnabled(false);
+            repo.save(user);
+        }
+    }
+        public User saveUser (User user){
+            return repo.save(user);
+        }
+
     public User fetchUserByEmail(String email) {
         return repo.findByEmail(email);
     }
@@ -36,6 +71,7 @@ public class UserService implements IUser{
     public User fetchUserByEmailAndPassword(String email, String password) {
         return repo.findByEmailAndPassword(email, password);
     }
+
     @Override
     public User addUser(User user) {
         return repo.save(user);    }
@@ -52,6 +88,7 @@ public class UserService implements IUser{
 
     @Override
     public List<User> retrieveAllUser() {
+
         return repo.findAll();    }
 
     @Override
@@ -67,47 +104,25 @@ public class UserService implements IUser{
     }
 
     @Override
-    public User updateUser(Long id, User user, Set<String> roles) {
+    public User updateUser(Long id, User user, Set<String> roleNames) {
         User existingUser = repo.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
+        // Update the user properties
         existingUser.setUsername(user.getUsername());
         existingUser.setEmail(user.getEmail());
+        // ... and so on for other properties
 
-        if (!StringUtils.isEmpty(user.getPassword())) {
-            existingUser.setPassword(encoder.encode(user.getPassword()));
+        // Update user roles
+        Set<Role> updatedRoles = new HashSet<>();
+        for (Role role : existingUser.getRoles()) {
+            Role existingRole = rolo.findByName(role.getName())
+                    .orElseThrow(() -> new RuntimeException("Role not found"));
+            updatedRoles.add(existingRole);
         }
+        existingUser.setRoles(updatedRoles);
 
-        Set<Role> userRoles = new HashSet<>();
-        if (roles != null) {
-            roles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = rolo.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        userRoles.add(adminRole);
-                        break;
-                    case "mod":
-                        Role modRole = rolo.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        userRoles.add(modRole);
-                        break;
-                    default:
-                        Role userRole = rolo.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        userRoles.add(userRole);
-                        break;
-                }
-            });
-        } else {
-            Role userRole = rolo.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            userRoles.add(userRole);
-        }
-        existingUser.setRoles(userRoles);
-
-        User updatedUser = repo.save(existingUser);
-        return updatedUser;
+        return repo.save(existingUser);
     }
 
     @Override
@@ -116,9 +131,9 @@ public class UserService implements IUser{
     }
 
 
-
-
-
+    @Override
+    public User findByEmail(String email) {
+        return repo.findByEmail(email);    }
 
 
 }

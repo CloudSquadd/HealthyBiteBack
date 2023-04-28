@@ -2,6 +2,7 @@ package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
+import org.springframework.data.repository.query.Param;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface IProduit {
     void deleteProduit(Produit pr) throws AccessDeniedException;
 
     public Set<Produit> getProduitByUserId();
+    //void checkReclamationsByProduit(Long id);
+    void updateProduitBloqueStatus();
 }

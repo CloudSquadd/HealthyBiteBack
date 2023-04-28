@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LoginRequest {
 	@NotBlank
-  private String username;
+   private String username;
 
 	@NotBlank
 	private String password;

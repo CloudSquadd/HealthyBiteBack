@@ -1,16 +1,12 @@
 package com.esprit.pidev.entities.ProduitRepas;
 
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
-<<<<<<< Updated upstream
-=======
 import java.util.Base64;
-import java.util.Set;
->>>>>>> Stashed changes
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -33,19 +29,16 @@ public class Repas implements Serializable {
     @Enumerated(EnumType.STRING)
     private  ObjectifType objectif;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image_data")
+    @Lob
+    private byte[] imageData;
 
-    @Transient
-    private MultipartFile imageFile;
-
-<<<<<<< Updated upstream
-=======
     @Column(name = "image_type")
     private String imageType;
 
     @Column(name = "image_path")
     private String imagePath;
+
 
     public String getImageBase64() {
         if (imageData == null) {
@@ -63,7 +56,6 @@ public class Repas implements Serializable {
     }
 
     private Boolean bloquee=false;
->>>>>>> Stashed changes
 
     @Enumerated(EnumType.STRING)
     private CategRepas CategorieRep;
@@ -73,4 +65,8 @@ public class Repas implements Serializable {
 
     @OneToOne(mappedBy = "repas", cascade = CascadeType.ALL)
     private Nutrition nutrition;
+
+    private int quantite;
+    @OneToMany(mappedBy = "repas",cascade = CascadeType.ALL)
+    private Set<Reclamation> reclamations;
 }

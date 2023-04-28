@@ -1,6 +1,7 @@
 
 package com.esprit.pidev.services.CommandeLivraisonServices;
 
+import com.esprit.pidev.entities.CommandeLivraison.Commande;
 import com.esprit.pidev.entities.CommandeLivraison.EtatCommande;
 import com.esprit.pidev.entities.CommandeLivraison.Livraison;
 
@@ -9,6 +10,7 @@ import com.esprit.pidev.services.CommandeLivraisonServices.ILivraisonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,10 +30,12 @@ public class LivraisonService implements ILivraisonService {
         return livraisonRepository.save(livraison);
     }
 
+
     @Override
-    public void deleteLivraison(Long id) {
+    public void deleteLivraisonById(Long id) {
         livraisonRepository.deleteById(id);
     }
+
 
     @Override
     public Livraison getLivraisonById(Long id) {
@@ -54,7 +58,7 @@ public class LivraisonService implements ILivraisonService {
     public Livraison accepterLivraison(Long id) {
         Livraison livraison = getLivraisonById(id);
         livraison.setEtat(EtatCommande.CONFIRMEE);
-        return updateLivraison(livraison);
+        return this.updateLivraison(livraison);
     }
 
     @Override
@@ -63,4 +67,22 @@ public class LivraisonService implements ILivraisonService {
         livraison.setEtat(EtatCommande.ANNULEE);
         return updateLivraison(livraison);
     }
+    @Override
+    public Livraison updateLivraisonTimeSlot(Long id, String deliveryTimeSlot) {
+        Livraison livraison = getLivraisonById(id);
+        livraison.setDeliveryTimeSlot(deliveryTimeSlot);
+        return updateLivraison(livraison);
+    }
+    @Override
+    public Livraison updateCollectionPoint(Long id, String pointCollecte) {
+        Livraison livraison = getLivraisonById(id);
+
+        livraison.setCollectionPoint(pointCollecte);
+
+        return  updateLivraison(livraison);
+    }
+    public List<Livraison> findLivraisonsByEtatAndDeliveryTimeSlot(EtatCommande etatCommande, String deliveryTimeSlot) {
+        return livraisonRepository.findLivraisonsByEtatAndDeliveryTimeSlot(etatCommande, deliveryTimeSlot);
+    }
+
 }

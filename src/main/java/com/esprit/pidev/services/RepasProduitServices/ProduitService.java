@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +36,20 @@ public class ProduitService implements IProduit{
         return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    //public void checkReclamationsByProduit(Long id) {
+    // List<Object[]> result = produitRepository.countReclamationsByProduit();
+    //// for (Object[] row : result) {
+        //     String nomProduit = (String) row[0];
+    // Long nombreReclamations = (Long) row[1];
+    // if (nombreReclamations > 10) {
+    //  Produit produit = produitRepository.findById(id).orElse(null);
+    //  produit.setBloquee(true);
+    //  produitRepository.save(produit);
+    // }
+    //}
+    // }
+
+
     @Override
     public Produit addProduit(Produit pr) {
         return produitRepository.save(pr);
@@ -44,17 +57,9 @@ public class ProduitService implements IProduit{
 
     @Override
     public Produit updateProduit(Produit pr) throws AccessDeniedException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (user.getRoles().equals("ROLE_RESTAURANT") && pr.getUser().getId() == user.getId()) {
-            produitRepository.save(pr);
-        } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
-        }
-        return pr;
+        return  produitRepository.save(pr);
+
     }
 
     @Override
@@ -70,15 +75,8 @@ public class ProduitService implements IProduit{
 
     @Override
     public void deleteProduit(Produit pr) throws AccessDeniedException {
-       User user = getCurrentUserObjects();
-
-        if (user.getRoles().equals("ROLE_FOURNISSEUR") && pr.getUser().getId() == user.getId()) {
             produitRepository.delete(pr);
-        } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
-        }
     }
-
 
     @Override
     public Set<Produit> getProduitByUserId() {
@@ -89,6 +87,11 @@ public class ProduitService implements IProduit{
         }
 
         return produitRepository.findByUserId(user.getId());
+    }
+
+    @Override
+    public void updateProduitBloqueStatus() {
+        produitRepository.blockProduitWithTooManyReclamations();
     }
 
 

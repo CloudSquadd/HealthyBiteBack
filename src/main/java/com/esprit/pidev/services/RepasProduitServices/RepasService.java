@@ -1,28 +1,27 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
-import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.CategRepas;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.stereotype.Service;
 
-import lombok.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Lob;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -53,17 +52,7 @@ public class RepasService implements IRepas {
 
     @Override
     public Repas updateRepas(Repas rep) throws AccessDeniedException {
-        User user = getCurrentUserObjects();
-
-        if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
             repasRepository.save(rep);
-        } else {
-<<<<<<< Updated upstream
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
-=======
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à modifier ce repas.");
->>>>>>> Stashed changes
-        }
         return rep;
     }
 
@@ -79,23 +68,16 @@ public class RepasService implements IRepas {
 
     @Override
     public void deleteRepas(Repas rep) throws AccessDeniedException {
-        User user = getCurrentUserObjects();
-
-        if (user.getRoles().equals("ROLE_RESTAURANT") && rep.getUser().getId() == user.getId()) {
             repasRepository.delete(rep);
-        } else {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce repas.");
-        }
     }
 
 
 
 
-    //calculer nombre de calories dans les repas choisie par le client et verifier qu'il n'a pas exceder le maximum des calories dans les repas choisie
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
-        double caloriesTotales = 0;
-            double maxCalories = calculerMaxCalories(getCurrentUser());
+        int caloriesTotales = 0;
+            long maxCalories = calculerMaxCalories(getCurrentUser());
             for (Repas repas : repasChoisis) {
                 caloriesTotales += repas.getNutrition().getCalories();
             }
@@ -104,21 +86,34 @@ public class RepasService implements IRepas {
             if (caloriesTotales > maxCalories) {
                 System.out.println("Le total des calories dépasse le maximum autorisé !");
             }
-
-        return (int) caloriesTotales;
+        proposerRepasSelonObjectifEtActivite();
+        return caloriesTotales;
 
     }
 
+    @Override
+    public void updateRepasBloqueStatus() {
+        repasRepository.blockRepasWithTooManyReclamations();
+    }
+    public String checkMealNutrition(Repas repas) {
+        // Logique de vérification des valeurs nutritionnelles d'un repas
+        // Exemple : vérifier si les calories dépassent la limite recommandée
+        if (repas.getNutrition().getCalories() >600 ) {
+            return ("Les calories du repas dépassent la limite recommandée.");
+        }
+        return "";
+    }
 
     //calculer le nombre maximum qu'un client doit consommer par jour
     @Override
-    public double calculerMaxCalories(User user) {
+    public long calculerMaxCalories(User user) {
         double metabolismeDeBase = 0;
         if (user.getGender().equals("Homme")) {
             metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
-        } else {
+        } 
+        else {
             metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
-        }
+        } 
         return Math.round(metabolismeDeBase);
     }
 
@@ -131,16 +126,10 @@ public class RepasService implements IRepas {
         return repasRepository.findByNomContainingIgnoreCase(nom);
     }
 
-
-
-
     @Override
-<<<<<<< Updated upstream
-    public List<Repas> proposerRepasSelonObjectifEtActivite() {
-=======
+
     public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
         Repas pt = new Repas();
-
         pt.setNom(nom);
         pt.setDescription(description);
         pt.setPrix(prix);
@@ -182,7 +171,7 @@ public class RepasService implements IRepas {
 
 
    /* public List<Repas> proposerRepasSelonObjectifEtActivite() {
->>>>>>> Stashed changes
+
         User user = getCurrentUserObjects();
             ObjectifType objectifClient = user.getObjectif();
             TypeActivite typeActiviteClient = user.getActivite();
@@ -222,7 +211,7 @@ public class RepasService implements IRepas {
 
 
 
-    }
+    }*/
 
     @Override
     public Set<Repas> getRepasByUserId() {
@@ -232,6 +221,23 @@ public class RepasService implements IRepas {
             return repasRepository.findByUserId(user.getId());
         }
         return repasRepository.findByUserId(user.getId());
+    }
+
+    @Override
+    public List<Repas> proposerRepasSelonObjectifEtActivite() {
+        User user = getCurrentUserObjects();
+
+       // double maxCalories = calculerMaxCalories(user);
+
+        List<Repas> mealsByUserGoal = new ArrayList<>();
+        List<Repas> meals = repasRepository.findAll();
+        for (Repas meal : meals) {
+            if (meal.getObjectif().equals(user.getObjectif())) {
+                mealsByUserGoal.add(meal);
+            }
+        }
+
+        return mealsByUserGoal;
     }
 
     }

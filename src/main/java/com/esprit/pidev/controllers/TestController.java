@@ -8,14 +8,20 @@ import com.esprit.pidev.payload.request.SignupRequest;
 import com.esprit.pidev.payload.response.MessageResponse;
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
+
 import com.esprit.pidev.security.services.IUser;
 import com.esprit.pidev.security.services.UserService;
+
+import com.esprit.pidev.security.services.RoleService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +43,8 @@ public class TestController {
 
   @Autowired
   PasswordEncoder encoder;
-
+@Autowired
+  private RoleService roleservice;
 
   @Autowired
 
@@ -66,7 +73,6 @@ public class TestController {
   public String adminAccess() {
     return "Admin Board.";
   }
-
   @PostMapping("/addUser")
   public ResponseEntity<?> addUser(@Valid @RequestBody SignupRequest signUpRequest){
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -102,22 +108,22 @@ public class TestController {
             roles.add(adminRole);
 
             break;
-          case "restaurant":
-            Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(restaurantRole);
-
-            break;
-          case "fournisseur":
-            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(fournisseurRole);
-
-            break;
           case "mod":
             Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(modRole);
+
+            break;
+          case "fournisseur":
+            Role fournisseur = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(fournisseur);
+
+            break;
+          case "restaurant":
+            Role restaurant = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(restaurant);
 
             break;
           default:
@@ -143,7 +149,7 @@ public class TestController {
   public User retrieveUserById(@PathVariable("id") Long id){
     return iuser.retrieveUserById(id);
   }
-
+  @PreAuthorize("hasAuthority('ROLE_USER') and isAuthenticated() and principal.isEnabled()")
   @GetMapping("/getAllUser")
   public List<User> retrieveAllUser(){
     return iuser.retrieveAllUser();
@@ -156,15 +162,69 @@ public class TestController {
   public List<User> searchUsersByUsername(@RequestParam("username") String username) {
     return iuser.searchUsersByUsername(username);
   }
-  @PutMapping("/update/{id}")
-  public User updateUser(@PathVariable Long id, @RequestBody User updatedUser, @RequestParam(required = false) Set<String> roles) {
-    return service.updateUser(id, updatedUser, roles);
+  @PutMapping("/{id}")
+  public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
+                                         @RequestBody User user,
+                                         @RequestParam(value = "roles", required = false) Set<String> roleNames) {
+    User updatedUser = service.updateUser(id, user, roleNames);
+    return ResponseEntity.ok(updatedUser);
+  }
+  @PostMapping("/{id}/roles")
+  public ResponseEntity<?> assignRoleToUser(@PathVariable Long id, @RequestParam ERole roleName) {
+    User user = service.retrieveUserById(id);
+    if (user == null) {
+      return ResponseEntity.notFound().build();
+    }
+    Role role = roleservice.findByName(roleName);
+    if (role == null) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    roleservice.assignRoleToUser(id, roleName);
+    return ResponseEntity.ok().build();
+  }
+  @PutMapping("/{id}/enable")
+  public ResponseEntity<?> enableUser(@PathVariable Long id) {
+    User user = service.enableUser(id);
+    if (user == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(user);
   }
 
-  @GetMapping("/users/{ville}")
-  public List<User> getUsersByVille(@PathVariable("ville") String ville) {
+  @PutMapping("/{id}/disable")
+  public ResponseEntity<?> disableUser(@PathVariable Long id) {
+    User user = service.disableUser(id);
+    if (user == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(user);
+  }
+  @GetMapping("/users")
+  public ResponseEntity<List<User>> getAllUsers(@AuthenticationPrincipal User user) {
+    if (user != null && user.isEnabled()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+    List<User> users = service.retrieveAllUser();
+    return ResponseEntity.ok(users);
+  }
+  @PutMapping("/disableU3-roles")
+  public ResponseEntity<?> disableUsersWithMoreThan3Roles() {
+    service.disableUsersWithMoreThan3Roles();
+    return ResponseEntity.ok().build();
+  }
+  @PutMapping("/disable-by-role")
+  public ResponseEntity<String> disableUsersByRoleName(@RequestParam("roleName") String roleName) {
+    service.disableUsersByRoleName(roleName);
+    return ResponseEntity.ok("Users with role " + roleName + " have been disabled.");
+  }
+
+  @GetMapping("/searchUsers")
+  public List<User> getUsersByVille(@RequestParam("ville") String ville) {
     return service.findByVille(ville);
   }
+
+
 
 
 }
