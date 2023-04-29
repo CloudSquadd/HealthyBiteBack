@@ -6,13 +6,15 @@ import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import com.esprit.pidev.services.ForumServices.IPost;
 import com.esprit.pidev.services.ForumServices.PostService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 
-
+@Data
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor
@@ -63,6 +65,7 @@ public class PostController {
         return iPost.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getAllPosts")
     @ResponseBody
     public List<Post> retrieveAllPosts(){

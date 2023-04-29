@@ -101,8 +101,8 @@ public class PostService implements IPost {
 
     @Override
     public Post addPost(Post pt) {
-        User user = getCurrentUser();
-        pt.setUser(user);
+   /*     User user = getCurrentUser();
+        pt.setUser(user);*/
         postRepository.save(pt);
         return pt;
     }
