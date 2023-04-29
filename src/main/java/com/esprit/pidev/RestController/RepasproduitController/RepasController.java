@@ -49,9 +49,9 @@ public class RepasController {
     }
 
     @PostMapping("/addRepasWithImg")
-    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas,@RequestParam("nutritionId") long nutritionId, @RequestParam("image") MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
         return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
-        categRepas, nutritionId,image);
+        categRepas,image);
     }
 
 

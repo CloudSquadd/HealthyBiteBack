@@ -130,7 +130,7 @@ public class RepasService implements IRepas {
 
     @Override
 
-    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, long nutritionId,MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
         Repas pt = new Repas();
         pt.setNom(nom);
         pt.setDescription(description);
@@ -139,7 +139,7 @@ public class RepasService implements IRepas {
         pt.setAllergene(allergene);
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
-        pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+       // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
         //pt.setUser(userRepository.findById(user).orElse(null));
         byte[] imageData = image.getBytes();
         System.err.println(imageData.toString());
