@@ -53,7 +53,7 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public Repas updateRepas(Repas rep) throws AccessDeniedException {
+    public Repas updateRepas(Repas rep)  {
             repasRepository.save(rep);
         return rep;
     }
@@ -69,7 +69,7 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public void deleteRepas(Repas rep) throws AccessDeniedException {
+    public void deleteRepas(Repas rep) {
             repasRepository.delete(rep);
     }
 
@@ -129,7 +129,6 @@ public class RepasService implements IRepas {
     }
 
     @Override
-
     public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
         Repas pt = new Repas();
         pt.setNom(nom);
@@ -140,6 +139,33 @@ public class RepasService implements IRepas {
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+        //pt.setUser(userRepository.findById(user).orElse(null));
+        byte[] imageData = image.getBytes();
+        System.err.println(imageData.toString());
+        pt.setImageData(imageData);
+        // Save the image file to a folder named 'images' in your project directory
+        Path directory = Paths.get("images");
+        if (!Files.exists(directory)) {Files.createDirectories(directory);}
+        Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+        Files.write(imagePath, imageData);
+        repasRepository.save(pt);
+        return pt;
+    }
+
+
+
+    @Override
+    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
+        Repas pt = new Repas();
+        pt.setId(id);
+        pt.setNom(nom);
+        pt.setDescription(description);
+        pt.setPrix(prix);
+        pt.setIngredient(ingredient);
+        pt.setAllergene(allergene);
+        pt.setObjectif(objectifType);
+        pt.setCategorieRep(categRepas);
+        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
         //pt.setUser(userRepository.findById(user).orElse(null));
         byte[] imageData = image.getBytes();
         System.err.println(imageData.toString());
@@ -217,13 +243,14 @@ public class RepasService implements IRepas {
     }*/
 
     @Override
-    public Set<Repas> getRepasByUserId() {
-        User user = getCurrentUserObjects();
+    public Set<Repas> getRepasByUserId(long id) {
+       /* User user = getCurrentUserObjects();
 
         if (user.getRoles().equals("ROLE_RESTAURANT")) {
             return repasRepository.findByUserId(user.getId());
-        }
-        return repasRepository.findByUserId(user.getId());
+        }*/
+       // return repasRepository.findByUserId(user.getId());
+        return repasRepository.findByUserId(id);
     }
 
     @Override
