@@ -85,6 +85,4 @@ public class ConseilController {
         List<Conseil> list = conseilService.recommend(userId);
         return new ResponseEntity<List<Conseil>>(list, HttpStatus.CREATED);
     }
-
-
 }
