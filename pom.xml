@@ -98,11 +98,11 @@
 
 
 
-		<dependency>
-			<groupId>com.esprit</groupId>
-			<artifactId>pidev</artifactId>
-			<version>1.0</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.esprit</groupId>-->
+<!--			<artifactId>pidev</artifactId>-->
+<!--			<version>1.0</version>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>

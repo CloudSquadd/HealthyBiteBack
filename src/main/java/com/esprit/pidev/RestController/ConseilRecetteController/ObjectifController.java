@@ -1,13 +1,11 @@
 package com.esprit.pidev.RestController.ConseilRecetteController;
 
-
 import com.esprit.pidev.entities.ConseilRecette.Objectif;
-import com.esprit.pidev.entities.UserRole.User;
+ import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.exceptions.RecetteNotFoundException;
-
 import com.esprit.pidev.security.services.UserService;
 import com.esprit.pidev.services.ConseilRecetteServices.IObjectifService;
-import lombok.AllArgsConstructor;
+ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,7 +64,7 @@ public class ObjectifController {
         return new ResponseEntity<Void>(HttpStatus.GONE);
     }
 
-    @PostMapping("/userObjectifs/{userId}")
+    @PostMapping("/user/{userId}/objectifs")
     public ResponseEntity<Objectif> addObjectifToUser(
             @PathVariable("userId") Long userId, @RequestBody Objectif objectif) {
 

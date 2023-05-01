@@ -19,14 +19,15 @@ public class RecetteController {
     private IRecetteService recetteService;
 
     @PostMapping("/")
-    public ResponseEntity<Recette> addRecette(@RequestBody Recette recette){
+    public ResponseEntity<Recette> addRecette(@RequestBody Recette recette) {
 
         Recette saved = recetteService.addRecette(recette);
         return new ResponseEntity<Recette>(saved, HttpStatus.CREATED);
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Recette> updateRecette(@PathVariable("id")Long id , @RequestBody Recette recette) {
-        Recette updated = recetteService.updateRecette(id,recette);
+    public ResponseEntity<Recette> updateRecette(@PathVariable("id") Long id, @RequestBody Recette recette) {
+        Recette updated = recetteService.updateRecette(id, recette);
         return new ResponseEntity<Recette>(updated, HttpStatus.OK);
     }
 
@@ -43,10 +44,10 @@ public class RecetteController {
         Collection<Recette> recettes = recetteService.retrieveAllRecette();
         return new ResponseEntity<Collection<Recette>>(recettes, HttpStatus.FOUND);
     }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteRecette(@PathVariable(value = "id", required = true) Long id) {
         recetteService.deleteRecette(id);
         return new ResponseEntity<Void>(HttpStatus.GONE);
     }
 }
-
