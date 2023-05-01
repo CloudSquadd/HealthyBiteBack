@@ -1,7 +1,6 @@
 package com.esprit.pidev.security.services;
 
 
-import com.esprit.pidev.entities.UserRole.PasswordResetToken;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.entities.UserRole.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,5 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         mailSender.send(mailMessage);
     }
 
-    @Override
-    public void sendResetPasswordEmail(User user, PasswordResetToken passwordResetToken, String resetUrl) {
 
-    }
 }
