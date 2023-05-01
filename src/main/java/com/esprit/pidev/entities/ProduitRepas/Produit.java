@@ -1,10 +1,13 @@
 package com.esprit.pidev.entities.ProduitRepas;
 
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.io.Serializable;
 
 @Entity
@@ -25,6 +28,7 @@ public class Produit implements Serializable {
     @Enumerated(EnumType.STRING)
     @JsonIgnore
     private CategProduit categoriePro;
+    private Boolean bloquee=false;
 
     @ManyToOne
     @JsonIgnore
@@ -35,4 +39,6 @@ public class Produit implements Serializable {
     private Nutrition nutrition;
 
     private int quantite;
+    @OneToMany(mappedBy = "produit",cascade = CascadeType.ALL)
+    private Set<Reclamation> reclamations;
 }

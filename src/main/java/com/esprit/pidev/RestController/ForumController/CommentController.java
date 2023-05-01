@@ -2,44 +2,59 @@ package com.esprit.pidev.RestController.ForumController;
 
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.ForumRepository.CommentRepository;
 import com.esprit.pidev.repository.ForumRepository.PostRepository;
+import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import com.esprit.pidev.services.ForumServices.CommentService;
 import com.esprit.pidev.services.ForumServices.IComment;
+import com.esprit.pidev.services.ForumServices.LikeService;
 import com.esprit.pidev.services.ForumServices.PostService;
+import lombok.AllArgsConstructor;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/api/test")
 @RestController
+@AllArgsConstructor
 public class CommentController {
 
-    private final IComment iComment;
-
-
-    private final CommentService commentService;
-    private final PostService postService;
-
-
-    private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-
+     IComment iComment;
+@Autowired
+LikeService likeService;
     @Autowired
-    public CommentController(IComment iComment, CommentService commentService, PostService postService, CommentRepository commentRepository, PostRepository postRepository) {
-        this.iComment = iComment;
-        this.commentService = commentService;
-        this.postService = postService;
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-    }
+     CommentService commentService;
+    @Autowired
+     PostService postService;
+
+
+     CommentRepository commentRepository;
+     PostRepository postRepository;
+     UserRepository userRepository;
+
+
+
+
+
+
+
+
+
+
 
     @PostMapping("/{postId}/comments")
-    public Comment addComment(@PathVariable Long postId, @RequestBody Comment comment) {
+    public Comment addComment( @PathVariable Long postId, @RequestBody Comment comment) {
         Post post = postService.retrievePostById(postId);
         if (post == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
@@ -50,6 +65,11 @@ public class CommentController {
 
 
 
+    @PostMapping("/{commentId}/replies")
+    public Comment addReply(@PathVariable Long commentId, @RequestBody Comment reply) {
+
+        return commentService.addReply(commentId,reply);
+    }
 
 
     @GetMapping("/getPostComments")
@@ -97,6 +117,8 @@ public class CommentController {
     public void deleteComment(@PathVariable("id") Long id){
         commentService.deleteComment(id);
     }
+
+
 
 
 }

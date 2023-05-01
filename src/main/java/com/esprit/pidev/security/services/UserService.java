@@ -165,6 +165,11 @@ public class UserService implements IUser{
         repo.save(user);
     }
 
+    @Override
+    public List<User> findByVille(String ville) {
+        return repo.findByVille(ville);
+    }
+
 
 
     @Override

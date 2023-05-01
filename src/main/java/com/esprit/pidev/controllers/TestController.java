@@ -21,6 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
@@ -113,6 +117,18 @@ public class TestController {
             Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(fournisseurRole);
+            break;
+          case "fournisseur":
+            Role fournisseur = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(fournisseur);
+
+            break;
+          case "restaurant":
+            Role restaurant = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(restaurant);
+
             break;
           default:
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -240,6 +256,12 @@ public class TestController {
 
 
 
+
+
+  @GetMapping("/searchUsers")
+  public List<User> getUsersByVille(@RequestParam("ville") String ville) {
+    return service.findByVille(ville);
+  }
 
 
 

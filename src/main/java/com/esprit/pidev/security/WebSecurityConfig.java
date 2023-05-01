@@ -27,6 +27,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import java.util.Arrays;
 import java.util.Collections;
 
+
+import java.security.Principal;
+
 @Configuration
 @EnableGlobalMethodSecurity(
     // securedEnabled = true,
@@ -43,6 +46,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
+
+
 
 //  @Override
 //  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -92,7 +97,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     http.cors().and().csrf().disable()
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+        .authorizeRequests().antMatchers("/api/auth/**","/**","/conseil/**","/ingredient/**","/objectif/**","/recette/**").permitAll()
         .antMatchers("/api/test/**").permitAll()
         .anyRequest().authenticated();
 
@@ -103,6 +108,5 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     
     return http.build();
   }
-
 
 }

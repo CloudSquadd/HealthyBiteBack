@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -23,5 +25,14 @@ public class Livraison {
 
     @Enumerated(EnumType.STRING)
     private EtatCommande etat;
+    private String status;
+    private String currentLocation;
+    private LocalDateTime lastUpdatedAt;
+    private String deliveryTimeSlot; // plage horaire de livraison
+    private String alternateAddress; // adresse de livraison alternative
+    private String collectionPoint; // point de collecte choisi
+    private Double expressDeliveryFee; // frais de livraison express
+
+
     
 }

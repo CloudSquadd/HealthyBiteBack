@@ -12,19 +12,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/test")
 @AllArgsConstructor
+
 public class TagController {
-    private final ITag iTag;
+      ITag iTag;
 
-    private final IPost iPost;
+     IPost iPost;
 
-    private final IComment iComment;
+     IComment iComment;
 
     @PostMapping("/addTag")
     public Tag addTag(@RequestBody Tag tag) {
         return iTag.addTag(tag);
     }
 
-   /* @PostMapping("/addTagToPost")
+    @PostMapping("/addTagToPost")
     public Post addTagToPost(@RequestParam Long postId, @RequestParam Long tagId) {
         Post post = iPost.retrievePostById(postId);
         Tag tag = iTag.retrieveTagById(tagId);
@@ -33,7 +34,7 @@ public class TagController {
         iPost.addPost(post);
 
         return post;
-    }*/
+    }
 
 
     @PostMapping("/addTagToComment")

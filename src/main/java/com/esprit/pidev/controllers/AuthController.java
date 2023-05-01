@@ -1,5 +1,14 @@
 package com.esprit.pidev.controllers;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
+
 
 import java.io.IOException;
 import java.security.Principal;
@@ -58,7 +67,6 @@ public class AuthController {
   @Autowired
   private EmailSenderService emailSenderService;
   @Autowired
-
   private VerificationTokenRepository tok;
   @Autowired
   private UserService userservice;
@@ -153,16 +161,16 @@ public class AuthController {
             roles.add(modRole);
 
             break;
-          case "restaurant":
-            Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+          case "fournisseur":
+            Role fournisseur = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(restaurantRole);
+            roles.add(fournisseur);
 
             break;
-          case "fournisseur":
-            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+          case "restaurant":
+            Role restaurant = roleRepository.findByName(ERole.ROLE_RESTAURANT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(fournisseurRole);
+            roles.add(restaurant);
 
             break;
           default:
@@ -186,6 +194,18 @@ public class AuthController {
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+  
+
+  @GetMapping("/userObjects")
+  public User getCurrentUserObjects() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    //return new User(user.getUsername(), user.getPassword(), user.getEmail());
+    return user;
+  }
+
   @PostMapping("/confirm-account")
   public ResponseEntity<?> confirmAccount(@RequestParam("token") String token) {
     VerificationToken verificationToken = tok.findByToken(token);
