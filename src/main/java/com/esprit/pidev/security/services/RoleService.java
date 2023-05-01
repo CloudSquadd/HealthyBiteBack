@@ -27,7 +27,9 @@ public class RoleService implements IRole{
     @Override
     public Role findByName(ERole name) {
         Optional<Role> role = roleRepository.findByName(name);
-        return role.orElse(null);    }
+        return role.orElseThrow(() -> new ResourceNotFoundException("Error: Role not found."));
+    }
+
 
     @Override
     public Set<ERole> getAllRoles() {

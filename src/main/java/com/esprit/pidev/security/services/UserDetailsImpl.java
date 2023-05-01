@@ -4,8 +4,11 @@ package com.esprit.pidev.security.services;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.esprit.pidev.entities.UserRole.ERole;
+import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.entities.UserRole.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,9 +24,16 @@ public class UserDetailsImpl implements UserDetails {
   private String username;
 
   private String email;
+  private Set<Role> roles;
 
   @JsonIgnore
   private String password;
+  public Set<Role> getRoles() {
+    return user.getRoles();
+  }
+  public User getUser() {
+    return user;
+  }
 
   private Collection<? extends GrantedAuthority> authorities;
 
@@ -36,6 +46,7 @@ public class UserDetailsImpl implements UserDetails {
     this.email = email;
     this.password = password;
     this.authorities = authorities;
+    this.roles = user.getRoles();
     this.user = user;
   }
 
@@ -53,6 +64,8 @@ public class UserDetailsImpl implements UserDetails {
             user // initialize the User field
     );
   }
+
+
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

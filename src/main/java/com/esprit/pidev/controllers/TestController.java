@@ -4,16 +4,19 @@ package com.esprit.pidev.controllers;
 import com.esprit.pidev.entities.UserRole.ERole;
 import com.esprit.pidev.entities.UserRole.Role;
 import com.esprit.pidev.entities.UserRole.User;
+import com.esprit.pidev.payload.request.SMSSendRequest;
 import com.esprit.pidev.payload.request.SignupRequest;
 import com.esprit.pidev.payload.response.MessageResponse;
 import com.esprit.pidev.repository.UserRoleRepository.RoleRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 
 import com.esprit.pidev.security.services.IUser;
+import com.esprit.pidev.security.services.SMSService;
 import com.esprit.pidev.security.services.UserService;
 
 import com.esprit.pidev.security.services.RoleService;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +30,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/test")
+@AllArgsConstructor
 public class TestController {
   @Autowired
   UserRepository userRepository;
+  private final SMSService SS;
 
   @Autowired
   RoleRepository roleRepository;
@@ -69,24 +74,15 @@ public class TestController {
   public String adminAccess() {
     return "Admin Board.";
   }
-  @PostMapping("/addUser")
-  public ResponseEntity<?> addUser(@Valid @RequestBody SignupRequest signUpRequest){
+  @PostMapping("/add")
+  public ResponseEntity<?> addUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity
-              .badRequest()
-              .body(new MessageResponse("Error: Username is already taken!"));
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
 
     if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity
-              .badRequest()
-              .body(new MessageResponse("Error: Email is already in use!"));
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
     }
-
-    // Create new user's account
-    User user = new User(signUpRequest.getUsername(),
-            signUpRequest.getEmail(),
-            encoder.encode(signUpRequest.getPassword()));
 
     Set<String> strRoles = signUpRequest.getRole();
     Set<Role> roles = new HashSet<>();
@@ -102,13 +98,21 @@ public class TestController {
             Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(adminRole);
-
             break;
           case "mod":
             Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(modRole);
-
+            break;
+          case "restaurant":
+            Role restaurantRole = roleRepository.findByName(ERole.ROLE_RESTAURANT)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(restaurantRole);
+            break;
+          case "fournisseur":
+            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(fournisseurRole);
             break;
           default:
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -118,11 +122,25 @@ public class TestController {
       });
     }
 
-    user.setRoles(roles);
-    userRepository.save(user);
+    User user = new User(signUpRequest.getUsername(),
+            signUpRequest.getEmail(),
+            encoder.encode(signUpRequest.getPassword()));
+    user.setPhone(signUpRequest.getPhone());
+    user.setEnabled(true);
+
+    User newUser = service.addUser(user, roles);
+
+
 
     return ResponseEntity.ok(new MessageResponse("User added successfully!"));
   }
+  @PutMapping("/{id}")
+  public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody SignupRequest signUpRequest) {
+    service.updateUser(id, signUpRequest);
+    return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+  }
+
+
 
 
   //@PutMapping("/updateUser")
@@ -133,7 +151,7 @@ public class TestController {
   public User retrieveUserById(@PathVariable("id") Long id){
     return iuser.retrieveUserById(id);
   }
-  @PreAuthorize("hasAuthority('ROLE_USER') and isAuthenticated() and principal.isEnabled()")
+  //@PreAuthorize("hasAuthority('ROLE_USER') and isAuthenticated() and principal.isEnabled()")
   @GetMapping("/getAllUser")
   public List<User> retrieveAllUser(){
     return iuser.retrieveAllUser();
@@ -146,13 +164,7 @@ public class TestController {
   public List<User> searchUsersByUsername(@RequestParam("username") String username) {
     return iuser.searchUsersByUsername(username);
   }
-  @PutMapping("/{id}")
-  public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
-                                         @RequestBody User user,
-                                         @RequestParam(value = "roles", required = false) Set<String> roleNames) {
-    User updatedUser = service.updateUser(id, user, roleNames);
-    return ResponseEntity.ok(updatedUser);
-  }
+
   @PostMapping("/{id}/roles")
   public ResponseEntity<?> assignRoleToUser(@PathVariable Long id, @RequestParam ERole roleName) {
     User user = service.retrieveUserById(id);
@@ -202,6 +214,33 @@ public class TestController {
     service.disableUsersByRoleName(roleName);
     return ResponseEntity.ok("Users with role " + roleName + " have been disabled.");
   }
+  @PutMapping("/sendsms")
+  public String sendSms(@RequestBody SMSSendRequest sendRequest)
+  {
+    String codeGenerated=SS.generateCode();
+    System.out.println(codeGenerated);
+    User u1=userRepository.findByPhone(sendRequest.getPhone());
+    System.out.println(u1.getPhone());
+    u1.setCode(codeGenerated);
+    iuser.SMSUSER(u1);
+    return SS.sendSMS(sendRequest.getPhone(),"your code is :"+codeGenerated);
+  }
+  @PutMapping("/resetbysms/{code}/{newpassword}")
+  public String resetBySms(@RequestBody SMSSendRequest sendRequest, @PathVariable("code") String code , @PathVariable("newpassword") String newpassword)
+  {   User u12=userRepository.findByPhone(sendRequest.getPhone());
+    if (code.equals(u12.getCode())&u12.getCode()!=null) {
+      u12.setPassword(encoder.encode(newpassword));
+      u12.setCode(null);
+      iuser.SMSUSER(u12);
+    }
+    //here the exception or message if the code is not match to
+    return SS.sendSMS(sendRequest.getPhone(),"your password has changed ;)");
+  }
+
+
+
+
+
 
 
 

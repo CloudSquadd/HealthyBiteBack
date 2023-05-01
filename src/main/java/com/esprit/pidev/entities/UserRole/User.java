@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @ToString
 @Table(name = "users",
         uniqueConstraints = {
@@ -39,6 +40,10 @@ public class User {
     @NotBlank
     @Size(max = 20)
     private String username;
+    @NotBlank
+    private String phone;
+    @NotBlank
+    private String code;
 
     @NotBlank
     @Size(max = 50)
@@ -54,6 +59,9 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+    public User(Set<Role> roles) {
+        this.roles = roles;
+    }
     private Long maxCalories;
 
     private String besoin;
@@ -65,7 +73,10 @@ public class User {
     private int age;
     private Long perdrePoids;
     private Long taille;
-    private String verificationToken;
+
+
+    public User(String username, String email, String phone, String encode) {
+    }
 
     public boolean isActive() {
         return enabled;
