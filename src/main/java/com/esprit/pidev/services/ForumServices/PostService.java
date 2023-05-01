@@ -88,6 +88,29 @@ public class PostService implements IPost {
     }
 
     @Override
+    public Post updatePostAndImage(long id,String title, String content,  MultipartFile image) throws IOException {
+        Post pt = new Post();
+        pt.setId(id);
+        pt.setContent(content);
+        pt.setTitle(title);
+        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+        //pt.setUser(userRepository.findById(user).orElse(null));
+        byte[] imageData = image.getBytes();
+        System.err.println(imageData.toString());
+        pt.setImageData(imageData);
+        // Save the image file to a folder named 'images' in your project directory
+        Path directory = Paths.get("images");
+        if (!Files.exists(directory)) {Files.createDirectories(directory);}
+        Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+        Files.write(imagePath, imageData);
+        postRepository.save(pt);
+        return pt;
+    }
+
+
+
+
+    @Override
     public Post updatePost(Long id, Post pt) {
         User user = getCurrentUser();
         pt.setUser(user);

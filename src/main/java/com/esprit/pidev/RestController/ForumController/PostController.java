@@ -1,6 +1,7 @@
 package com.esprit.pidev.RestController.ForumController;
 
 import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import com.esprit.pidev.services.ForumServices.IPost;
@@ -44,6 +45,12 @@ public class PostController {
     @PostMapping("/addPostWithImg")
     public Post addPostAndImage(@RequestParam("title") String title, @RequestParam("content") String description, @RequestParam("image") MultipartFile image) throws IOException {
         return iPost.addPostAndImage(title, description, image);
+    }
+
+    @PutMapping("/updatePostWithImg")
+    public Post updatePostAndImage(@RequestParam("id")long id, @RequestParam("title")String title, @RequestParam("content") String content, @RequestParam("image") MultipartFile image) throws IOException
+    {
+        return iPost.updatePostAndImage(id,title,  content,image);
     }
 
     @PostMapping("/addPost")

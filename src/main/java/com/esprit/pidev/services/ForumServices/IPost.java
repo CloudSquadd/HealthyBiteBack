@@ -17,4 +17,5 @@ public interface IPost {
     List<Post> retrieveAllPosts();
     void deletePost(Long id);
     List<Post> findAll();
+    public Post updatePostAndImage(long id,String title, String content, MultipartFile image) throws IOException;
 }
