@@ -1,23 +1,35 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
+import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.CategRepas;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Set;
 
 public interface IRepas {
     Repas addRepas(Repas rep);
-    Repas updateRepas(Repas rep);
+    Repas updateRepas(Repas rep) throws AccessDeniedException;
     Repas retrieveRepasById(Long id);
     List<Repas> retrieveAllRepas();
-    void deleteRepas(Long id);
+    void deleteRepas(Repas rep) throws AccessDeniedException;
+     Set<Repas> getRepasByUserId();
 
-     Set<Repas> getRepasByUserId(Long id);
-
+    void updateRepasBloqueStatus( );
     int calculerCaloriesTotales(List<Repas> repasChoisis);
 
-     String checkMealNutrition(Repas repas);
+    long calculerMaxCalories(User user);
 
-    double calculerMetabolismeDeBase(User user);
+    List<Repas> proposerRepasSelonObjectifEtActivite();
+
+     List<Repas> rechercherRepasParNom(String nom);
+
+    Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas,long user,  MultipartFile image)throws IOException;
+
+
 }

@@ -2,7 +2,7 @@ package com.esprit.pidev.services;
 
 import com.esprit.pidev.constants.HealthyBiteBackConstants;
 import com.esprit.pidev.entities.UserRole.User;
-import com.esprit.pidev.services.UserRoleService.UserService;
+import com.esprit.pidev.security.services.UserService;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -38,7 +38,7 @@ public class SmsService {
                     .creator(
                             new PhoneNumber("+21655592142"),
                             new PhoneNumber("+16206709679"),
-                            messageBody != null ? messageBody: HealthyBiteBackConstants.TWILIO_MESSAGE_BODY
+                            messageBody != null ? messageBody: "HealthyBiteBackConstants.TWILIO_MESSAGE_BODY"
                     ).create(
 
                     );

@@ -6,7 +6,6 @@ public class HealthyBiteBackConstants {
     public static final String TWILIO_AUTH_TOKEN = "1e2d40912120c444a8266ac6bab1c11b";
 
     public static final String TWILIO_SENDER_PHONE_NUMBER = "+16206709679";
-    public static final String TWILIO_MESSAGE_BODY = "Hello from Twilio ";
     public static final String COUNTRY_PREFIX_TUNISIA = "+216";
 
 

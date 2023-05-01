@@ -15,9 +15,10 @@ public class AdresseLivraisonService implements IAdresseLivraisonService {
     private AdresseLivraisonRepository adresseLivraisonRepository;
 
     @Override
-    public AdresseLivraison saveAdresseLivraison(AdresseLivraison adresseLivraison) {
+    public AdresseLivraison addAdresseLivraison(AdresseLivraison adresseLivraison) {
         return adresseLivraisonRepository.save(adresseLivraison);
     }
+
 
     @Override
     public AdresseLivraison updateAdresseLivraison(AdresseLivraison adresseLivraison) {
@@ -31,8 +32,8 @@ public class AdresseLivraisonService implements IAdresseLivraisonService {
 
     @Override
     public AdresseLivraison getAdresseLivraisonById(Long id) {
-        Optional<AdresseLivraison> adresseLivraisonOptional = adresseLivraisonRepository.findById(id);
-        return adresseLivraisonOptional.orElse(null);
+         ;
+        return adresseLivraisonRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -43,4 +44,5 @@ public class AdresseLivraisonService implements IAdresseLivraisonService {
     public boolean existAdresseLivraison(Long id) {
         return adresseLivraisonRepository.existsById(id);
     }
+
 }

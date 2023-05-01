@@ -1,69 +1,95 @@
 package com.esprit.pidev.entities.UserRole;
 
+
 import com.esprit.pidev.entities.CommandeLivraison.AdresseLivraison;
-import com.esprit.pidev.entities.Objectif;
+import com.esprit.pidev.entities.ConseilRecette.Objectif;
+import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
+import com.esprit.pidev.entities.CommandeLivraison.Commande;
+import com.esprit.pidev.entities.Forum.Comment;
+import com.esprit.pidev.entities.Forum.Post;
+
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
-import com.esprit.pidev.entities.Forum.Comment;
-import com.esprit.pidev.entities.Forum.LikeDislike;
-import com.esprit.pidev.entities.Forum.Post;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+
 @Entity
-@Data
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
-
-public class User implements Serializable {
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private boolean enabled;
+    @NotBlank
+    @Size(max = 20)
     private String username;
-    private String password;
+
+    @NotBlank
+    @Size(max = 50)
+    @Email
     private String email;
-    private Integer tel;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLE",
-            joinColumns = {
-                    @JoinColumn(name = "USER_ID")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ROLE_ID")
-            }
-    )
+    @NotBlank
+    @Size(max = 120)
+    private String password;
 
-    private Set<Role> role;
-    public Set<Role> getRole() {
-        return role;
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(  name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+    // **************** attribut qui concerne le client
 
-    public void setRole(Set<Role> role) {
-        this.role = role;
-    }
+    @Enumerated(EnumType.STRING)
+    private TypeActivite activite;
 
-    private Long maxCalories;
-
-    private String besoin;
+    @Enumerated(EnumType.STRING)
+    private ObjectifType objectif;
 
     private Long poids;
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private GenderType Gender;
 
     private int age;
-    private Long perdrePoids;
+    private Long ObjectifPoids;
     private Long taille;
+
+    ///********************fin des attributs
+
+
+    private String verificationToken;
+
+    ///********************fin des attributs
+    public boolean isActive() {
+        return enabled;
+    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AdresseLivraison> addresses;
@@ -72,20 +98,79 @@ public class User implements Serializable {
     private Set<Repas> repas;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Reclamation> reclamations;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Set<Produit> produits;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Commande> commande;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "user_liked_posts",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id")})
+    private Set<Post> likedPosts = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<LikeDislike> likeDislikes = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "user_liked_comments",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "comment_id")})
+    private Set<Comment> likedComments = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Objectif> objectifs = new ArrayList<>();
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User() {
+
+    }
 
 
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
