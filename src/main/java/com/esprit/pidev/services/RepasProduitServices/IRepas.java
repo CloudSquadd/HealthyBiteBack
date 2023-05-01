@@ -30,8 +30,8 @@ public interface IRepas {
      List<Repas> rechercherRepasParNom(String nom);
 
 
-    Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas,  MultipartFile image)throws IOException;
+    Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas,  MultipartFile image,long user)throws IOException;
 
-    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException;
+    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException;
     public List<Repas> getAllRepasAndImage();
 }

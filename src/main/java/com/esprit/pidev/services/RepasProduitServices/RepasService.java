@@ -129,7 +129,7 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException {
         Repas pt = new Repas();
         pt.setNom(nom);
         pt.setDescription(description);
@@ -139,7 +139,7 @@ public class RepasService implements IRepas {
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
-        //pt.setUser(userRepository.findById(user).orElse(null));
+        pt.setUser(userRepository.findById(user).get());
         byte[] imageData = image.getBytes();
         System.err.println(imageData.toString());
         pt.setImageData(imageData);
@@ -155,7 +155,7 @@ public class RepasService implements IRepas {
 
 
     @Override
-    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
+    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException {
         Repas pt = new Repas();
         pt.setId(id);
         pt.setNom(nom);
@@ -165,6 +165,7 @@ public class RepasService implements IRepas {
         pt.setAllergene(allergene);
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
+        pt.setUser(userRepository.findById(user).get());
         // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
         //pt.setUser(userRepository.findById(user).orElse(null));
         byte[] imageData = image.getBytes();

@@ -1,18 +1,25 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
+import com.esprit.pidev.entities.ProduitRepas.CategProduit;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
+import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.ProduitRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -79,19 +86,80 @@ public class ProduitService implements IProduit{
     }
 
     @Override
-    public Set<Produit> getProduitByUserId() {
-        User user = getCurrentUserObjects();
+    public Set<Produit> getProduitByUserId(long id) {
+      /*  User user = getCurrentUserObjects();
 
         if (user.getRoles().equals("ROLE_FOURNISSEUR")) {
             return produitRepository.findByUserId(user.getId());
         }
-
-        return produitRepository.findByUserId(user.getId());
+*/
+        return produitRepository.findByUserId(id);
     }
 
     @Override
     public void updateProduitBloqueStatus() {
         produitRepository.blockProduitWithTooManyReclamations();
+    }
+
+    @Override
+    public Produit addProduitAndImage(String nom, String description, double prix, String ingredient, CategProduit categProduit, MultipartFile image) throws IOException {
+        Produit pt = new Produit();
+        pt.setNom(nom);
+        pt.setDescription(description);
+        pt.setPrix(prix);
+        pt.setIngredient(ingredient);
+        pt.setCategoriePro(categProduit);
+        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+        //pt.setUser(userRepository.findById(user).orElse(null));
+        byte[] imageData = image.getBytes();
+        System.err.println(imageData.toString());
+        pt.setImageData(imageData);
+        // Save the image file to a folder named 'images' in your project directory
+        Path directory = Paths.get("images");
+        if (!Files.exists(directory)) {Files.createDirectories(directory);}
+        Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+        Files.write(imagePath, imageData);
+        produitRepository.save(pt);
+        return pt;
+    }
+
+    @Override
+    public Produit updateProduitAndImage(long id, String nom, String description, double prix, String ingredient, CategProduit categProduit, MultipartFile image) throws IOException {
+        Produit pt = new Produit();
+        pt.setId(id);
+        pt.setNom(nom);
+        pt.setDescription(description);
+        pt.setPrix(prix);
+        pt.setIngredient(ingredient);
+        pt.setCategoriePro(categProduit);
+        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+        //pt.setUser(userRepository.findById(user).orElse(null));
+        byte[] imageData = image.getBytes();
+        System.err.println(imageData.toString());
+        pt.setImageData(imageData);
+        // Save the image file to a folder named 'images' in your project directory
+        Path directory = Paths.get("images");
+        if (!Files.exists(directory)) {Files.createDirectories(directory);}
+        Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+        Files.write(imagePath, imageData);
+        produitRepository.save(pt);
+        return pt;
+    }
+
+    @Override
+    public List<Produit> getAllProduitAndImage() {
+        List<Produit> produit = produitRepository.findAll();
+        for (Produit produitItem : produit) {
+            if (produitItem.getImageData() != null) {
+                try {
+                    String imageBase64 = Base64.getEncoder().encodeToString(produitItem.getImageData());
+                    produitItem.setImageBase64(imageBase64);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return produit;
     }
 
 
