@@ -38,6 +38,11 @@ public class RepasController {
     @Autowired
     IUser iUser;
 
+    @GetMapping("/getCurrentUser")
+    public User getCurrentUserObjects(){
+        return iRepas.getCurrentUserObjects();
+    }
+
     @PostMapping("/addRepas")
     public Repas addRepas(@RequestBody Repas rep){
         return iRepas.addRepas(rep);
@@ -49,16 +54,16 @@ public class RepasController {
     }
 
     @PostMapping("/addRepasWithImg")
-    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException {
+    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
         return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
-        categRepas,image,user);
+        categRepas,image);
     }
 
     @PutMapping("/updateRepasWithImg")
-    public Repas updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException
+    public Repas updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException
         {
         return iRepas.updateRepasAndImage(id,nom,  description,  prix,  ingredient,  allergene,  objectifType,
-                categRepas,image,user);
+                categRepas,image);
     }
 
 
