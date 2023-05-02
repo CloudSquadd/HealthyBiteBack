@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 import java.util.Base64;
+import java.util.Set;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -55,6 +56,7 @@ public class Repas implements Serializable {
             imageData = Base64.getDecoder().decode(imageBase64);
         }
     }
+
 
     private Boolean bloquee=false;
 

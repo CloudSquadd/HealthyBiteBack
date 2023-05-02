@@ -1,13 +1,23 @@
 package com.esprit.pidev.payload.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Set;
 
 import javax.validation.constraints.*;
+@Getter
+@Setter
+@AllArgsConstructor
 
 public class SignupRequest {
   @NotBlank
   @Size(min = 3, max = 20)
   private String username;
+  @NotBlank
+  @Size(min = 3, max = 20)
+  private String phone;
 
   @NotBlank
   @Size(max = 50)

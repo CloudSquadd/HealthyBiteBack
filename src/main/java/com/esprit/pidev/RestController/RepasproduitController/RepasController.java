@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @AllArgsConstructor
 @Data
 @RequestMapping("/api/test")
@@ -53,6 +53,10 @@ public class RepasController {
         return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
         categRepas,image,user);
     }
+    @PutMapping("/updateRepasWithImg")
+    public Repas updateRepasAndImage(@RequestParam("id") long id, @RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("user") long user,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
+        return iRepas.updateRepasAndImage( id, nom,  description,  prix,  ingredient,  allergene,  objectifType,  categRepas,  image, user);
+    }
 
     @PutMapping("/updateRepasWithImg")
     public Repas updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException
@@ -63,13 +67,18 @@ public class RepasController {
 
 
     @GetMapping("getRepasById/{id}")
-    public Repas retrieveRepasById(@PathVariable("id") Long id){
+    public Repas retrieveRepasById(@PathVariable("id") long id){
         return iRepas.retrieveRepasById(id);
     }
 
     @GetMapping("/getAllRepas")
     public List<Repas> retrieveAllRepas(){
         return iRepas.retrieveAllRepas();
+    }
+
+    @GetMapping("/getAllRepasAndImage")
+    public List<Repas> retrieveAllRepasAndImage(){
+        return iRepas.getAllRepasAndImage();
     }
 
 
@@ -86,7 +95,7 @@ public class RepasController {
     }
 
     @GetMapping("/getRepasByUserId/{id}")
-    public Set<Repas> getRepasByUserId(@PathVariable("id") long id) {
+    public Set<Repas> getRepasByUserId(@PathVariable("id") Long id) {
         return iRepas.getRepasByUserId(id);
 
     }

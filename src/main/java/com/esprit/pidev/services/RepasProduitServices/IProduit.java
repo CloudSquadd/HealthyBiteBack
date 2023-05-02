@@ -2,6 +2,11 @@ package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.*;
 import org.springframework.data.repository.query.Param;
+import com.esprit.pidev.entities.ProduitRepas.CategProduit;
+import com.esprit.pidev.entities.ProduitRepas.Produit;
+import com.esprit.pidev.entities.ProduitRepas.Repas;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,10 +25,7 @@ public interface IProduit {
     //void checkReclamationsByProduit(Long id);
     void updateProduitBloqueStatus();
 
-
-    Produit addProduitAndImage(String nom, String description, double prix, String ingredient,  CategProduit categProduit, MultipartFile image)throws IOException;
-
-    public Produit updateProduitAndImage(long id, String nom, String description, double prix, String ingredient, CategProduit categProduit, MultipartFile image) throws IOException;
     public List<Produit> getAllProduitAndImage();
-
+    public Produit addProduitAndImage(String nom, String description, double prix, String ingredient, CategProduit categProduit, MultipartFile image,long user) throws IOException;
+    public Produit updateProduitAndImage(long id, String nom, String description, double prix, String ingredient, CategProduit categProduit, MultipartFile image,long user) throws IOException;
 }
