@@ -17,8 +17,8 @@ public interface IRepas {
     Repas updateRepas(Repas rep) throws AccessDeniedException;
     Repas retrieveRepasById(Long id);
     List<Repas> retrieveAllRepas();
-    void deleteRepas(Repas rep) throws AccessDeniedException;
-     Set<Repas> getRepasByUserId();
+    void deleteRepas(Repas rep) ;
+     Set<Repas> getRepasByUserId(long  id);
 
     void updateRepasBloqueStatus( );
     int calculerCaloriesTotales(List<Repas> repasChoisis);
@@ -31,5 +31,6 @@ public interface IRepas {
 
     Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas,long user,  MultipartFile image)throws IOException;
 
-
+    Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException;
+    public List<Repas> getAllRepasAndImage();
 }

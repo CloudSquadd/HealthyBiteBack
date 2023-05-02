@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @AllArgsConstructor
 @Data
 @RequestMapping("/api/test")
@@ -52,9 +52,13 @@ public class RepasController {
         return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
         categRepas,user, image);
     }
+    @PutMapping("/updateRepasWithImg")
+    public Repas updateRepasAndImage(@RequestParam("id") long id, @RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("user") long user,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
+        return iRepas.updateRepasAndImage( id, nom,  description,  prix,  ingredient,  allergene,  objectifType,  categRepas,  image, user);
+    }
 
     @GetMapping("getRepasById/{id}")
-    public Repas retrieveRepasById(@PathVariable("id") Long id){
+    public Repas retrieveRepasById(@PathVariable("id") long id){
         return iRepas.retrieveRepasById(id);
     }
 
@@ -63,18 +67,22 @@ public class RepasController {
         return iRepas.retrieveAllRepas();
     }
 
+    @GetMapping("/getAllRepasAndImage")
+    public List<Repas> retrieveAllRepasAndImage(){
+        return iRepas.getAllRepasAndImage();
+    }
+
 
     @DeleteMapping("/deleteRepas")
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and isAuthenticated() and principal.isEnabled()")
-    public void deleteRepas(@RequestBody Repas rep) throws AccessDeniedException {
+    public void deleteRepas(@RequestBody Repas rep)  {
         iRepas.deleteRepas(rep);
 
     }
 
 
-    @GetMapping("/getRepasByUserId")
-    public Set<Repas> getRepasByUserId() {
-        return iRepas.getRepasByUserId();
+    @GetMapping("/getRepasByUserId/{id}")
+    public Set<Repas> getRepasByUserId(@PathVariable("id") Long id) {
+        return iRepas.getRepasByUserId(id);
 
     }
 
