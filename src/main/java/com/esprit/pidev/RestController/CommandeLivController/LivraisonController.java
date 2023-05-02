@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/test")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LivraisonController {
     @Autowired
     private LivraisonService livraisonService;
@@ -34,10 +35,12 @@ public class LivraisonController {
         return new ResponseEntity<>(livraison, HttpStatus.OK);
     }
 
-
-    @PutMapping("/updateLivraison/{id}")
-    public void updateLivraison(@PathVariable Long id, @RequestBody Livraison livraison) {
-        livraison.setId(id);
+    @GetMapping("/getAllLivraison")
+    public List<Livraison> getAllLivraison() {
+        return livraisonService.getAllLivraisons();
+    }
+    @PutMapping("/updateLivraison")
+    public void updateLivraison(@RequestBody Livraison livraison) {
         livraisonService.updateLivraison(livraison);
     }
 

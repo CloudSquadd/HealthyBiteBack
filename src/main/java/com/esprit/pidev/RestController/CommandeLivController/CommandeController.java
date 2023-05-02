@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/test")
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CommandeController {
     private final CommandeService commandeService;
     @Autowired
