@@ -39,6 +39,8 @@ import com.esprit.pidev.repository.UserRoleRepository.VerificationTokenRepositor
 import com.esprit.pidev.security.services.EmailSenderService;
 import com.esprit.pidev.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,7 +60,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -202,8 +204,14 @@ public class AuthController {
     String username = authentication.getName();
     Optional<User> userOptional = userRepository.findByUsername(username);
     User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    //return new User(user.getUsername(), user.getPassword(), user.getEmail());
-    return user;
+    return new User(user.getId());
+    //return user;
+  }
+  @PostMapping("/signout")
+  public ResponseEntity<?> logoutUser() {
+    ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(new MessageResponse("You've been signed out!"));
   }
 
   @PostMapping("/confirm-account")

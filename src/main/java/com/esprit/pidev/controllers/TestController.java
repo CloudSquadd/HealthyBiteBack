@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/test")
 @AllArgsConstructor
@@ -118,18 +118,7 @@ public class TestController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(fournisseurRole);
             break;
-          case "fournisseur":
-            Role fournisseur = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(fournisseur);
 
-            break;
-          case "restaurant":
-            Role restaurant = roleRepository.findByName(ERole.ROLE_RESTAURANT)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(restaurant);
-
-            break;
           default:
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -258,10 +247,7 @@ public class TestController {
 
 
 
-  @GetMapping("/searchUsers")
-  public List<User> getUsersByVille(@RequestParam("ville") String ville) {
-    return service.findByVille(ville);
-  }
+
 
 
 
