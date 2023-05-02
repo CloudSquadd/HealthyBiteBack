@@ -35,14 +35,14 @@ public class RecetteController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Recette> findRecetteById(@PathVariable(value = "id") Long id) {
         Recette recette = recetteService.retrieveRecetteById(id);
-        return new ResponseEntity<Recette>(recette, HttpStatus.FOUND);
+        return new ResponseEntity<Recette>(recette, HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<Collection<Recette>> getAllRecettes() {
         Collection<Recette> recettes = recetteService.retrieveAllRecette();
-        return new ResponseEntity<Collection<Recette>>(recettes, HttpStatus.FOUND);
+        return new ResponseEntity<Collection<Recette>>(recettes, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
