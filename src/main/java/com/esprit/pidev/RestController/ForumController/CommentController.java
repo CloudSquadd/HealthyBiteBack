@@ -66,10 +66,8 @@ LikeService likeService;
 
 
     @PostMapping("/{commentId}/replies")
-    public Comment addReply(@PathVariable Long commentId, @RequestBody Comment reply,@RequestParam Long postId) {
+    public Comment addReply(@PathVariable Long commentId, @RequestBody Comment reply) {
         Comment parentComment = commentRepository.findById(commentId).orElse(null);
-        Post post = parentComment.getPost();
-        reply.setPost(post);
         reply.setParentComment(parentComment);
         parentComment.getReplies().add(reply);
         return commentRepository.save(parentComment);

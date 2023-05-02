@@ -15,7 +15,7 @@ public interface IComment {
     void unlikeComment(User user, Long commentId);*/
     Comment updateComment(Long id,Comment comment);
     Comment retrieveCommentById(Long id);
-    Comment addReply(Long commentId, Comment reply, Long postId);
+    Comment addReply(Long commentId, Comment reply);
     List<Comment> retrieveAllComment();
     void deleteComment(Long id);
     List<Comment> retrieveCommentsByPost(Post post);
