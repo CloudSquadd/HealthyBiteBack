@@ -177,47 +177,9 @@ public class RepasService implements IRepas {
 
 
 
-    @Override
-    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException {
-        Repas pt = new Repas();
-        pt.setId(id);
-        pt.setNom(nom);
-        pt.setDescription(description);
-        pt.setPrix(prix);
-        pt.setIngredient(ingredient);
-        pt.setAllergene(allergene);
-        pt.setObjectif(objectifType);
-        pt.setCategorieRep(categRepas);
-        pt.setUser(userRepository.findById(user).get());
-        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
-        //pt.setUser(userRepository.findById(user).orElse(null));
-        byte[] imageData = image.getBytes();
-        System.err.println(imageData.toString());
-        pt.setImageData(imageData);
-        // Save the image file to a folder named 'images' in your project directory
-        Path directory = Paths.get("images");
-        if (!Files.exists(directory)) {Files.createDirectories(directory);}
-        Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
-        Files.write(imagePath, imageData);
-        repasRepository.save(pt);
-        return pt;
-    }
 
 
-    public List<Repas> getAllRepasAndImage() {
-        List<Repas> repas = repasRepository.findAll();
-        for (Repas repasItem : repas) {
-            if (repasItem.getImageData() != null) {
-                try {
-                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
-                    repasItem.setImageBase64(imageBase64);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return repas;
-    }
+
 
 
 
