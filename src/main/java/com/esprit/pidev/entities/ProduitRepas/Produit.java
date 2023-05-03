@@ -35,7 +35,7 @@ public class Produit implements Serializable {
     @Lob
     private byte[] imageData;
 
-    private Boolean bloquee=false;
+
 
 
 

@@ -36,11 +36,6 @@ public class RepasController {
     @Autowired
     IUser iUser;
 
-    @GetMapping("/getCurrentUser")
-    public User getCurrentUserObjects(){
-        return iRepas.getCurrentUserObjects();
-    }
-
     @PostMapping("/addRepas")
     public Repas addRepas(@RequestBody Repas rep){
         return iRepas.addRepas(rep);
@@ -50,24 +45,19 @@ public class RepasController {
     public Repas updateRepas(@RequestBody Repas rep)  {
         return iRepas.updateRepas(rep);
     }
-    @PostMapping("/addRepasWithImg")
-    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("user") long user,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
-        return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
-        categRepas,user, image);
-    }
 
     @PostMapping("/addRepasWithImg")
-    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException {
         return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
-        categRepas,image);
+                categRepas,image,user);
     }
-   
+
 
     @PutMapping("/updateRepasWithImg")
-    public Repas updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException
-        {
+    public Repas updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException
+    {
         return iRepas.updateRepasAndImage(id,nom,  description,  prix,  ingredient,  allergene,  objectifType,
-                categRepas,image);
+                categRepas,image,user);
     }
 
 
@@ -119,7 +109,7 @@ public class RepasController {
     public double calculerMaxCalories(@RequestBody User user) {
         return iRepas.calculerMaxCalories(user);
     }
-   @GetMapping("/searchRepas")
+    @GetMapping("/searchRepas")
     public List<Repas> searchRepasByNom(@RequestParam("nom") String nom) {
         return iRepas.rechercherRepasParNom(nom);
     }

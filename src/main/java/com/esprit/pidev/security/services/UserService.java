@@ -115,10 +115,7 @@ public class UserService implements IUser {
         repo.save(user);
     }
 
-    @Override
-    public void SMSUSER(User user) {
-         repo.save(user);
-    }
+
 
     @Override
     public List<User> retrieveAllUser() {

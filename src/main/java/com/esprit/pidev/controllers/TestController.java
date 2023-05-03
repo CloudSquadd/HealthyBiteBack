@@ -249,6 +249,8 @@ public class TestController {
     }
     //here the exception or message if the code is not match to
     return SS.sendSMS(sendRequest.getPhone(),"your password has changed ;)");
+
+  }
   @PostMapping("/deactivateUsersWithRole")
   public int deactivateUsersWithRole(@RequestBody ERole role) {
     return service.deactivateUsersWithRole(role);
@@ -258,33 +260,13 @@ public class TestController {
 
 
 
-
  /* @GetMapping("/searchUsers")
   public List<User> getUsersByVille(@RequestParam("ville") String ville) {
     return service.findByVille(ville);
   }*/
-  @PutMapping("/sendsms")
-  public String sendSms(@RequestBody SMSSendRequest sendRequest)
-  {
-    String codeGenerated=SS.generateCode();
-    System.out.println(codeGenerated);
-    User u1=userRepository.findByPhone(sendRequest.getPhone());
-    System.out.println(u1.getPhone());
-    u1.setCode(codeGenerated);
-    iuser.SMSUSER(u1);
-    return SS.sendSMS(sendRequest.getPhone(),"your code is :"+codeGenerated);
-  }
-  @PutMapping("/resetbysms/{code}/{newpassword}")
-  public String resetBySms(@RequestBody SMSSendRequest sendRequest, @PathVariable("code") String code , @PathVariable("newpassword") String newpassword)
-  {   User u12=userRepository.findByPhone(sendRequest.getPhone());
-    if (code.equals(u12.getCode())&u12.getCode()!=null) {
-      u12.setPassword(encoder.encode(newpassword));
-      u12.setCode(null);
-      iuser.SMSUSER(u12);
-    }
+
     //here the exception or message if the code is not match to
-    return SS.sendSMS(sendRequest.getPhone(),"your password has changed ;)");
-  }
+
   @GetMapping("/roles")
   public ResponseEntity<Set<String>> getAllRoles() {
     Set<String> roles = roleservice.getAllRoles().stream()

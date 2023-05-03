@@ -22,9 +22,6 @@ public class Role implements Serializable {
         this.count = count;
     }
 
-    public Role(String roleName) {
-        this.name = ERole.valueOf(roleName);
-    }
 
 
     public Role(String roleName) {

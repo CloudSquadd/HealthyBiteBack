@@ -15,11 +15,11 @@ import java.util.Set;
 
 public interface IRepas {
     Repas addRepas(Repas rep);
-    Repas updateRepas(Repas rep) throws AccessDeniedException;
+    Repas updateRepas(Repas rep);
     Repas retrieveRepasById(Long id);
     List<Repas> retrieveAllRepas();
     void deleteRepas(Repas rep) ;
-     Set<Repas> getRepasByUserId(long  id);
+    Set<Repas> getRepasByUserId(long  id);
 
     void updateRepasBloqueStatus( );
     int calculerCaloriesTotales(List<Repas> repasChoisis);
@@ -28,10 +28,10 @@ public interface IRepas {
 
     List<Repas> proposerRepasSelonObjectifEtActivite();
 
-     List<Repas> rechercherRepasParNom(String nom);
+    List<Repas> rechercherRepasParNom(String nom);
 
 
-    Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas,  MultipartFile image)throws IOException;
+    Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas,  MultipartFile image,long user)throws IOException;
 
     Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException;
     public List<Repas> getAllRepasAndImage();
