@@ -17,6 +17,7 @@ import com.esprit.pidev.security.services.UserService;
 import com.esprit.pidev.security.services.RoleService;
 
 import lombok.AllArgsConstructor;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
@@ -113,12 +116,10 @@ public class TestController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(restaurantRole);
             break;
-
           case "fournisseur":
-            Role fournisseur = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(fournisseur);
-
+            roles.add(fournisseurRole);
             break;
 
           default:
@@ -141,7 +142,13 @@ public class TestController {
 
     return ResponseEntity.ok(new MessageResponse("User added successfully!"));
   }
-  @PutMapping("/{id}")
+  @GetMapping("/count")
+  public ResponseEntity<List<Map<String, Object>>> getAllRolesWithUserCounts() {
+    List<Map<String, Object>> roles = service.getAllRolesWithUserCounts();
+    return ResponseEntity.ok(roles);
+  }
+
+  @PutMapping("/update/{id}")
   public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody SignupRequest signUpRequest) {
     service.updateUser(id, signUpRequest);
     return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
@@ -242,8 +249,12 @@ public class TestController {
     }
     //here the exception or message if the code is not match to
     return SS.sendSMS(sendRequest.getPhone(),"your password has changed ;)");
-  }
 
+  }
+  @PostMapping("/deactivateUsersWithRole")
+  public int deactivateUsersWithRole(@RequestBody ERole role) {
+    return service.deactivateUsersWithRole(role);
+  }
 
 
 
@@ -253,6 +264,48 @@ public class TestController {
   public List<User> getUsersByVille(@RequestParam("ville") String ville) {
     return service.findByVille(ville);
   }*/
+
+    //here the exception or message if the code is not match to
+
+  @GetMapping("/roles")
+  public ResponseEntity<Set<String>> getAllRoles() {
+    Set<String> roles = roleservice.getAllRoles().stream()
+            .map(ERole::name)
+            .collect(Collectors.toSet());
+    return ResponseEntity.ok(roles);
+  }
+  @GetMapping("/users/{id}/roles")
+  public ResponseEntity<Set<ERole>> getUserRoles(@PathVariable Long id) {
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    Set<ERole> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+    return ResponseEntity.ok().body(roles);
+  }
+  @PutMapping("/{userId}/role/{roleName}")
+  public ResponseEntity<String> updateUserRole(@PathVariable Long userId, @PathVariable String roleName) {
+    try {
+      service.updateUserRole(userId, roleName);
+      return ResponseEntity.ok("User role updated successfully.");
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user role.");
+    }
+  }
+
+
+
+
+  @GetMapping("/{name}")
+  public Role getRoleByName(@PathVariable ERole name) {
+    return roleservice.findByName(name);
+  }
+
+
+
+
+
+
 
 
 

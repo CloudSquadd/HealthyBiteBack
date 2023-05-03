@@ -33,9 +33,12 @@ public class RoleService implements IRole{
 
     @Override
     public Set<ERole> getAllRoles() {
-        return null;
+        Set<ERole> roles = new HashSet<>();
+        for (Role role : roleRepository.findAll()) {
+            roles.add(role.getName());
+        }
+        return roles;
     }
-
     @Override
     public void assignRoleToUser(Long id, ERole roleName) {
         User user = userRepository.findById(id).orElse(null);

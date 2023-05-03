@@ -1,9 +1,7 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.ProduitRepas.CategRepas;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
-import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.ProduitRepas.*;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.NutritionRepository;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
@@ -17,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -33,7 +32,6 @@ public class RepasService implements IRepas {
     NutritionRepository nutritionRepository;
 
 
-    @Override
     public User getCurrentUserObjects() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -46,7 +44,6 @@ public class RepasService implements IRepas {
         String username = authentication.getName();
         Optional<User> userOptional = userRepository.findByUsername(username);
         return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
     }
 
     @Override
@@ -56,7 +53,7 @@ public class RepasService implements IRepas {
 
     @Override
     public Repas updateRepas(Repas rep)  {
-            repasRepository.save(rep);
+        repasRepository.save(rep);
         return rep;
     }
 
@@ -72,24 +69,21 @@ public class RepasService implements IRepas {
 
     @Override
     public void deleteRepas(Repas rep) {
-            repasRepository.delete(rep);
+        repasRepository.delete(rep);
     }
-
-
-
 
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
         int caloriesTotales = 0;
-            long maxCalories = calculerMaxCalories(getCurrentUser());
-            for (Repas repas : repasChoisis) {
-                caloriesTotales += repas.getNutrition().getCalories();
-            }
-            System.out.println("le nombre totale des calories est : " + caloriesTotales);
-            //notifier le client qu'il excede le maxuimum de calories qu'il doit consommer
-            if (caloriesTotales > maxCalories) {
-                System.out.println("Le total des calories dépasse le maximum autorisé !");
-            }
+        long maxCalories = calculerMaxCalories(getCurrentUser());
+        for (Repas repas : repasChoisis) {
+            caloriesTotales += repas.getNutrition().getCalories();
+        }
+        System.out.println("le nombre totale des calories est : " + caloriesTotales);
+        //notifier le client qu'il excede le maxuimum de calories qu'il doit consommer
+        if (caloriesTotales > maxCalories) {
+            System.out.println("Le total des calories dépasse le maximum autorisé !");
+        }
         proposerRepasSelonObjectifEtActivite();
         return caloriesTotales;
 
@@ -112,14 +106,19 @@ public class RepasService implements IRepas {
     @Override
     public long calculerMaxCalories(User user) {
         double metabolismeDeBase = 0;
-        if (user.getGender().equals("Homme")) {
-            metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
-        } 
-        else {
-            metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
-        } 
-        return Math.round(metabolismeDeBase);
+        if (user != null) {
+            if (user.getGender().equals("Homme")) {
+                metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
+            }
+            else {
+                metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
+            }
+            return Math.round(metabolismeDeBase);
+        } else {
+            throw new IllegalArgumentException("L'objet User est null");
+        }
     }
+
 
     //proposer des repas selon les activités des utilisateur
 
@@ -131,7 +130,7 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException {
         Repas pt = new Repas();
         pt.setNom(nom);
         pt.setDescription(description);
@@ -140,8 +139,8 @@ public class RepasService implements IRepas {
         pt.setAllergene(allergene);
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
-       // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
-        pt.setUser(getCurrentUserObjects());
+        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+        pt.setUser(userRepository.findById(user).get());
         byte[] imageData = image.getBytes();
         System.err.println(imageData.toString());
         pt.setImageData(imageData);
@@ -153,11 +152,8 @@ public class RepasService implements IRepas {
         repasRepository.save(pt);
         return pt;
     }
-
-
-
     @Override
-    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
+    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException {
         Repas pt = new Repas();
         pt.setId(id);
         pt.setNom(nom);
@@ -167,7 +163,7 @@ public class RepasService implements IRepas {
         pt.setAllergene(allergene);
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
-        pt.setUser(getCurrentUserObjects());
+        pt.setUser(userRepository.findById(user).get());
         // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
         //pt.setUser(userRepository.findById(user).orElse(null));
         byte[] imageData = image.getBytes();
@@ -183,27 +179,17 @@ public class RepasService implements IRepas {
     }
 
 
-    public List<Repas> getAllRepasAndImage() {
-        List<Repas> repas = repasRepository.findAll();
-        for (Repas repasItem : repas) {
-            if (repasItem.getImageData() != null) {
-                try {
-                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
-                    repasItem.setImageBase64(imageBase64);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return repas;
-    }
+
+
+
+
+
 
 
 
 
 
    /* public List<Repas> proposerRepasSelonObjectifEtActivite() {
-
         User user = getCurrentUserObjects();
             ObjectifType objectifClient = user.getObjectif();
             TypeActivite typeActiviteClient = user.getActivite();
@@ -211,7 +197,6 @@ public class RepasService implements IRepas {
             // Calculer les calories minimales et maximales en fonction de l'objectif et du type d'activité
             double minCalories = 0;
             double maxCaloriesProposees = 0;
-
             switch (objectifClient) {
                 case Perdre_Poids:
                     minCalories = maxCalories * 0.75; // 75% des calories maximales
@@ -234,33 +219,34 @@ public class RepasService implements IRepas {
                     maxCaloriesProposees = maxCalories; // Les mêmes calories maximales
                     break;
             }
-
             // Rechercher les repas qui ont une quantité de calories entre les calories minimales et maximales proposées et
             // qui correspondent à l'objectif du client
             List<Repas> repasProposes = repasRepository.findByCaloriesAndObjectif(minCalories,maxCaloriesProposees,objectifClient);
-
             return repasProposes;
-
-
-
     }*/
 
     @Override
     public Set<Repas> getRepasByUserId(long id) {
-       /* User user = getCurrentUserObjects();
+        Set<Repas> repas = repasRepository.findByUserId(id);
+        for (Repas repasItem : repas) {
+            if (repasItem.getImageData() != null) {
+                try {
+                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
+                    repasItem.setImageBase64(imageBase64);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return repas;
 
-        if (user.getRoles().equals("ROLE_RESTAURANT")) {
-            return repasRepository.findByUserId(user.getId());
-        }*/
-       // return repasRepository.findByUserId(user.getId());
-        return repasRepository.findByUserId(id);
     }
 
     @Override
     public List<Repas> proposerRepasSelonObjectifEtActivite() {
         User user = getCurrentUserObjects();
 
-       // double maxCalories = calculerMaxCalories(user);
+        // double maxCalories = calculerMaxCalories(user);
 
         List<Repas> mealsByUserGoal = new ArrayList<>();
         List<Repas> meals = repasRepository.findAll();
@@ -273,10 +259,32 @@ public class RepasService implements IRepas {
         return mealsByUserGoal;
     }
 
+    public List<Repas> getAllRepasAndImage() {
+        List<Repas> repas = repasRepository.findAll();
+        for (Repas repasItem : repas) {
+            if (repasItem.getImageData() != null) {
+                try {
+                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
+                    repasItem.setImageBase64(imageBase64);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return repas;
     }
 
+    @Override
+    public Repas addNutritionToRepas(Nutrition nutrition, long repasId) {
+        Repas repas = repasRepository.findById(repasId).orElse(null);
+        if (repas == null) {
+            throw new EntityNotFoundException("Produit non trouvé pour l'identifiant " + repasId);
+        }
+        repas.setNutrition(nutrition);
+        return repasRepository.save(repas);
+    }
 
-
+}
 
 
 
