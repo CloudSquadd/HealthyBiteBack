@@ -1,10 +1,11 @@
 package com.esprit.pidev.entities.UserRole;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -12,9 +13,17 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ERole name;
+    private Long count;
 
     public Role() {
 
+    }
+    public void setCount(Long count) {
+        this.count = count;
+    }
+
+    public Role(String roleName) {
+        this.name = ERole.valueOf(roleName);
     }
 
     public Role(ERole name) {
