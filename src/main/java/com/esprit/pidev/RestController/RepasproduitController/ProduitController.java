@@ -15,7 +15,7 @@ import java.util.Set;
 
 @RestController
 @Data
-@CrossOrigin(origins = "*")
+
 @AllArgsConstructor
 @RequestMapping("/api/test")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
