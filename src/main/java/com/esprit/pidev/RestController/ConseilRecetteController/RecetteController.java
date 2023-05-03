@@ -13,6 +13,7 @@ import java.util.Collection;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/recette")
+@CrossOrigin(origins = {"http://localhost:4200"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 public class RecetteController {
     @Autowired
 
@@ -48,6 +49,6 @@ public class RecetteController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteRecette(@PathVariable(value = "id", required = true) Long id) {
         recetteService.deleteRecette(id);
-        return new ResponseEntity<Void>(HttpStatus.GONE);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }
