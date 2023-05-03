@@ -113,10 +113,12 @@ public class TestController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(restaurantRole);
             break;
+
           case "fournisseur":
-            Role fournisseurRole = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
+            Role fournisseur = roleRepository.findByName(ERole.ROLE_FOURNISSEUR)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(fournisseurRole);
+            roles.add(fournisseur);
+
             break;
 
           default:
@@ -247,7 +249,10 @@ public class TestController {
 
 
 
-
+ /* @GetMapping("/searchUsers")
+  public List<User> getUsersByVille(@RequestParam("ville") String ville) {
+    return service.findByVille(ville);
+  }*/
 
 
 

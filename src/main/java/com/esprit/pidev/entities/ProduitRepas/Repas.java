@@ -5,12 +5,11 @@ import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
 import java.util.Base64;
-import java.util.Set;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -35,7 +34,6 @@ public class Repas implements Serializable {
     @Lob
     private byte[] imageData;
 
-
     @Column(name = "image_type")
     private String imageType;
 
@@ -57,7 +55,6 @@ public class Repas implements Serializable {
         }
     }
 
-
     private Boolean bloquee=false;
 
     @Enumerated(EnumType.STRING)
@@ -66,7 +63,8 @@ public class Repas implements Serializable {
     @JsonIgnore
     private User user;
 
-    @OneToOne(mappedBy = "repas", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nutrition_id")
     private Nutrition nutrition;
 
     private int quantite;

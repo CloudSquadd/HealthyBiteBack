@@ -29,6 +29,25 @@ public class Produit implements Serializable {
     @Enumerated(EnumType.STRING)
     @JsonIgnore
     private CategProduit categoriePro;
+
+    @Column(name = "image_data")
+    @Lob
+    private byte[] imageData;
+
+    public String getImageBase64() {
+        if (imageData == null) {
+            return null;
+        }
+        return Base64.getEncoder().encodeToString(imageData);
+    }
+
+    public void setImageBase64(String imageBase64) {
+        if (imageBase64 == null) {
+            imageData = null;
+        } else {
+            imageData = Base64.getDecoder().decode(imageBase64);
+        }
+    }
     private Boolean bloquee=false;
     @Column(name = "image_data")
     @Lob
@@ -61,8 +80,8 @@ public class Produit implements Serializable {
     @JsonIgnore
     private User user;
 
-    @OneToOne(mappedBy = "produit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nutrition_id")
     private Nutrition nutrition;
 
     private int quantite;

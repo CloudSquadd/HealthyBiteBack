@@ -5,6 +5,7 @@ import com.esprit.pidev.entities.ProduitRepas.CategRepas;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
+import com.esprit.pidev.repository.RepasproduitRepository.NutritionRepository;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -29,8 +30,10 @@ import java.util.*;
 public class RepasService implements IRepas {
     UserRepository userRepository;
     RepasRepository repasRepository;
+    NutritionRepository nutritionRepository;
 
 
+    @Override
     public User getCurrentUserObjects() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -43,6 +46,7 @@ public class RepasService implements IRepas {
         String username = authentication.getName();
         Optional<User> userOptional = userRepository.findByUsername(username);
         return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
     }
 
     @Override
@@ -51,7 +55,7 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public Repas updateRepas(Repas rep) throws AccessDeniedException {
+    public Repas updateRepas(Repas rep)  {
             repasRepository.save(rep);
         return rep;
     }
@@ -70,6 +74,9 @@ public class RepasService implements IRepas {
     public void deleteRepas(Repas rep) {
             repasRepository.delete(rep);
     }
+
+
+
 
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
@@ -124,7 +131,7 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, long user, MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
         Repas pt = new Repas();
         pt.setNom(nom);
         pt.setDescription(description);
@@ -133,7 +140,8 @@ public class RepasService implements IRepas {
         pt.setAllergene(allergene);
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
-        pt.setUser(userRepository.findById(user).get());
+       // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
+        pt.setUser(getCurrentUserObjects());
         byte[] imageData = image.getBytes();
         System.err.println(imageData.toString());
         pt.setImageData(imageData);
@@ -145,8 +153,11 @@ public class RepasService implements IRepas {
         repasRepository.save(pt);
         return pt;
     }
+
+
+
     @Override
-    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException {
+    public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
         Repas pt = new Repas();
         pt.setId(id);
         pt.setNom(nom);
@@ -156,7 +167,7 @@ public class RepasService implements IRepas {
         pt.setAllergene(allergene);
         pt.setObjectif(objectifType);
         pt.setCategorieRep(categRepas);
-        pt.setUser(userRepository.findById(user).get());
+        pt.setUser(getCurrentUserObjects());
         // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
         //pt.setUser(userRepository.findById(user).orElse(null));
         byte[] imageData = image.getBytes();
@@ -172,11 +183,27 @@ public class RepasService implements IRepas {
     }
 
 
+    public List<Repas> getAllRepasAndImage() {
+        List<Repas> repas = repasRepository.findAll();
+        for (Repas repasItem : repas) {
+            if (repasItem.getImageData() != null) {
+                try {
+                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
+                    repasItem.setImageBase64(imageBase64);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return repas;
+    }
+
 
 
 
 
    /* public List<Repas> proposerRepasSelonObjectifEtActivite() {
+
         User user = getCurrentUserObjects();
             ObjectifType objectifClient = user.getObjectif();
             TypeActivite typeActiviteClient = user.getActivite();
@@ -220,19 +247,13 @@ public class RepasService implements IRepas {
 
     @Override
     public Set<Repas> getRepasByUserId(long id) {
-        Set<Repas> repas = repasRepository.findByUserId(id);
-        for (Repas repasItem : repas) {
-            if (repasItem.getImageData() != null) {
-                try {
-                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
-                    repasItem.setImageBase64(imageBase64);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return repas;
+       /* User user = getCurrentUserObjects();
 
+        if (user.getRoles().equals("ROLE_RESTAURANT")) {
+            return repasRepository.findByUserId(user.getId());
+        }*/
+       // return repasRepository.findByUserId(user.getId());
+        return repasRepository.findByUserId(id);
     }
 
     @Override
@@ -250,21 +271,6 @@ public class RepasService implements IRepas {
         }
 
         return mealsByUserGoal;
-    }
-
-    public List<Repas> getAllRepasAndImage() {
-        List<Repas> repas = repasRepository.findAll();
-        for (Repas repasItem : repas) {
-            if (repasItem.getImageData() != null) {
-                try {
-                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
-                    repasItem.setImageBase64(imageBase64);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return repas;
     }
 
     }

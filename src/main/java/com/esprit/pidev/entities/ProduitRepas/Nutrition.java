@@ -26,12 +26,6 @@ public class Nutrition implements Serializable {
     private double lipides;
     private double sel;
 
-    @OneToOne
-    @JsonIgnore
-    private Produit produit;
 
-    @OneToOne
-    @JsonIgnore
-    private Repas repas;
 
 }

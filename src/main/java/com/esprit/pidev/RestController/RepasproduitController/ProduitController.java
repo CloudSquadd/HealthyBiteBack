@@ -1,7 +1,6 @@
 package com.esprit.pidev.RestController.RepasproduitController;
 
-import com.esprit.pidev.entities.ProduitRepas.CategProduit;
-import com.esprit.pidev.entities.ProduitRepas.Produit;
+import com.esprit.pidev.entities.ProduitRepas.*;
 import com.esprit.pidev.services.RepasProduitServices.IProduit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +15,7 @@ import java.util.Set;
 
 @RestController
 @Data
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RequestMapping("/api/test")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
@@ -43,7 +43,7 @@ public class ProduitController {
         return iProduit.retrieveAllProduit();
     }
     @DeleteMapping("deleteProduit")
-
+   // @PreAuthorize("hasAuthority('ROLE_FOURNISSEUR') and isAuthenticated() and principal.isEnabled()")
     public void deleteProduit(@RequestBody Produit pr) throws AccessDeniedException {
         iProduit.deleteProduit(pr);
     }
@@ -57,18 +57,21 @@ public class ProduitController {
         iProduit.updateProduitBloqueStatus();
     }
 
+
+
     @PostMapping("/addProduitWithImg")
-    public Produit addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description, @RequestParam("prix") double prix, @RequestParam("ingredient") String ingredient, @RequestParam("categProduit") CategProduit categProduit, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException {
-        return iProduit.addProduitAndImage(nom,  description,  prix,  ingredient, categProduit,image,user);
+    public Produit addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description, @RequestParam("prix") double prix, @RequestParam("ingredient") String ingredient, @RequestParam("categProduit") CategProduit categProduit, @RequestParam("image") MultipartFile image) throws IOException {
+        return iProduit.addProduitAndImage(nom,  description,  prix,  ingredient, categProduit,image);
     }
 
     @PutMapping("/updateProduitWithImg")
-    public Produit updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("categProduit") CategProduit categProduit, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException
+    public Produit updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("categProduit") CategProduit categProduit, @RequestParam("image") MultipartFile image) throws IOException
     {
-        return iProduit.updateProduitAndImage(id,nom,  description,  prix,  ingredient, categProduit,image,user);
+        return iProduit.updateProduitAndImage(id,nom,  description,  prix,  ingredient, categProduit,image);
     }
-    @GetMapping("/getAllProduitWithImage")
-    public List<Produit> retrieveAllProduitWithImage(){
-        return  iProduit.getAllProduitAndImage();
+
+    @GetMapping("getAllProduitWithImage")
+    public List<Produit> getAllRepasAndImage(){
+        return iProduit.getAllProduitAndImage();
     }
 }
