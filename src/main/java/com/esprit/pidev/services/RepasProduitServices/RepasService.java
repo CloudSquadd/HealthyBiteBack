@@ -1,9 +1,7 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.ProduitRepas.CategRepas;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
-import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.ProduitRepas.*;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.NutritionRepository;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
@@ -17,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -74,9 +73,6 @@ public class RepasService implements IRepas {
     public void deleteRepas(Repas rep) {
             repasRepository.delete(rep);
     }
-
-
-
 
     @Override
     public int calculerCaloriesTotales(List<Repas> repasChoisis) {
@@ -153,9 +149,6 @@ public class RepasService implements IRepas {
         repasRepository.save(pt);
         return pt;
     }
-
-
-
     @Override
     public Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image) throws IOException {
         Repas pt = new Repas();
@@ -183,20 +176,11 @@ public class RepasService implements IRepas {
     }
 
 
-    public List<Repas> getAllRepasAndImage() {
-        List<Repas> repas = repasRepository.findAll();
-        for (Repas repasItem : repas) {
-            if (repasItem.getImageData() != null) {
-                try {
-                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
-                    repasItem.setImageBase64(imageBase64);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return repas;
-    }
+
+
+
+
+
 
 
 
@@ -247,13 +231,19 @@ public class RepasService implements IRepas {
 
     @Override
     public Set<Repas> getRepasByUserId(long id) {
-       /* User user = getCurrentUserObjects();
+        Set<Repas> repas = repasRepository.findByUserId(id);
+        for (Repas repasItem : repas) {
+            if (repasItem.getImageData() != null) {
+                try {
+                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
+                    repasItem.setImageBase64(imageBase64);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return repas;
 
-        if (user.getRoles().equals("ROLE_RESTAURANT")) {
-            return repasRepository.findByUserId(user.getId());
-        }*/
-       // return repasRepository.findByUserId(user.getId());
-        return repasRepository.findByUserId(id);
     }
 
     @Override
@@ -271,6 +261,31 @@ public class RepasService implements IRepas {
         }
 
         return mealsByUserGoal;
+    }
+
+    public List<Repas> getAllRepasAndImage() {
+        List<Repas> repas = repasRepository.findAll();
+        for (Repas repasItem : repas) {
+            if (repasItem.getImageData() != null) {
+                try {
+                    String imageBase64 = Base64.getEncoder().encodeToString(repasItem.getImageData());
+                    repasItem.setImageBase64(imageBase64);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return repas;
+    }
+
+    @Override
+    public Repas addNutritionToRepas(Nutrition nutrition, long repasId) {
+        Repas repas = repasRepository.findById(repasId).orElse(null);
+        if (repas == null) {
+            throw new EntityNotFoundException("Produit non trouvé pour l'identifiant " + repasId);
+        }
+        repas.setNutrition(nutrition);
+        return repasRepository.save(repas);
     }
 
     }

@@ -34,6 +34,16 @@ public class Produit implements Serializable {
     @Lob
     private byte[] imageData;
 
+    private Boolean bloquee=false;
+
+
+
+    @Column(name = "image_type")
+    private String imageType;
+
+    @Column(name = "image_path")
+    private String imagePath;
+
     public String getImageBase64() {
         if (imageData == null) {
             return null;
@@ -48,14 +58,16 @@ public class Produit implements Serializable {
             imageData = Base64.getDecoder().decode(imageBase64);
         }
     }
-    private Boolean bloquee=false;
+
+
+
 
     @ManyToOne
     @JsonIgnore
     private User user;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "nutrition_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nutrition_id", referencedColumnName = "id")
     private Nutrition nutrition;
 
     private int quantite;

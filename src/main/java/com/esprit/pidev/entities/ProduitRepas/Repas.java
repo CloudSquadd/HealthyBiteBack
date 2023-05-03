@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 import java.util.Base64;
+import java.util.Set;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -56,6 +57,7 @@ public class Repas implements Serializable {
         }
     }
 
+
     private Boolean bloquee=false;
 
     @Enumerated(EnumType.STRING)
@@ -64,8 +66,8 @@ public class Repas implements Serializable {
     @JsonIgnore
     private User user;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "nutrition_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nutrition_id", referencedColumnName = "id")
     private Nutrition nutrition;
 
     private int quantite;

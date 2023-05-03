@@ -1,7 +1,9 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.Nutrition;
+import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.repository.RepasproduitRepository.NutritionRepository;
+import com.esprit.pidev.repository.RepasproduitRepository.ProduitRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class NutritionService implements INutrition{
     NutritionRepository nutritionRepository;
+    ProduitRepository produitRepository;
 
     @Override
     public Nutrition addNutrition(Nutrition nut) {
@@ -36,4 +39,6 @@ public class NutritionService implements INutrition{
     public void deleteNutrition(Long id) {
         nutritionRepository.deleteById(id);
     }
+
+
 }
