@@ -15,7 +15,7 @@ import java.util.Set;
 
 public interface IRepas {
     Repas addRepas(Repas rep);
-    Repas updateRepas(Repas rep);
+    Repas updateRepas(Repas rep) throws AccessDeniedException;
     Repas retrieveRepasById(Long id);
     List<Repas> retrieveAllRepas();
     void deleteRepas(Repas rep) ;

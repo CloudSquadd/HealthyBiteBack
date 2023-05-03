@@ -29,6 +29,7 @@ public class Produit implements Serializable {
     @Enumerated(EnumType.STRING)
     @JsonIgnore
     private CategProduit categoriePro;
+    private Boolean bloquee=false;
 
     @Column(name = "image_data")
     @Lob

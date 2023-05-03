@@ -48,6 +48,21 @@ public class RepasService implements IRepas {
 
     }
 
+
+    public User getCurrentUserObjects() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user;
+    }
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        return userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
     @Override
     public Repas addRepas(Repas rep) {
         return repasRepository.save(rep);

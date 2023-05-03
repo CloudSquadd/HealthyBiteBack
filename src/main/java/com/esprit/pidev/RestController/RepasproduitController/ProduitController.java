@@ -30,7 +30,6 @@ public class ProduitController {
 
     }
     @PutMapping("/updateProduit")
-
     public Produit updateProduit(@RequestBody Produit pr) throws AccessDeniedException {
         return iProduit.updateProduit(pr);
     }

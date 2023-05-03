@@ -13,9 +13,17 @@ public class Role implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ERole name;
+    private Long count;
 
     public Role() {
 
+    }
+    public void setCount(Long count) {
+        this.count = count;
+    }
+
+    public Role(String roleName) {
+        this.name = ERole.valueOf(roleName);
     }
 
 

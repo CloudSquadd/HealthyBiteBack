@@ -17,6 +17,7 @@ import com.esprit.pidev.security.services.UserService;
 import com.esprit.pidev.security.services.RoleService;
 
 import lombok.AllArgsConstructor;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
@@ -139,7 +142,13 @@ public class TestController {
 
     return ResponseEntity.ok(new MessageResponse("User added successfully!"));
   }
-  @PutMapping("/{id}")
+  @GetMapping("/count")
+  public ResponseEntity<List<Map<String, Object>>> getAllRolesWithUserCounts() {
+    List<Map<String, Object>> roles = service.getAllRolesWithUserCounts();
+    return ResponseEntity.ok(roles);
+  }
+
+  @PutMapping("/update/{id}")
   public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody SignupRequest signUpRequest) {
     service.updateUser(id, signUpRequest);
     return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
@@ -240,6 +249,9 @@ public class TestController {
     }
     //here the exception or message if the code is not match to
     return SS.sendSMS(sendRequest.getPhone(),"your password has changed ;)");
+  @PostMapping("/deactivateUsersWithRole")
+  public int deactivateUsersWithRole(@RequestBody ERole role) {
+    return service.deactivateUsersWithRole(role);
   }
 
 
@@ -251,6 +263,67 @@ public class TestController {
   public List<User> getUsersByVille(@RequestParam("ville") String ville) {
     return service.findByVille(ville);
   }*/
+  @PutMapping("/sendsms")
+  public String sendSms(@RequestBody SMSSendRequest sendRequest)
+  {
+    String codeGenerated=SS.generateCode();
+    System.out.println(codeGenerated);
+    User u1=userRepository.findByPhone(sendRequest.getPhone());
+    System.out.println(u1.getPhone());
+    u1.setCode(codeGenerated);
+    iuser.SMSUSER(u1);
+    return SS.sendSMS(sendRequest.getPhone(),"your code is :"+codeGenerated);
+  }
+  @PutMapping("/resetbysms/{code}/{newpassword}")
+  public String resetBySms(@RequestBody SMSSendRequest sendRequest, @PathVariable("code") String code , @PathVariable("newpassword") String newpassword)
+  {   User u12=userRepository.findByPhone(sendRequest.getPhone());
+    if (code.equals(u12.getCode())&u12.getCode()!=null) {
+      u12.setPassword(encoder.encode(newpassword));
+      u12.setCode(null);
+      iuser.SMSUSER(u12);
+    }
+    //here the exception or message if the code is not match to
+    return SS.sendSMS(sendRequest.getPhone(),"your password has changed ;)");
+  }
+  @GetMapping("/roles")
+  public ResponseEntity<Set<String>> getAllRoles() {
+    Set<String> roles = roleservice.getAllRoles().stream()
+            .map(ERole::name)
+            .collect(Collectors.toSet());
+    return ResponseEntity.ok(roles);
+  }
+  @GetMapping("/users/{id}/roles")
+  public ResponseEntity<Set<ERole>> getUserRoles(@PathVariable Long id) {
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    Set<ERole> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+    return ResponseEntity.ok().body(roles);
+  }
+  @PutMapping("/{userId}/role/{roleName}")
+  public ResponseEntity<String> updateUserRole(@PathVariable Long userId, @PathVariable String roleName) {
+    try {
+      service.updateUserRole(userId, roleName);
+      return ResponseEntity.ok("User role updated successfully.");
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user role.");
+    }
+  }
+
+
+
+
+  @GetMapping("/{name}")
+  public Role getRoleByName(@PathVariable ERole name) {
+    return roleservice.findByName(name);
+  }
+
+
+
+
+
+
 
 
 
