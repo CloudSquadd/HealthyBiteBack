@@ -10,6 +10,7 @@ import com.esprit.pidev.repository.CommandeLivraisonRepo.CommandeRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
