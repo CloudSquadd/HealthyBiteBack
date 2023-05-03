@@ -28,4 +28,6 @@ public interface IProduit {
     public List<Produit> getAllProduitAndImage();
     public Produit addProduitAndImage(String nom, String description, double prix, String ingredient, CategProduit categProduit, MultipartFile image,long user) throws IOException;
     public Produit updateProduitAndImage(long id, String nom, String description, double prix, String ingredient, CategProduit categProduit, MultipartFile image,long user) throws IOException;
-}
+    public Produit addNutritionToProduit(Nutrition nutrition, long produitId);
+
+    }

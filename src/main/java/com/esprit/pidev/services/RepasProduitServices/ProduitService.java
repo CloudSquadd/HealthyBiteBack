@@ -1,6 +1,7 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.ProduitRepas.CategProduit;
+import com.esprit.pidev.entities.ProduitRepas.Nutrition;
 import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -169,6 +171,21 @@ public class ProduitService implements IProduit{
         produitRepository.save(pt);
         return pt;
     }
+
+
+
+
+    @Override
+    public Produit addNutritionToProduit(Nutrition nutrition, long produitId) {
+        Produit produit = produitRepository.findById(produitId).orElse(null);
+        if (produit == null) {
+            throw new EntityNotFoundException("Produit non trouvé pour l'identifiant " + produitId);
+        }
+        produit.setNutrition(nutrition);
+        return produitRepository.save(produit);
+    }
+
+
 
 
 

@@ -1,9 +1,7 @@
 package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.ProduitRepas.CategRepas;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
-import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.ProduitRepas.*;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.RepasproduitRepository.NutritionRepository;
 import com.esprit.pidev.repository.RepasproduitRepository.RepasRepository;
@@ -17,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -275,6 +274,16 @@ public class RepasService implements IRepas {
             }
         }
         return repas;
+    }
+
+    @Override
+    public Repas addNutritionToRepas(Nutrition nutrition, long repasId) {
+        Repas repas = repasRepository.findById(repasId).orElse(null);
+        if (repas == null) {
+            throw new EntityNotFoundException("Produit non trouvé pour l'identifiant " + repasId);
+        }
+        repas.setNutrition(nutrition);
+        return repasRepository.save(repas);
     }
 
     }

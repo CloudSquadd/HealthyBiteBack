@@ -2,6 +2,7 @@ package com.esprit.pidev.services.RepasProduitServices;
 
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.ProduitRepas.CategRepas;
+import com.esprit.pidev.entities.ProduitRepas.Nutrition;
 import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
@@ -34,4 +35,5 @@ public interface IRepas {
 
     Repas updateRepasAndImage(long id,String nom, String description, double prix, String ingredient, String allergene, ObjectifType objectifType, CategRepas categRepas, MultipartFile image,long user) throws IOException;
     public List<Repas> getAllRepasAndImage();
+    public Repas addNutritionToRepas(Nutrition nutrition, long repasId);
 }

@@ -71,4 +71,10 @@ public class ProduitController {
     public List<Produit> retrieveAllProduitWithImage(){
         return  iProduit.getAllProduitAndImage();
     }
+
+    @PostMapping("addNutritionToProduit/{produitId}")
+    public Produit addNutritionToProduit(@RequestBody Nutrition nutrition, @PathVariable("produitId") long produitId){
+        return iProduit.addNutritionToProduit(nutrition,produitId);
+    }
+
 }

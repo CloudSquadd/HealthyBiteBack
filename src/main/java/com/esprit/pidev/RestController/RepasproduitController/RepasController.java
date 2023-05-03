@@ -2,9 +2,7 @@ package com.esprit.pidev.RestController.RepasproduitController;
 
 import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.ProduitRepas.CategRepas;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
-import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.ProduitRepas.*;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.security.services.IUser;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
@@ -131,5 +129,9 @@ public class RepasController {
         return ResponseEntity.ok("Vérification des nouveaux repas en cours !");
     }*/
 
+    @PostMapping("addNutritionToRepas/{repasId}")
+    public Repas addNutritionToRepas(@RequestBody Nutrition nutrition, @PathVariable("repasId") long repasId){
+        return iRepas.addNutritionToRepas(nutrition,repasId);
+    }
 
 }
