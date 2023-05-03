@@ -57,8 +57,6 @@ public class CommentService implements IComment {
 
     @Override
     public Comment addComment(Comment comment, Long postId) {
-
-            comment.setUser(getCurrentUser());
             Post post = postService.retrievePostById(postId);
             if (post == null) {
                 throw new IllegalArgumentException("Post not found");

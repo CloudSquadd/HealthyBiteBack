@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Data
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor

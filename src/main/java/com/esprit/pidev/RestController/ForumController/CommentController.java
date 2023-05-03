@@ -11,20 +11,19 @@ import com.esprit.pidev.services.ForumServices.IComment;
 import com.esprit.pidev.services.ForumServices.LikeService;
 import com.esprit.pidev.services.ForumServices.PostService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityNotFoundException;
-import java.security.Principal;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials="true")
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor
@@ -44,24 +43,17 @@ LikeService likeService;
      UserRepository userRepository;
 
 
-
-
-
-
-
-
-
-
-
     @PostMapping("/{postId}/comments")
-    public Comment addComment( @PathVariable Long postId, @RequestBody Comment comment) {
+    public Comment addComment(@PathVariable Long postId, @RequestBody Comment comment, HttpServletResponse response) {
         Post post = postService.retrievePostById(postId);
         if (post == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
         }
         comment.setPost(post);
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
         return commentService.addComment(comment, postId);
     }
+
 
 
 
