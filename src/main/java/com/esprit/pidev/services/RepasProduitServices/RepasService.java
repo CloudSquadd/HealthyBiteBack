@@ -106,14 +106,19 @@ public class RepasService implements IRepas {
     @Override
     public long calculerMaxCalories(User user) {
         double metabolismeDeBase = 0;
-        if (user.getGender().equals("Homme")) {
-            metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
+        if (user != null) {
+            if (user.getGender().equals("Homme")) {
+                metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
+            }
+            else {
+                metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
+            }
+            return Math.round(metabolismeDeBase);
+        } else {
+            throw new IllegalArgumentException("L'objet User est null");
         }
-        else {
-            metabolismeDeBase = 447.593 + (9.247 * user.getPoids()) + (3.098 * user.getTaille()) - (4.330 * user.getAge());
-        }
-        return Math.round(metabolismeDeBase);
     }
+
 
     //proposer des repas selon les activités des utilisateur
 
