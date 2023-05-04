@@ -23,7 +23,7 @@ public class Recette {
 
     private String nom;
 
-    @OneToMany(mappedBy="recette", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="recette", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Ingredient> ingredients= new ArrayList<>();
 

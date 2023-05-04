@@ -24,9 +24,9 @@ public class SmsController {
     private final SmsService smsService;
 
     @GetMapping(value = "/{userId}/sendSMS")
-    public ResponseEntity<String> sendSMS(@PathVariable("userId")Long userId) {
+    public ResponseEntity<String> sendSMS(@PathVariable("userId") Long userId) {
 
-        smsService.sendSms(userId,null);
+        smsService.sendSms(userId, null);
 
         return new ResponseEntity<String>("Message sent successfully", HttpStatus.OK);
     }

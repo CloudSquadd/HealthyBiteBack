@@ -1,10 +1,12 @@
 package com.esprit.pidev.RestController.ConseilRecetteController;
 
-import com.esprit.pidev.entities.ConseilRecette.Ingredient;
-import com.esprit.pidev.entities.ConseilRecette.Recette;
-import com.esprit.pidev.exceptions.RecetteNotFoundException;
-import com.esprit.pidev.services.ConseilRecetteServices.IIngredientService;
-import com.esprit.pidev.services.ConseilRecetteServices.IRecetteService;
+ import com.esprit.pidev.entities.ConseilRecette.Ingredient;
+ import com.esprit.pidev.entities.ConseilRecette.Recette;
+ import com.esprit.pidev.exceptions.RecetteNotFoundException;
+
+ import com.esprit.pidev.services.ConseilRecetteServices.IIngredientService;
+ import com.esprit.pidev.services.ConseilRecetteServices.IRecetteService;
+ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +21,9 @@ import java.util.Optional;
 @RequestMapping("/ingredient")
 public class IngredientController {
 
-     private final IIngredientService ingredientService;
+    private final IIngredientService ingredientService;
 
-     private final IRecetteService recetteService;
+    private final IRecetteService recetteService;
     @Autowired
     public IngredientController(IIngredientService ingredientService, IRecetteService recetteService) {
         this.ingredientService = ingredientService;

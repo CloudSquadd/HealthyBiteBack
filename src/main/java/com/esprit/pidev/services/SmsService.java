@@ -38,7 +38,7 @@ public class SmsService {
                     .creator(
                             new PhoneNumber("+21655592142"),
                             new PhoneNumber("+16206709679"),
-                            messageBody != null ? messageBody: "HealthyBiteBackConstants.TWILIO_MESSAGE_BODY"
+                            messageBody != null ? messageBody: HealthyBiteBackConstants.TWILIO_MESSAGE_BODY
                     ).create(
 
                     );
