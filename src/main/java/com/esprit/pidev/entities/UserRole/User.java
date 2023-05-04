@@ -13,6 +13,7 @@ import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -35,6 +36,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @ToString
 @Table(name = "users",
         uniqueConstraints = {
@@ -49,6 +51,10 @@ public class User {
     @NotBlank
     @Size(max = 20)
     private String username;
+    @NotBlank
+    private String phone;
+    @NotBlank
+    private String code;
 
     @NotBlank
     @Size(max = 50)
@@ -64,7 +70,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-    // **************** attribut qui concerne le client
+    public User(Set<Role> roles) {
+        this.roles = roles;
+    }
+    private Long maxCalories;
 
     @Enumerated(EnumType.STRING)
     private TypeActivite activite;
@@ -81,6 +90,9 @@ public class User {
     private Long ObjectifPoids;
     private Long taille;
 
+
+    public User(String username, String email, String phone, String encode) {
+    }
     ///********************fin des attributs
 
 
@@ -131,8 +143,13 @@ public class User {
         this.email = email;
         this.password = password;
     }
+    public User(){
 
-    public User() {
+    }
+
+    public User(Long id) {
+        this.id = id;
+
 
     }
 

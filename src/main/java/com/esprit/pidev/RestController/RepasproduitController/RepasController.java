@@ -2,9 +2,7 @@ package com.esprit.pidev.RestController.RepasproduitController;
 
 import com.esprit.pidev.entities.ConseilRecette.TypeActivite;
 import com.esprit.pidev.entities.Forum.Post;
-import com.esprit.pidev.entities.ProduitRepas.CategRepas;
-import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
-import com.esprit.pidev.entities.ProduitRepas.Repas;
+import com.esprit.pidev.entities.ProduitRepas.*;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.security.services.IUser;
 import com.esprit.pidev.services.RepasProduitServices.IRepas;
@@ -28,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @AllArgsConstructor
 @Data
 @RequestMapping("/api/test")
@@ -44,17 +42,27 @@ public class RepasController {
 
     }
     @PutMapping("/updateRepas")
-    public Repas updateRepas(@RequestBody Repas rep) throws AccessDeniedException {
+    public Repas updateRepas(@RequestBody Repas rep)  {
         return iRepas.updateRepas(rep);
     }
+
     @PostMapping("/addRepasWithImg")
-    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("user") long user,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image) throws IOException {
+    public Repas addRepasAndImage(@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException {
         return iRepas.addRepasAndImage(nom,  description,  prix,  ingredient,  allergene,  objectifType,
-        categRepas,user, image);
+                categRepas,image,user);
     }
 
+
+    @PutMapping("/updateRepasWithImg")
+    public Repas updateRepasAndImage(@RequestParam("id")long id,@RequestParam("nom")String nom, @RequestParam("description") String description,@RequestParam("prix") double prix,@RequestParam("ingredient") String ingredient,@RequestParam("allergene") String allergene,@RequestParam("objectifType") ObjectifType objectifType,@RequestParam("categRepas") CategRepas categRepas, @RequestParam("image") MultipartFile image,@RequestParam("user") long user) throws IOException
+    {
+        return iRepas.updateRepasAndImage(id,nom,  description,  prix,  ingredient,  allergene,  objectifType,
+                categRepas,image,user);
+    }
+
+
     @GetMapping("getRepasById/{id}")
-    public Repas retrieveRepasById(@PathVariable("id") Long id){
+    public Repas retrieveRepasById(@PathVariable("id") long id){
         return iRepas.retrieveRepasById(id);
     }
 
@@ -63,18 +71,27 @@ public class RepasController {
         return iRepas.retrieveAllRepas();
     }
 
+    @GetMapping("/getAllRepasAndImage")
+    public List<Repas> retrieveAllRepasAndImage(){
+        return iRepas.getAllRepasAndImage();
+    }
+
 
     @DeleteMapping("/deleteRepas")
-    @PreAuthorize("hasAuthority('ROLE_RESTAURANT') and isAuthenticated() and principal.isEnabled()")
-    public void deleteRepas(@RequestBody Repas rep) throws AccessDeniedException {
+
+    public void deleteRepas(@RequestBody Repas rep)  {
         iRepas.deleteRepas(rep);
 
     }
 
+    @GetMapping("getAllRepasWithImage")
+    public List<Repas> getAllRepasAndImage(){
+        return iRepas.getAllRepasAndImage();
+    }
 
-    @GetMapping("/getRepasByUserId")
-    public Set<Repas> getRepasByUserId() {
-        return iRepas.getRepasByUserId();
+    @GetMapping("/getRepasByUserId/{id}")
+    public Set<Repas> getRepasByUserId(@PathVariable("id") Long id) {
+        return iRepas.getRepasByUserId(id);
 
     }
 
@@ -92,7 +109,7 @@ public class RepasController {
     public double calculerMaxCalories(@RequestBody User user) {
         return iRepas.calculerMaxCalories(user);
     }
-   @GetMapping("/searchRepas")
+    @GetMapping("/searchRepas")
     public List<Repas> searchRepasByNom(@RequestParam("nom") String nom) {
         return iRepas.rechercherRepasParNom(nom);
     }
@@ -112,5 +129,9 @@ public class RepasController {
         return ResponseEntity.ok("Vérification des nouveaux repas en cours !");
     }*/
 
+    @PostMapping("addNutritionToRepas/{repasId}")
+    public Repas addNutritionToRepas(@RequestBody Nutrition nutrition, @PathVariable("repasId") long repasId){
+        return iRepas.addNutritionToRepas(nutrition,repasId);
+    }
 
 }

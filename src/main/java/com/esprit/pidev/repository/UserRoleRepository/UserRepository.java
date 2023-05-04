@@ -12,27 +12,31 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByUsername(String username);
   List<User> findByUsernameContainingIgnoreCase(String username);
   @Modifying
-  //@Query("UPDATE User u SET u.enabled = false WHERE u.id IN (SELECT r.id FROM Role r GROUP BY r.id HAVING COUNT(r) > 3)")
-  @Query("UPDATE User u SET u.enabled = false WHERE u.roles.size>=3")
+  @Query("UPDATE User u SET u.enabled = false WHERE size(u.roles) > 3")
   void disableUsersWithMoreThan3Roles();
+  @Modifying
+  @Transactional
+  @Query("UPDATE User u SET u.enabled = false WHERE EXISTS (SELECT 1 FROM u.roles r WHERE r.name = :role)")
+  int deactivateUsersWithRole(@Param("role") ERole role);
+
+  ;
+
 
 
   List<User> findByRolesName(String roleName);
-
-
-
-
+  User findByPhone(String phone);
 
   Boolean existsByUsername(String username);
   Boolean existsByEmail(String email);
   public User findByEmail(String email);
-  public User findByEmailAndPassword(String email, String password);
-
   @Query("SELECT u FROM User u JOIN u.addresses a WHERE a.ville = :ville")
   List<User> findByVille(@Param("ville") String ville);
+
 }

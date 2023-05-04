@@ -26,11 +26,11 @@ public class Nutrition implements Serializable {
     private double lipides;
     private double sel;
 
-    @OneToOne
+    @OneToOne(mappedBy = "nutrition")
     @JsonIgnore
     private Produit produit;
 
-    @OneToOne
+    @OneToOne(mappedBy = "nutrition")
     @JsonIgnore
     private Repas repas;
 
