@@ -136,4 +136,7 @@ public class UserService implements IUser{
         return repo.findByEmail(email);    }
 
 
-}
+    public User findByUsername(String username) {
+        return repo.findByEmail(username);    }
+    }
+

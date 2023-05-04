@@ -150,4 +150,8 @@ public class PostService implements IPost {
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
+
+    public void likePost(User user, Long postId) {
+
+    }
 }

@@ -1,5 +1,4 @@
 package com.esprit.pidev.RestController.ForumController;
-
 import com.esprit.pidev.entities.Forum.Comment;
 import com.esprit.pidev.entities.Forum.Post;
 import com.esprit.pidev.entities.UserRole.User;
@@ -18,15 +17,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials="true")
+
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials="true")
 public class CommentController {
 
      IComment iComment;
