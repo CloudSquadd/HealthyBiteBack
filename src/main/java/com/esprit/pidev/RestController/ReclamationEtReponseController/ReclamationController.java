@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/test")
+@CrossOrigin(origins = "*")
 public class ReclamationController {
     IReclamation iReclamation;
     ReclamationRepository reclamationRepository;
@@ -21,9 +22,9 @@ public class ReclamationController {
     public void assignRepasToReclamation( @RequestBody Reclamation rec , @PathVariable("idRepas")Long idRepas) {
         iReclamation.assignRepasToReclamation( rec, idRepas);
     }
-    @PostMapping("/addReclamation/{idUser}")
-    public void addReclamation( @RequestBody Reclamation rec ,@PathVariable("idUser") Long idUser) {
-        iReclamation.addReclamation( rec, idUser);
+    @PostMapping("/addReclamation")
+    public void addReclamation( @RequestBody Reclamation rec ) {
+        iReclamation.addReclamation( rec);
     }
 
     @PostMapping("/assignProduitToReclamation/{idProduit}")
@@ -46,9 +47,10 @@ public class ReclamationController {
         return iReclamation.retrieveAllReclamation();
     }
 
-    @DeleteMapping("/ArchiverReclamation/{idReclamation}")
-    public void ArchiverReclamation(@PathVariable("idReclamation") Long idReclamation) {
-        iReclamation.ArchiverReclamation(idReclamation);
+
+    @DeleteMapping("/deleteReclamation/{idReclamation}")
+    public void deleteReclamation(@PathVariable("idReclamation") Long idReclamation){
+        iReclamation.deleteReclamation(idReclamation);
     }
 
 

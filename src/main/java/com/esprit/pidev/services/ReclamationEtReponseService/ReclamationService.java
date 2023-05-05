@@ -39,6 +39,7 @@ public class ReclamationService implements IReclamation {
         Repas repas = repasService.retrieveRepasById(id);
         rec.setRepas(repas);
         rec.setUser(getCurrentUser());
+        rec.setDateReclamation(new Date());
         return reclamationRepository.save(rec);
     }
 
@@ -47,6 +48,7 @@ public class ReclamationService implements IReclamation {
         Produit produit = produitService.retrieveProduitById(id);
         rec.setProduit(produit);
         rec.setUser(getCurrentUser());
+        rec.setDateReclamation(new Date());
         return reclamationRepository.save(rec);
     }
 
@@ -71,9 +73,9 @@ public class ReclamationService implements IReclamation {
     }
 
     @Override
-    public Reclamation addReclamation(Reclamation rec, Long id) {
-        User user = userService.retrieveUserById(id);
-        rec.setUser(user);
+    public Reclamation addReclamation(Reclamation rec) {
+        rec.setDateReclamation(new Date());
+        rec.setEtatReclamation("Non Traitee");
         return reclamationRepository.save(rec);
     }
 
@@ -102,18 +104,9 @@ public class ReclamationService implements IReclamation {
         return reclamationRepository.findByArchivedFalse();
     }
 
-
-    // @Override
-    //public void deleteReclamation(Long idReclamation) {
-     //   reclamationRepository.deleteById(idReclamation);
-    //}
-
-
-    public void ArchiverReclamation(Long idReclamation) {
-        Reclamation reclamation = reclamationRepository.findById(idReclamation)
-                .orElseThrow(() -> new RuntimeException("Réclamation non trouvée"));
-        reclamation.setArchived(true);
-        reclamationRepository.save(reclamation);
+    @Override
+    public void deleteReclamation(Long idReclamation) {
+        reclamationRepository.deleteById(idReclamation);
     }
 
 
@@ -122,8 +115,10 @@ public class ReclamationService implements IReclamation {
         return reclamationRepository.findAllByOrderByDateReclamation();
     }
 
-
-
+    // @Override
+    //public void deleteReclamation(Long idReclamation) {
+    //   reclamationRepository.deleteById(idReclamation);
+    //}
 
 
 

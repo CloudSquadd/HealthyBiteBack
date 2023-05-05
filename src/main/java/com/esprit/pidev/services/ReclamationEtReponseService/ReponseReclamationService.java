@@ -7,6 +7,8 @@ import com.esprit.pidev.repository.ReclamationEtReponseRepository.ReponseReclama
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,11 +28,13 @@ public class ReponseReclamationService implements IReponseReclamation {
         rec.setNotifications(not);
         rec.setReponseReclamation(repr);
         rec.setEtatReclamation("Traitee");
+        repr.setDateReponseReclamation(new Date());
         return reponseReclamationRepository.save(repr);
     }
 
     @Override
     public ReponseReclamation updateReponseReclamation(ReponseReclamation repr) {
+        repr.setDateReponseReclamation(new Date());
         return reponseReclamationRepository.save(repr);
     }
 

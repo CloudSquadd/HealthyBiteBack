@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Date;
 import java.util.List;
 @Service
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class NotificationService implements INotification{
     UserRepository userRepository;
     @Override
     public Notification addNotification(Notification not) {
+        not.setDateNotification(new Date());
         return notificationRepository.save(not);
     }
 

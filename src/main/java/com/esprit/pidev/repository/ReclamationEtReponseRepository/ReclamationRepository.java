@@ -17,7 +17,7 @@ public interface ReclamationRepository extends JpaRepository<Reclamation,Long> {
     List<Reclamation> findAllByOrderByDateReclamation();
     @Modifying
     @Transactional
-    @Query("UPDATE Reclamation r SET r.archived = true WHERE r.etatReclamation = 'Non traitée' AND r.dateReclamation <= :dateLimite")
+    @Query("UPDATE Reclamation r SET r.archived = true WHERE r.etatReclamation = 'Traitee' AND r.dateReclamation <= :dateLimite")
     void archiveReclamations(@Param("dateLimite") Date dateLimite);
 
     @Query("SELECT MONTH(r.dateReclamation) AS mois, COUNT(r) AS nbReclamations FROM Reclamation r GROUP BY mois")

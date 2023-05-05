@@ -3,14 +3,12 @@ package com.esprit.pidev.RestController.ReclamationEtReponseController;
 import com.esprit.pidev.entities.ReclamationEtReponse.Notification;
 import com.esprit.pidev.services.ReclamationEtReponseService.INotification;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RequestMapping("/api/test")
 public class NotificationController {
