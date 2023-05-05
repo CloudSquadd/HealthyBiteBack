@@ -72,10 +72,10 @@ public class Comment implements Serializable {
         }
     }
 
-    private int likeCount;
-    private  int dislikeCount;
+    private Integer likeCount;
+    private  Integer dislikeCount;
 
-    public int getLikeCount() {
+    public Integer getLikeCount() {
         return likeCount;
     }
 
@@ -83,7 +83,7 @@ public class Comment implements Serializable {
         this.likeCount = likeCount;
     }
 
-    public int getDislikeCount() {
+    public Integer getDislikeCount() {
         return dislikeCount;
     }
 
