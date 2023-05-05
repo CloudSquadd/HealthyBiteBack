@@ -213,8 +213,7 @@ public class UserService implements IUser {
     }
 
 
-
-
-
- 
+    public User findByUsername(String username) {
+        return repo.findByEmail(username);    }
+    
 }

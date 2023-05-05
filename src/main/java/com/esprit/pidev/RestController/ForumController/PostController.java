@@ -1,18 +1,21 @@
 package com.esprit.pidev.RestController.ForumController;
 
 import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.ProduitRepas.ObjectifType;
 import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
 import com.esprit.pidev.services.ForumServices.IPost;
 import com.esprit.pidev.services.ForumServices.PostService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 
-
+@Data
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor
@@ -44,6 +47,12 @@ public class PostController {
         return iPost.addPostAndImage(title, description, image);
     }
 
+    @PutMapping("/updatePostWithImg")
+    public Post updatePostAndImage(@RequestParam("id")long id, @RequestParam("title")String title, @RequestParam("content") String content, @RequestParam("image") MultipartFile image) throws IOException
+    {
+        return iPost.updatePostAndImage(id,title,  content,image);
+    }
+
     @PostMapping("/addPost")
     public Post addPost(@RequestBody Post pt) {
         return iPost.addPost(pt);
@@ -63,6 +72,7 @@ public class PostController {
         return iPost.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getAllPosts")
     @ResponseBody
     public List<Post> retrieveAllPosts(){

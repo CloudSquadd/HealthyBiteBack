@@ -1,8 +1,6 @@
 package com.esprit.pidev.services.ForumServices;
 
-import com.esprit.pidev.entities.Forum.Comment;
-import com.esprit.pidev.entities.Forum.LikeEntity;
-import com.esprit.pidev.entities.Forum.Post;
+import com.esprit.pidev.entities.Forum.*;
 import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.ForumRepository.CommentRepository;
 import com.esprit.pidev.repository.ForumRepository.LikeRepository;
@@ -22,115 +20,138 @@ import java.util.Optional;
 public class LikeService implements ILike {
 
         @Autowired
-        private LikeRepository likeRepository;
+        PostRepository postRepository;
         @Autowired
         UserRepository userRepository;
         @Autowired
-        private PostRepository postRepository;
-
-
+        CommentRepository commentRepository;
         @Autowired
-        private CommentRepository commentRepository;
-        public User getCurrentUser() {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                String username = authentication.getName();
-                Optional<User> userOptional = userRepository.findByUsername(username);
-                User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-                return user;
-        }
-
+        LikeRepository likeRepository;
 
         @Override
-        public void likePost( Long postId) {
-                //User currentUser = getCurrentUser();
-                User currentUser = new User();
-                currentUser.setId(14L);
+        public Post ToggleLikesP(Long postId, LikeType likeType, Long userId) {
                 Post post = postRepository.findById(postId)
-                        .orElseThrow(() -> new EntityNotFoundException("post not found"));
-                LikeEntity like = likeRepository.findByUserAndPost(getCurrentUser(), post).orElseGet(() -> new LikeEntity(currentUser, post));
+                        .orElseThrow(() -> new IllegalArgumentException("Publication Not Found with ID - " + postId));
+                User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new IllegalArgumentException("User Not Found with ID - " + userId));
+                Optional<Like> likeOptional = likeRepository.findByPostAndUser(post, user);
 
-                if (like.isLiked()) {
-                        throw new IllegalArgumentException("Comment already liked by user");
+                if (likeOptional.isPresent()) {
+                        Like existingLike = likeOptional.get();
+                        if (existingLike.getLikeType().equals(likeType)) {
+                                likeRepository.delete(existingLike);
+                                if (likeType.equals(LikeType.LIKE)) {
+                                        post.setLikeCount(post.getLikeCount() - 1);
+                                } else {
+                                        post.setDislikeCount(post.getDislikeCount() - 1);
+                                }
+
+                        } else {
+                                existingLike.setLikeType(likeType);
+                                likeRepository.save(existingLike);
+                                if (likeType.equals(LikeType.LIKE)) {
+                                        post.setLikeCount(post.getLikeCount() + 1);
+                                        post.setDislikeCount(post.getDislikeCount() - 1);
+                                } else {
+                                        post.setLikeCount(post.getLikeCount() - 1);
+                                        post.setDislikeCount(post.getDislikeCount() + 1);
+                                }
+                        }
+                } else {
+                        Like newLike = mapToLike(post, likeType, user);
+                        likeRepository.save(newLike);
+                        if (likeType.equals(LikeType.LIKE)) {
+                                post.setLikeCount(post.getLikeCount() + 1);
+                        } else {
+                                post.setDislikeCount(post.getDislikeCount() + 1);
+                        }
                 }
 
-                like.setLiked(true);
-                likeRepository.save(like);
-        }
-
-
-
-
-        @Override
-        public void unlikePost( Long postId) {
-                User currentUser = getCurrentUser();
-                Post post = postRepository.findById(postId)
-                        .orElseThrow(() -> new EntityNotFoundException("Post not found"));
-                LikeEntity like = likeRepository.findByUserAndPost(currentUser, post)
-                        .orElseThrow(() -> new EntityNotFoundException("Like not found"));
-
-                if (!like.isLiked()) {
-                        throw new IllegalArgumentException("Post is not liked by user");
-                }
-
-                like.setLiked(false);
-                likeRepository.save(like);
-        }
-
-        @Override
-        public void likeComment(User userId, Long commentId) {
-                Comment comment = commentRepository.findById(commentId)
-                        .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-                LikeEntity like = likeRepository.findByUserAndComment(userId, comment).orElseGet(() -> new LikeEntity(userId, comment));
-
-                if (like.isLiked()) {
-                        throw new IllegalArgumentException("Comment already liked by user");
-                }
-
-                like.setLiked(true);
-                likeRepository.save(like);
+                postRepository.save(post);
+                return post;
         }
 
         @Override
-        public void unlikeComment(User userId, Long commentId) {
+        public Comment ToggleLikesC(Long commentId, LikeType likeType, Long userId) {
                 Comment comment = commentRepository.findById(commentId)
-                        .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-                LikeEntity like = likeRepository.findByUserAndComment(userId, comment)
-                        .orElseThrow(() -> new EntityNotFoundException("Like not found"));
-
-                if (!like.isLiked()) {
-                        throw new IllegalArgumentException("Comment is not liked by user");
+                        .orElseThrow(() -> new IllegalArgumentException("Publication Not Found with ID - " + commentId));
+                User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new IllegalArgumentException("User Not Found with ID - " + userId));
+                Optional<Like> likeOptional = likeRepository.findByCommentAndUser(comment, user);
+                if (likeOptional.isPresent()) {
+                        Like existingLike = likeOptional.get();
+                        if (existingLike.getLikeType().equals(likeType)) {
+                                likeRepository.delete(existingLike);
+                                if (likeType.equals(LikeType.LIKE)) {
+                                        comment.setLikeCount(comment.getLikeCount() - 1);
+                                } else {
+                                        comment.setDislikeCount(comment.getDislikeCount() - 1);
+                                }
+                        } else {
+                                existingLike.setLikeType(likeType);
+                                likeRepository.save(existingLike);
+                                if (likeType.equals(LikeType.LIKE)) {
+                                        comment.setLikeCount(comment.getLikeCount() + 1);
+                                        comment.setDislikeCount(comment.getDislikeCount() - 1);
+                                } else {
+                                        comment.setLikeCount(comment.getLikeCount() - 1);
+                                        comment.setDislikeCount(comment.getDislikeCount() + 1);
+                                }
+                        }
+                } else {
+                        Like newLike = mapToLikeC(comment, likeType, user);
+                        likeRepository.save(newLike);
+                        if (likeType.equals(LikeType.LIKE)) {
+                                comment.setLikeCount(comment.getLikeCount() + 1);
+                        } else {
+                                comment.setDislikeCount(comment.getDislikeCount() + 1);
+                        }
                 }
 
-                like.setLiked(false);
-                likeRepository.save(like);
-        }
-
-        public List<LikeEntity> getAllPostLikes() {
-                return likeRepository.findAllByPostIsNotNull();
-        }
-
-        public List<LikeEntity> getAllCommentLikes() {
-                return likeRepository.findAllByCommentIsNotNull();
+                commentRepository.save(comment);
+                return comment;
         }
 
 
-        public boolean isPostLikedByUser( Long postId) {
-                //User currentUser = getCurrentUser();
-                User currentUser = new User();
-                currentUser.setId(14L);
 
-                Post post = postRepository.findById(postId)
-                        .orElseThrow(() -> new EntityNotFoundException("Post not found"));
-                Optional<LikeEntity> like = likeRepository.findByUserAndPost(currentUser, post);
-                return like.map(LikeEntity::isLiked).orElse(false);
+        private Like mapToLike(Post post, LikeType likeType, User user) {
+                return Like.builder()
+                        .likeType(likeType)
+                        .post(post)
+                        .user(user)
+                        .build();
         }
-
-        public boolean isCommentLikedByUser(User user, Long commentId) {
-                Comment comment = commentRepository.findById(commentId)
-                        .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-                Optional<LikeEntity> like = likeRepository.findByUserAndComment(user, comment);
-                return like.map(LikeEntity::isLiked).orElse(false);
+        private Like mapToLikeC(Comment comment, LikeType likeType, User user) {
+                return Like.builder()
+                        .likeType(likeType)
+                        .comment(comment)
+                        .user(user)
+                        .build();
         }
-
-
 }
+
+
+
+
+  /*  @Override
+    public Publication ToggleLikes(Integer idPub, Long idUser) {
+        Publication publication = publicationRepository.findById(idPub).orElse(null);
+        User user = userRepository.findById(idUser).orElse(null);
+        if (publication != null && user != null) {
+            List<Like> Likes = likeRepository.findAll().stream()
+                    .filter(x -> x.getPublication().getIdPub() == idPub)
+                    .filter(x -> x.getUser().getId() == idUser)
+                    .collect(Collectors.toList());
+            if (Likes.size() > 0) {
+                likeRepository.deleteById(Likes.get(0).getIdlike());
+            }
+            else {
+                Like like = new Like();
+                like.setUser(user);
+                like.setPublication(publication);
+                likeRepository.save(like);
+            }
+             }
+            return publication;
+        }*/
+
