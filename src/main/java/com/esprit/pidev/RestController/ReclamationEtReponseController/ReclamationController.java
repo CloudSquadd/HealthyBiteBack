@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/test")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class ReclamationController {
     IReclamation iReclamation;
     ReclamationRepository reclamationRepository;
