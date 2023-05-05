@@ -21,11 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
-
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RequestMapping("/api/test")
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials="true")
 public class CommentController {
 
     IComment iComment;
