@@ -11,13 +11,14 @@ import java.util.List;
 
 public interface IReclamation {
 
-    Reclamation addReclamation(Reclamation rec , Long id );
+    Reclamation addReclamation(Reclamation rec );
     Reclamation updateReclamation(Reclamation rec);
     Reclamation retrieveReclamationById(Long idReclamation);
     List<Reclamation> retrieveAllReclamation();
     List<Reclamation> retrieveAllReclamationByUser(long id);
     List<Reclamation> retrieveReclamation(boolean archived);
-    void ArchiverReclamation(Long idReclamation);
+    void deleteReclamation(Long idReclamation);
+
     public Reclamation assignRepasToReclamation(Reclamation rec ,Long id);
     public Reclamation assignProduitToReclamation(Reclamation rec,Long id);
 

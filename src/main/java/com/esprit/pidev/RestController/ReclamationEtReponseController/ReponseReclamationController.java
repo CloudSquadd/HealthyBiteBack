@@ -10,11 +10,13 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/test")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class ReponseReclamationController {
     IReponseReclamation iReponseReclamation;
 
     @PostMapping("/addReponseReclamation/{idReclamation}")
-    public ReponseReclamation addReponseReclamation(@RequestBody ReponseReclamation repr ,@PathVariable Long idReclamation){
+    public ReponseReclamation addReponseReclamation(@RequestBody ReponseReclamation repr ,@PathVariable("idReclamation") Long idReclamation){
       return iReponseReclamation.addReponseReclamation(repr, idReclamation) ;
     }
 
