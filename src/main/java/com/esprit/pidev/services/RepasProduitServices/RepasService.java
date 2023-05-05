@@ -73,9 +73,10 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public int calculerCaloriesTotales(List<Repas> repasChoisis) {
+    public int calculerCaloriesTotales(List<Repas> repasChoisis,long id) {
         int caloriesTotales = 0;
-        long maxCalories = calculerMaxCalories(getCurrentUser());
+        User user = userRepository.findById(id).get();
+        long maxCalories = calculerMaxCalories(user.getId());
         for (Repas repas : repasChoisis) {
             caloriesTotales += repas.getNutrition().getCalories();
         }
@@ -104,9 +105,10 @@ public class RepasService implements IRepas {
 
     //calculer le nombre maximum qu'un client doit consommer par jour
     @Override
-    public long calculerMaxCalories(User user) {
+    public long calculerMaxCalories(long id) {
+        User user = userRepository.findById(id).get();
         double metabolismeDeBase = 0;
-        if (user != null) {
+        if (user.getId() != null) {
             if (user.getGender().equals("Homme")) {
                 metabolismeDeBase = 88.362 + (13.397 * user.getPoids()) + (4.799 * user.getTaille()) - (5.677 * user.getAge());
             }
