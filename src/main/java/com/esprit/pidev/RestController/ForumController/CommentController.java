@@ -28,7 +28,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials="true")
 public class CommentController {
 
-     IComment iComment;
+    IComment iComment;
 @Autowired
 LikeService likeService;
     @Autowired
