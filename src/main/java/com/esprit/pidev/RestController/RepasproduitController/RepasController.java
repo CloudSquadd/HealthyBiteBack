@@ -97,17 +97,17 @@ public class RepasController {
 
 
     @PostMapping("/totalCalories")
-    public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis) {
-        return iRepas.calculerCaloriesTotales(repasChoisis);
+    public int calculerCaloriesTotales(@RequestBody List<Repas> repasChoisis,long id) {
+        return iRepas.calculerCaloriesTotales(repasChoisis,id);
     }
     @PutMapping("/checkReclamationsByRepas")
     public void checkReclamationsByRepas(){
         iRepas.updateRepasBloqueStatus();
     }
 
-    @PostMapping ("/maxCalories")
-    public double calculerMaxCalories(@RequestBody User user) {
-        return iRepas.calculerMaxCalories(user);
+    @GetMapping ("/maxCalories/{idUser}")
+    public double calculerMaxCalories(@PathVariable("idUser") long idUser) {
+        return iRepas.calculerMaxCalories(idUser);
     }
     @GetMapping("/searchRepas")
     public List<Repas> searchRepasByNom(@RequestParam("nom") String nom) {

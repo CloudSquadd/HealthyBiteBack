@@ -22,9 +22,9 @@ public interface IRepas {
     Set<Repas> getRepasByUserId(long  id);
 
     void updateRepasBloqueStatus( );
-    int calculerCaloriesTotales(List<Repas> repasChoisis);
+    int calculerCaloriesTotales(List<Repas> repasChoisis,long id);
 
-    long calculerMaxCalories(User user);
+    long calculerMaxCalories(long id);
 
     List<Repas> proposerRepasSelonObjectifEtActivite();
 
