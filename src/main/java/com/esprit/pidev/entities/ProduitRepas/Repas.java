@@ -3,6 +3,7 @@ package com.esprit.pidev.entities.ProduitRepas;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
@@ -72,5 +73,6 @@ public class Repas implements Serializable {
 
     private int quantite;
     @OneToMany(mappedBy = "repas",cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("repas")
     private Set<Reclamation> reclamations;
 }

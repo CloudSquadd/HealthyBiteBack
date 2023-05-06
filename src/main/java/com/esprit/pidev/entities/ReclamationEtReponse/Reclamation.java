@@ -4,6 +4,7 @@ import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.UserRole.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,7 +41,7 @@ public class Reclamation implements Serializable {
     private User user;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonIgnoreProperties("reclamations")
     private Repas repas;
 
     @ManyToOne
