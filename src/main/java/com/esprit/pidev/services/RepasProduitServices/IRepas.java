@@ -26,7 +26,7 @@ public interface IRepas {
 
     long calculerMaxCalories(long id);
 
-    List<Repas> proposerRepasSelonObjectifEtActivite();
+    List<Repas> proposerRepasSelonObjectifEtActivite(long id);
 
     List<Repas> rechercherRepasParNom(String nom);
 
