@@ -13,7 +13,7 @@ import java.util.Collection;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/recette")
-@CrossOrigin(origins = {"http://localhost:4200"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class RecetteController {
     @Autowired
 

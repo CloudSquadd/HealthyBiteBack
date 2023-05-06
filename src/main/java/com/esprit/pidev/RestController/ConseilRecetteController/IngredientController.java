@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/ingredient")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class IngredientController {
 
     private final IIngredientService ingredientService;
@@ -51,19 +52,19 @@ public class IngredientController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Ingredient> findIngredientById(@PathVariable(value = "id") Long id) {
         Optional<Ingredient> ingredient = ingredientService.retrieveIngredientById(id);
-        return new ResponseEntity<Ingredient>(ingredient.get(), HttpStatus.FOUND);
+        return new ResponseEntity<Ingredient>(ingredient.get(), HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<Collection<Ingredient>> getAllIngredients() {
         Collection<Ingredient> ingredients = ingredientService.retrieveAllIngredient();
-        return new ResponseEntity<Collection<Ingredient>>(ingredients, HttpStatus.FOUND);
+        return new ResponseEntity<Collection<Ingredient>>(ingredients, HttpStatus.OK);
     }
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable(value = "id", required = true) Long id) {
         ingredientService.deleteIngredient(id);
-        return new ResponseEntity<Void>(HttpStatus.GONE);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 

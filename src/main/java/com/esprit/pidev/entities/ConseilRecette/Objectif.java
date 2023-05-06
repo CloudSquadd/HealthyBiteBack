@@ -21,9 +21,9 @@ public class Objectif {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String title;
     private Long poidDepart;
-        private Long poidActuel;
+    private Long poidActuel;
     private Long taille;
     private Long objectifPoid;
 

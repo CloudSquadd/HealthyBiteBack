@@ -22,6 +22,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/objectif")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class ObjectifController {
 
     @Autowired
@@ -48,20 +49,20 @@ public class ObjectifController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Objectif> findbjectifById(@PathVariable(value = "id") Long id) {
         Optional<Objectif> objectif = objectifService.retrieveObjectifById(id);
-        return new ResponseEntity<Objectif>(objectif.get(), HttpStatus.FOUND);
+        return new ResponseEntity<Objectif>(objectif.get(), HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<Collection<Objectif>> getAllbjectifs() {
         Collection<Objectif> objectifs = objectifService.retrieveAllObjectif();
-        return new ResponseEntity<Collection<Objectif>>(objectifs, HttpStatus.FOUND);
+        return new ResponseEntity<Collection<Objectif>>(objectifs, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletebjectif(@PathVariable(value = "id", required = true) Long id) {
         objectifService.deleteObjectif(id);
-        return new ResponseEntity<Void>(HttpStatus.GONE);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @PostMapping("/user/{userId}/objectifs")
