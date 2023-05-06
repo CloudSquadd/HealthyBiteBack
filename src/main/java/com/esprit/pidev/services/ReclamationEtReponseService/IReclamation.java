@@ -19,7 +19,7 @@ public interface IReclamation {
     List<Reclamation> retrieveReclamation(boolean archived);
     void deleteReclamation(Long idReclamation);
 
-    public Reclamation assignRepasToReclamation(Reclamation rec ,Long id);
+    public Reclamation assignRepasToReclamation(Reclamation rec ,Long id,Long userId);
     public Reclamation assignProduitToReclamation(Reclamation rec,Long id);
 
     void archiveReclamationsNonTraitees();

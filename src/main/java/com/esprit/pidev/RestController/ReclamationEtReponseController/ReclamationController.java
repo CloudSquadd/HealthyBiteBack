@@ -1,6 +1,7 @@
 package com.esprit.pidev.RestController.ReclamationEtReponseController;
 
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
+import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.repository.ReclamationEtReponseRepository.ReclamationRepository;
 import com.esprit.pidev.services.ReclamationEtReponseService.IReclamation;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -18,9 +20,9 @@ public class ReclamationController {
     IReclamation iReclamation;
     ReclamationRepository reclamationRepository;
 
-    @PostMapping("/assignRepasToReclamation/{idRepas}")
-    public void assignRepasToReclamation( @RequestBody Reclamation rec , @PathVariable("idRepas")Long idRepas) {
-        iReclamation.assignRepasToReclamation( rec, idRepas);
+    @PostMapping("/assignRepasToReclamation/{idRepas}/{userId}")
+    public void assignRepasToReclamation(@RequestBody Reclamation rec , @PathVariable("idRepas")Long idRepas,@PathVariable ("userId")  Long userId) {
+        iReclamation.assignRepasToReclamation( rec, idRepas,userId);
     }
     @PostMapping("/addReclamation")
     public void addReclamation( @RequestBody Reclamation rec ) {
