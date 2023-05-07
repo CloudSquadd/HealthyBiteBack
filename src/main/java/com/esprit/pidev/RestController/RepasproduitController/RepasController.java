@@ -116,10 +116,10 @@ public class RepasController {
 
 
 
-    @GetMapping("/proposer")
-    public ResponseEntity<List<Repas>> proposerRepasSelonObjectifEtActivite()
+    @GetMapping("/proposer/{idUser}")
+    public ResponseEntity<List<Repas>> proposerRepasSelonObjectifEtActivite(@PathVariable("idUser") long idUser)
     {
-        List<Repas> repasProposes = iRepas.proposerRepasSelonObjectifEtActivite();
+        List<Repas> repasProposes = iRepas.proposerRepasSelonObjectifEtActivite(idUser);
         return ResponseEntity.ok(repasProposes);
     }
 /*

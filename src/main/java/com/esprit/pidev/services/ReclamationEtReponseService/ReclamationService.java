@@ -35,10 +35,12 @@ public class ReclamationService implements IReclamation {
 
 
     @Override
-    public Reclamation assignRepasToReclamation(Reclamation rec,Long id){
+    public Reclamation assignRepasToReclamation(Reclamation rec,Long id,Long userId){
         Repas repas = repasService.retrieveRepasById(id);
         rec.setRepas(repas);
-        rec.setUser(getCurrentUser());
+        rec.setEtatReclamation("Non Traitee");
+        User userrec = userRepository.findById(userId).get();
+        rec.setUser(userrec);
         rec.setDateReclamation(new Date());
         return reclamationRepository.save(rec);
     }

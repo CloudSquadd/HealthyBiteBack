@@ -85,7 +85,7 @@ public class RepasService implements IRepas {
         if (caloriesTotales > maxCalories) {
             System.out.println("Le total des calories dépasse le maximum autorisé !");
         }
-        proposerRepasSelonObjectifEtActivite();
+        proposerRepasSelonObjectifEtActivite(id);
         return caloriesTotales;
 
     }
@@ -245,9 +245,9 @@ public class RepasService implements IRepas {
     }
 
     @Override
-    public List<Repas> proposerRepasSelonObjectifEtActivite() {
-        User user = getCurrentUserObjects();
+    public List<Repas> proposerRepasSelonObjectifEtActivite(long id) {
 
+        User user = userRepository.findById(id).get();
         // double maxCalories = calculerMaxCalories(user);
 
         List<Repas> mealsByUserGoal = new ArrayList<>();
