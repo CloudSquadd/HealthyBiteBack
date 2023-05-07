@@ -55,66 +55,7 @@ public class LikeController {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username))
                 .getId();
     }
-/*
-    CommentRepository commentRepository;
-    LikeRepository likeRepository;
-    PostRepository postRepository;
-    ILike ilike;
 
-
-    @PostMapping("/posts/{postId}/like")
-    public ResponseEntity<?> likePost (@PathVariable Long postId) {
-        if (likeService.isPostLikedByUser( postId)) {
-            return ResponseEntity.badRequest().body("Post already liked by user");
-        }
-        likeService.likePost(postId);
-        return ResponseEntity.ok().body("you liked the post");
-    }
-
-    @PostMapping("/posts/{postId}/unlike")
-    public ResponseEntity<?> unlikePost( @PathVariable Long postId) {
-        if (!likeService.isPostLikedByUser( postId)) {
-            return ResponseEntity.badRequest().body("Post not liked by user");
-        }
-        likeService.unlikePost( postId);
-        return ResponseEntity.ok().body("you unliked the post");
-    }
-
-
-    @PostMapping("/comments/{commentId}/unlike")
-    public ResponseEntity<?> unlikeComment(@AuthenticationPrincipal User userId, @PathVariable Long commentId) {
-        if (!likeService.isCommentLikedByUser(userId, commentId)) {
-            return ResponseEntity.badRequest().body("Comment not liked by user");
-        }
-        likeService.unlikeComment(userId, commentId);
-        return ResponseEntity.ok().body("you unliked the comment");
-    }
-
-
-    @GetMapping("/posts/likes")
-    public List<LikeEntity> getAllPostLikes() {
-        return likeService.getAllPostLikes();
-    }
-
-    @GetMapping("/comments/likes")
-    public List<LikeEntity> getAllCommentLikes() {
-        return likeService.getAllCommentLikes();
-    }
-
-    public boolean isPostLikedByUser(User user, Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
-        Optional<LikeEntity> like = likeRepository.findByUserAndPost(user, post);
-        return like.map(LikeEntity::isLiked).orElse(false);
-    }
-
-    public boolean isCommentLikedByUser(User user, Long commentId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-        Optional<LikeEntity> like = likeRepository.findByUserAndComment(user, comment);
-        return like.map(LikeEntity::isLiked).orElse(false);
-    }
-*/
 
 
 }

@@ -71,9 +71,9 @@ public class PostService implements IPost {
     }
 
     @Override
-    public Post addPostAndImage(String title, String description, MultipartFile image) throws IOException {
-
+    public Post addPostAndImage(String title, String description, MultipartFile image,long user) throws IOException {
         Post pt = new Post();
+        pt.setUser(userRepository.findById(user).get());
         pt.setTitle(title);
         pt.setContent(description);
         byte[] imageData = image.getBytes();
@@ -131,6 +131,10 @@ public class PostService implements IPost {
     }
 
 
+    public User getUserByPost(Long postId) {
+        return postRepository.findUserByPostId(postId);
+    }
+
     @Override
     public Post retrievePostById(Long id) {
         return postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));
@@ -140,6 +144,14 @@ public class PostService implements IPost {
     public List<Post> findAll() {
         return postRepository.findAll();
     }
+/*
+
+    @Override
+    public List<Post> retrieveAllPosts() {
+        return postRepository.findAllWithUser();
+    }
+*/
+
 
     @Override
     public List<Post> retrieveAllPosts() {

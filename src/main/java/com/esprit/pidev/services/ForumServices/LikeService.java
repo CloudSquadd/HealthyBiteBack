@@ -6,6 +6,7 @@ import com.esprit.pidev.repository.ForumRepository.CommentRepository;
 import com.esprit.pidev.repository.ForumRepository.LikeRepository;
 import com.esprit.pidev.repository.ForumRepository.PostRepository;
 import com.esprit.pidev.repository.UserRoleRepository.UserRepository;
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LikeService implements ILike {
@@ -36,9 +38,11 @@ public class LikeService implements ILike {
                         .orElseThrow(() -> new IllegalArgumentException("User Not Found with ID - " + userId));
                 Optional<Like> likeOptional = likeRepository.findByPostAndUser(post, user);
 
-                if (likeOptional.isPresent()) {
+                if (likeOptional.isPresent()) { // Existing like found
                         Like existingLike = likeOptional.get();
+
                         if (existingLike.getLikeType().equals(likeType)) {
+                                // Delete existing like
                                 likeRepository.delete(existingLike);
                                 if (likeType.equals(LikeType.LIKE)) {
                                         post.setLikeCount(post.getLikeCount() - 1);
@@ -57,9 +61,12 @@ public class LikeService implements ILike {
                                         post.setDislikeCount(post.getDislikeCount() + 1);
                                 }
                         }
-                } else {
+                } else { // No existing like found
+                        // Create new like and save it to the database
                         Like newLike = mapToLike(post, likeType, user);
                         likeRepository.save(newLike);
+
+                        // Update publication's like count
                         if (likeType.equals(LikeType.LIKE)) {
                                 post.setLikeCount(post.getLikeCount() + 1);
                         } else {
@@ -70,6 +77,7 @@ public class LikeService implements ILike {
                 postRepository.save(post);
                 return post;
         }
+
 
         @Override
         public Comment ToggleLikesC(Long commentId, LikeType likeType, Long userId) {
@@ -113,7 +121,6 @@ public class LikeService implements ILike {
         }
 
 
-
         private Like mapToLike(Post post, LikeType likeType, User user) {
                 return Like.builder()
                         .likeType(likeType)
@@ -121,6 +128,7 @@ public class LikeService implements ILike {
                         .user(user)
                         .build();
         }
+
         private Like mapToLikeC(Comment comment, LikeType likeType, User user) {
                 return Like.builder()
                         .likeType(likeType)
@@ -128,30 +136,7 @@ public class LikeService implements ILike {
                         .user(user)
                         .build();
         }
+
+
+
 }
-
-
-
-
-  /*  @Override
-    public Publication ToggleLikes(Integer idPub, Long idUser) {
-        Publication publication = publicationRepository.findById(idPub).orElse(null);
-        User user = userRepository.findById(idUser).orElse(null);
-        if (publication != null && user != null) {
-            List<Like> Likes = likeRepository.findAll().stream()
-                    .filter(x -> x.getPublication().getIdPub() == idPub)
-                    .filter(x -> x.getUser().getId() == idUser)
-                    .collect(Collectors.toList());
-            if (Likes.size() > 0) {
-                likeRepository.deleteById(Likes.get(0).getIdlike());
-            }
-            else {
-                Like like = new Like();
-                like.setUser(user);
-                like.setPublication(publication);
-                likeRepository.save(like);
-            }
-             }
-            return publication;
-        }*/
-

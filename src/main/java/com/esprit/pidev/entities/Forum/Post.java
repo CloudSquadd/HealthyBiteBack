@@ -43,12 +43,10 @@ public class Post {
     private Date addedDate = new Date();
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
+    @JsonIgnoreProperties("posts")
     private User user;
-
-
 
     @ManyToOne
     @JsonIgnore
@@ -56,7 +54,7 @@ public class Post {
     private Category category;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonProperty
+    @JsonIgnoreProperties("posts")
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
