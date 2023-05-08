@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/conseil")
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials = "true")
 public class ConseilController {
 
 
@@ -64,7 +64,7 @@ public class ConseilController {
 
 
     //    add conseil to objectif
-    @PostMapping("/objectif/{objectifId}/conseils")
+    @PostMapping("/objectif/{objectifId}")
     public ResponseEntity<Conseil> addConseilToObjectif(
             @PathVariable("objectifId") Long objectifId, @RequestBody Conseil conseil) {
 

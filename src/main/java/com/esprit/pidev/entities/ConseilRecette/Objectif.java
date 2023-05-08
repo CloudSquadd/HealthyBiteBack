@@ -34,7 +34,7 @@ public class Objectif {
     private User user;
 
 
-    @OneToMany(mappedBy = "objectif", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "objectif")
     private List<Conseil> conseils = new ArrayList<>();
 
 
