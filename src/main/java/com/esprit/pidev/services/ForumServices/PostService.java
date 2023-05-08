@@ -75,6 +75,8 @@ public class PostService implements IPost {
         Post pt = new Post();
         pt.setUser(userRepository.findById(user).get());
         pt.setTitle(title);
+        pt.setLikeCount(0);
+        pt.setDislikeCount(0);
         pt.setContent(description);
         byte[] imageData = image.getBytes();
         pt.setImageData(imageData);

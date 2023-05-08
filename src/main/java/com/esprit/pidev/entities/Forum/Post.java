@@ -86,8 +86,25 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new HashSet<>();
 
-    private Integer likeCount;
-    private  Integer dislikeCount;
+    private Integer likeCount = 0;
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(Integer dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
+
+    private  Integer dislikeCount = 0;
 
 
 
@@ -97,21 +114,7 @@ public class Post {
         return comments;
     }
 
-    public Integer getLikeCount() {
-        return this.likeCount;
-    }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public Integer getDislikeCount() {
-        return dislikeCount;
-    }
-
-    public void setDislikeCount(int dislikeCount) {
-        this.dislikeCount = dislikeCount;
-    }
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
