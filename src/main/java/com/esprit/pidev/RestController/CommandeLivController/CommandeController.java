@@ -7,6 +7,7 @@ import com.esprit.pidev.services.CommandeLivraisonServices.ICommande;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/test")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class CommandeController {
     private final CommandeService commandeService;
     @Autowired
@@ -67,5 +68,15 @@ public class CommandeController {
 
 
     }
+  //  @PostMapping("/{id}/apply-coupon")
+  //  public ResponseEntity<Commande> applyCoupon(@PathVariable("id") Long id, @RequestParam("couponCode") String couponCode) {
+     //   Commande commande = commandeService.applyCoupon(id, couponCode);
+     //   if (commande != null) {
+      //      return new ResponseEntity<>(commande, HttpStatus.OK);
+    //    } else {
+      //      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      //  }
+   // }
+ 
 }
 

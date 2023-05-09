@@ -24,6 +24,7 @@ public class UserDetailsImpl implements UserDetails {
   private String username;
 
   private String email;
+  private String phone;
   private Set<Role> roles;
 
   @JsonIgnore
@@ -39,12 +40,13 @@ public class UserDetailsImpl implements UserDetails {
 
   private User user; // new field to hold the User object
 
-  public UserDetailsImpl(Long id, String username, String email, String password,
+  public UserDetailsImpl(Long id, String username, String email, String password, String phone,
                          Collection<? extends GrantedAuthority> authorities, User user) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
+    this.phone = phone;
     this.authorities = authorities;
     this.roles = user.getRoles();
     this.user = user;
@@ -60,6 +62,7 @@ public class UserDetailsImpl implements UserDetails {
             user.getUsername(),
             user.getEmail(),
             user.getPassword(),
+            user.getPhone(),
             authorities,
             user // initialize the User field
     );
@@ -90,6 +93,7 @@ public class UserDetailsImpl implements UserDetails {
     return username;
   }
 
+
   @Override
   public boolean isAccountNonExpired() {
     return true;
@@ -118,6 +122,15 @@ public class UserDetailsImpl implements UserDetails {
       return false;
     UserDetailsImpl user = (UserDetailsImpl) o;
     return Objects.equals(id, user.id);
+  }
+
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
   }
 }
 
