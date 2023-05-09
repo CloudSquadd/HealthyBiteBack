@@ -27,7 +27,7 @@ public class Objectif {
     private Long taille;
     private Long objectifPoid;
 
-    private TypeActivite typeActivite;
+    private String typeActivite;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
