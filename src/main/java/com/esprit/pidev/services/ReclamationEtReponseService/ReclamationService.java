@@ -83,6 +83,8 @@ public class ReclamationService implements IReclamation {
 
     @Override
     public Reclamation updateReclamation(Reclamation rec) {
+
+        rec.setDateReclamation(new Date());
         return reclamationRepository.save(rec);
     }
 

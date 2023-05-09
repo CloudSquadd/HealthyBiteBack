@@ -34,10 +34,11 @@ public class Reclamation implements Serializable {
     private Notification notifications;
 
     @OneToOne
+    @JsonIgnoreProperties("reclamation")
     private ReponseReclamation reponseReclamation;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonIgnoreProperties("reclamations")
     private User user;
 
     @ManyToOne

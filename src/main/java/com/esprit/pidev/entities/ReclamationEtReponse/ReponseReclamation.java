@@ -1,6 +1,7 @@
 package com.esprit.pidev.entities.ReclamationEtReponse;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class ReponseReclamation implements Serializable {
     private String textReponseReclamation;
 
     @OneToOne(mappedBy = "reponseReclamation")
-    @JsonIgnore
+    @JsonIgnoreProperties("reponse")
     private  Reclamation reclamation;
 
 }

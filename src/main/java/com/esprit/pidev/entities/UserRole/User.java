@@ -13,6 +13,7 @@ import com.esprit.pidev.entities.ProduitRepas.Produit;
 import com.esprit.pidev.entities.ProduitRepas.Repas;
 import com.esprit.pidev.entities.ReclamationEtReponse.Reclamation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -110,6 +111,7 @@ public class User {
     private Set<Repas> repas;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
     private Set<Reclamation> reclamations;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
