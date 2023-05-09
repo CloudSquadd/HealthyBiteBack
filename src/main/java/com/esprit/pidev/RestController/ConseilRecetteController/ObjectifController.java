@@ -1,13 +1,11 @@
 package com.esprit.pidev.RestController.ConseilRecetteController;
 
-
 import com.esprit.pidev.entities.ConseilRecette.Objectif;
-import com.esprit.pidev.entities.UserRole.User;
+ import com.esprit.pidev.entities.UserRole.User;
 import com.esprit.pidev.exceptions.RecetteNotFoundException;
-
 import com.esprit.pidev.security.services.UserService;
 import com.esprit.pidev.services.ConseilRecetteServices.IObjectifService;
-import lombok.AllArgsConstructor;
+ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +22,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/objectif")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class ObjectifController {
 
     @Autowired
@@ -50,23 +49,23 @@ public class ObjectifController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Objectif> findbjectifById(@PathVariable(value = "id") Long id) {
         Optional<Objectif> objectif = objectifService.retrieveObjectifById(id);
-        return new ResponseEntity<Objectif>(objectif.get(), HttpStatus.FOUND);
+        return new ResponseEntity<Objectif>(objectif.get(), HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<Collection<Objectif>> getAllbjectifs() {
         Collection<Objectif> objectifs = objectifService.retrieveAllObjectif();
-        return new ResponseEntity<Collection<Objectif>>(objectifs, HttpStatus.FOUND);
+        return new ResponseEntity<Collection<Objectif>>(objectifs, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletebjectif(@PathVariable(value = "id", required = true) Long id) {
         objectifService.deleteObjectif(id);
-        return new ResponseEntity<Void>(HttpStatus.GONE);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PostMapping("/userObjectifs/{userId}")
+    @PostMapping("/user/{userId}/objectifs")
     public ResponseEntity<Objectif> addObjectifToUser(
             @PathVariable("userId") Long userId, @RequestBody Objectif objectif) {
 

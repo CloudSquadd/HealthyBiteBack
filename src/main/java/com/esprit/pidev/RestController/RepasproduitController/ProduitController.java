@@ -24,6 +24,10 @@ public class ProduitController {
 
     IProduit iProduit;
 
+    @GetMapping("/hello")
+    public String hello(){
+        return "hello";
+    }
     @PostMapping("/addProduit")
     public Produit addProduit(@RequestBody Produit pr){
         return iProduit.addProduit(pr);

@@ -34,18 +34,15 @@ public class LikeController {
 
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<Post> toggleLikeOnPost(@PathVariable Long postId, @RequestParam LikeType likeType) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = getUserIdFromAuth(auth);
-        Post post = likeService.ToggleLikesP(postId, likeType, userId);
+    public ResponseEntity<Post> toggleLikeOnPost(@PathVariable Long postId, @RequestParam LikeType likeType,@RequestParam(value = "user", required = false) long user
+    ) {
+        Post post = likeService.ToggleLikesP(postId, likeType, user);
         return ResponseEntity.ok(post);
     }
 
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<Comment> toggleLikeOnComment(@PathVariable Long commentId, @RequestParam LikeType likeType) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = getUserIdFromAuth(auth);
-        Comment comment = likeService.ToggleLikesC(commentId, likeType, userId);
+    public ResponseEntity<Comment> toggleLikeOnComment(@PathVariable Long commentId, @RequestParam LikeType likeType,@RequestParam("user") long user) {
+        Comment comment = likeService.ToggleLikesC(commentId, likeType, user);
         return ResponseEntity.ok(comment);
     }
 

@@ -30,6 +30,14 @@ public class Like implements Serializable {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public LikeType getLikeType() {
+        return likeType;
+    }
+
+    public void setLikeType(LikeType likeType) {
+        this.likeType = likeType;
+    }
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "comment_id")

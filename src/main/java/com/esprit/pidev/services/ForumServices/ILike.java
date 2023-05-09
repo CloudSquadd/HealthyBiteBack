@@ -16,6 +16,6 @@ public interface ILike {
 
     void unlikeComment(User userId, Long commentId);*/
 
-    public Post ToggleLikesP (Long postId , LikeType likeType , Long userId);
-    public Comment ToggleLikesC (Long commentId , LikeType likeType , Long userId);
+    public Post ToggleLikesP (Long postId , LikeType likeType , long user);
+    public Comment ToggleLikesC (Long commentId , LikeType likeType ,  long user);
 }
