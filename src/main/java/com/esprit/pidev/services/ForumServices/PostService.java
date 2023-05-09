@@ -23,10 +23,7 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -71,32 +68,46 @@ public class PostService implements IPost {
     }
 
     @Override
-    public Post addPostAndImage(String title, String description, MultipartFile image,long user) throws IOException {
+    public Post addPostAndImage(String title, String description, MultipartFile image, long user) throws IOException {
+        List<String> badWords = Arrays.asList("badWord1", "badWord2", "badWord3");
+
+        // Check if the description contains any bad words
+        for (String word : badWords) {
+            if (description.contains(word)) {
+                throw new IllegalArgumentException("Content contains bad word: " + word);
+            }
+        }
+
         Post pt = new Post();
         pt.setUser(userRepository.findById(user).get());
         pt.setTitle(title);
         pt.setLikeCount(0);
         pt.setDislikeCount(0);
+        for (String word : badWords) {
+            description = description.replaceAll(word, "***");
+        }
         pt.setContent(description);
         byte[] imageData = image.getBytes();
         pt.setImageData(imageData);
+
         // Save the image file to a folder named 'images' in your project directory
         Path directory = Paths.get("images");
         if (!Files.exists(directory)) {Files.createDirectories(directory);}
         Path imagePath = directory.resolve(UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
         Files.write(imagePath, imageData);
+
         postRepository.save(pt);
+
         return pt;
     }
+
 
     @Override
     public Post updatePostAndImage(long id,String title, String content,  MultipartFile image) throws IOException {
         Post pt = new Post();
         pt.setId(id);
-        pt.setContent(content);
+               pt.setContent(content);
         pt.setTitle(title);
-        // pt.setNutrition(nutritionRepository.findById(nutritionId).orElse(null));
-        //pt.setUser(userRepository.findById(user).orElse(null));
         byte[] imageData = image.getBytes();
         System.err.println(imageData.toString());
         pt.setImageData(imageData);
