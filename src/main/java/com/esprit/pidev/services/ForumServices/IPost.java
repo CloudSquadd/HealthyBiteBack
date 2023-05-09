@@ -11,7 +11,7 @@ import java.util.List;
 public interface IPost {
     Post addPost(Post pt);
     Post updatePost(Long id, Post pt);
-    Post addPostAndImage(String title, String description, MultipartFile image)throws IOException;
+    Post addPostAndImage(String title, String description, MultipartFile image, long user)throws IOException;
     ResponseEntity<Void> uploadImageToAPost(Long id, MultipartFile image) throws IOException;
     Post retrievePostById(Long id);
     List<Post> retrieveAllPosts();

@@ -43,8 +43,8 @@ public class PostController {
     }
 
     @PostMapping("/addPostWithImg")
-    public Post addPostAndImage(@RequestParam("title") String title, @RequestParam("content") String description, @RequestParam("image") MultipartFile image) throws IOException {
-        return iPost.addPostAndImage(title, description, image);
+    public Post addPostAndImage(@RequestParam("title") String title, @RequestParam("content") String description,@RequestParam("user") long user,@RequestParam("image") MultipartFile image) throws IOException {
+        return iPost.addPostAndImage(title, description, image,user);
     }
 
     @PutMapping("/updatePostWithImg")
@@ -83,4 +83,6 @@ public class PostController {
     public void deletePost(@PathVariable("id") Long id){
         iPost.deletePost(id);
     }
+
+
 }

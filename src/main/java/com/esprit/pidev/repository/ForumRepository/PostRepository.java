@@ -16,5 +16,12 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post,Long> {
 
 
+    @Query("SELECT p FROM Post p JOIN FETCH p.user")
+    List<Post> findAllWithUser();
+
+    @Query("SELECT p.user FROM Post p WHERE p.id = :postId")
+    User findUserByPostId(@Param("postId") Long postId);
+
+
 
 }
