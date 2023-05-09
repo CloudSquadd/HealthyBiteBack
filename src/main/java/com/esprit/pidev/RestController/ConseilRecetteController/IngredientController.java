@@ -1,10 +1,12 @@
 package com.esprit.pidev.RestController.ConseilRecetteController;
 
-import com.esprit.pidev.entities.ConseilRecette.Ingredient;
-import com.esprit.pidev.entities.ConseilRecette.Recette;
-import com.esprit.pidev.exceptions.RecetteNotFoundException;
-import com.esprit.pidev.services.ConseilRecetteServices.IIngredientService;
-import com.esprit.pidev.services.ConseilRecetteServices.IRecetteService;
+ import com.esprit.pidev.entities.ConseilRecette.Ingredient;
+ import com.esprit.pidev.entities.ConseilRecette.Recette;
+ import com.esprit.pidev.exceptions.RecetteNotFoundException;
+
+ import com.esprit.pidev.services.ConseilRecetteServices.IIngredientService;
+ import com.esprit.pidev.services.ConseilRecetteServices.IRecetteService;
+ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/ingredient")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class IngredientController {
 
-     private final IIngredientService ingredientService;
+    private final IIngredientService ingredientService;
 
-     private final IRecetteService recetteService;
+    private final IRecetteService recetteService;
     @Autowired
     public IngredientController(IIngredientService ingredientService, IRecetteService recetteService) {
         this.ingredientService = ingredientService;
@@ -49,19 +52,19 @@ public class IngredientController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Ingredient> findIngredientById(@PathVariable(value = "id") Long id) {
         Optional<Ingredient> ingredient = ingredientService.retrieveIngredientById(id);
-        return new ResponseEntity<Ingredient>(ingredient.get(), HttpStatus.FOUND);
+        return new ResponseEntity<Ingredient>(ingredient.get(), HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/")
     public ResponseEntity<Collection<Ingredient>> getAllIngredients() {
         Collection<Ingredient> ingredients = ingredientService.retrieveAllIngredient();
-        return new ResponseEntity<Collection<Ingredient>>(ingredients, HttpStatus.FOUND);
+        return new ResponseEntity<Collection<Ingredient>>(ingredients, HttpStatus.OK);
     }
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable(value = "id", required = true) Long id) {
         ingredientService.deleteIngredient(id);
-        return new ResponseEntity<Void>(HttpStatus.GONE);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 

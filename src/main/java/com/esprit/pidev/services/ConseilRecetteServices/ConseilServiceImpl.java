@@ -46,8 +46,9 @@ public class ConseilServiceImpl implements IConseilService {
         if (conseil.getDescription() == null) {
             throw new IllegalArgumentException("No description is provided");
         }
-        existingConseil.setDescription(conseil.getDescription());
 
+        existingConseil.setDescription(conseil.getDescription());
+        existingConseil.setTitle(conseil.getTitle());
         return conseilRepository.save(existingConseil);
     }
 

@@ -45,7 +45,7 @@ public class ObectifServiceImpl implements IObjectifService {
                 "poid actuel : " + objectif.getPoidActuel() + "\n" +
                 "objectif poid : " + objectif.getObjectifPoid() + "\n" +
                 "taille" + objectif.getTaille() + "\n";
-        smsService.sendSms(user.getId(), messageBody);
+//        smsService.sendSms(user.getId(), messageBody);
         return objectifRepository.save(objectif);
     }
 
@@ -67,6 +67,9 @@ public class ObectifServiceImpl implements IObjectifService {
         }
         if (objectif.getPoidActuel() != 0.0f) {
             existigObjectif.setPoidActuel(objectif.getPoidActuel());
+        }
+        if(objectif.getTitle() !=null){
+            existigObjectif.setTitle(objectif.getTitle());
         }
         return objectifRepository.save(existigObjectif);
     }
