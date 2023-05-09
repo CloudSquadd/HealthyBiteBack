@@ -59,7 +59,7 @@ public class ConseilController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteConseil(@PathVariable(value = "id", required = true) Long id) {
         conseilService.deleteConseil(id);
-        return new ResponseEntity<Void>(HttpStatus.GONE);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 
