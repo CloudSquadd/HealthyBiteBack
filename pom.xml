@@ -71,10 +71,7 @@
 			<artifactId>spring-security-web</artifactId>
 			<version>5.7.3</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -96,14 +93,6 @@
 			<version>7.20.0</version>
 		</dependency>
 
-
-
-
-		<dependency>
-			<groupId>com.esprit</groupId>
-			<artifactId>pidev</artifactId>
-			<version>1.0</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -139,6 +128,8 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+
 		</plugins>
 	</build>
 
